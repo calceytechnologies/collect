@@ -35,6 +35,7 @@ import androidx.work.WorkManager;
 
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
+import org.odk.collect.android.R2;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
@@ -75,10 +76,10 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
     private static final int INSTANCE_UPLOADER = 0;
 
-    @BindView(R.id.upload_button)
+    @BindView(R2.id.upload_button)
     Button uploadButton;
 
-    @BindView(R.id.toggle_button)
+    @BindView(R2.id.toggle_button)
     Button toggleSelsButton;
 
     @Inject
@@ -119,7 +120,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         init();
     }
 
-    @OnClick({R.id.upload_button})
+    @OnClick({R2.id.upload_button})
     public void onUploadButtonsClicked(Button button) {
         if (!connectivityProvider.isDeviceOnline()) {
             ToastUtils.showShortToast(R.string.no_connection);
@@ -245,13 +246,13 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             return true;
         }
 
-        switch (item.getItemId()) {
-            case R.id.menu_preferences:
-                createPreferencesMenu();
-                return true;
-            case R.id.menu_change_view:
-                showSentAndUnsentChoices();
-                return true;
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_preferences) {
+            createPreferencesMenu();
+            return true;
+        } else if (itemId == R.id.menu_change_view) {
+            showSentAndUnsentChoices();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

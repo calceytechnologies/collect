@@ -45,7 +45,7 @@ public class MediaUtils {
     }
 
     public void openFile(Context context, File file, String mimeType) {
-        Uri contentUri = ContentUriProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", file);
+        Uri contentUri = ContentUriProvider.getUriForFile(context, "org.odk.collect.android" + ".provider", file);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         if (mimeType == null || mimeType.isEmpty()) {

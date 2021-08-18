@@ -129,22 +129,19 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
 
     @Override
     public void onButtonClick(int buttonId) {
-        switch (buttonId) {
-            case R.id.capture_image:
-                getPermissionsProvider().requestCameraPermission((Activity) getContext(), new PermissionListener() {
-                    @Override
-                    public void granted() {
-                        captureImage();
-                    }
+        if (buttonId == R.id.capture_image) {
+            getPermissionsProvider().requestCameraPermission((Activity) getContext(), new PermissionListener() {
+                @Override
+                public void granted() {
+                    captureImage();
+                }
 
-                    @Override
-                    public void denied() {
-                    }
-                });
-                break;
-            case R.id.choose_image:
-                imageCaptureHandler.chooseImage(R.string.choose_image);
-                break;
+                @Override
+                public void denied() {
+                }
+            });
+        } else if (buttonId == R.id.choose_image) {
+            imageCaptureHandler.chooseImage(R.string.choose_image);
         }
     }
 
@@ -172,7 +169,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
 
             try {
                 Uri uri = ContentUriProvider.getUriForFile(getContext(),
-                        BuildConfig.APPLICATION_ID + ".provider",
+                        "org.odk.collect.android" + ".provider",
                         new File(tmpImageFilePath));
                 // if this gets modified, the onActivityResult in
                 // FormEntyActivity will also need to be updated.

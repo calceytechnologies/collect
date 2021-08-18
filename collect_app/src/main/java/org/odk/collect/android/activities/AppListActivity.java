@@ -215,10 +215,9 @@ abstract class AppListActivity extends CollectAbstractActivity {
             return true;
         }
 
-        switch (item.getItemId()) {
-            case R.id.menu_sort:
-                showBottomSheetDialog();
-                return true;
+        if (item.getItemId() == R.id.menu_sort) {
+            showBottomSheetDialog();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

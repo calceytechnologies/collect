@@ -20,7 +20,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.analytics.BlockableFirebaseAnalytics;
 import org.odk.collect.analytics.NoopAnalytics;
-import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.*;
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel;
@@ -287,12 +287,12 @@ public class AppDependencyModule {
 
     @Provides
     public VersionInformation providesVersionInformation() {
-        return new VersionInformation(() -> BuildConfig.VERSION_NAME);
+        return new VersionInformation(() -> "1.0");
     }
 
     @Provides
     public FileProvider providesFileProvider(Context context) {
-        return filePath -> getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", new File(filePath));
+        return filePath -> getUriForFile(context, "org.odk.collect.android" + ".provider", new File(filePath));
     }
 
     @Provides
@@ -527,7 +527,7 @@ public class AppDependencyModule {
 
     @Provides
     public LaunchState providesAppStateProvider(Context context, SettingsProvider settingsProvider) {
-        return new LaunchState(context, settingsProvider.getMetaSettings(), BuildConfig.VERSION_CODE);
+        return new LaunchState(context, settingsProvider.getMetaSettings(), 1);
     }
 
     @Provides

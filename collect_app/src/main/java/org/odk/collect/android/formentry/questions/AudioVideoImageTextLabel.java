@@ -41,6 +41,7 @@ import com.google.android.material.button.MaterialButton;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
+import org.odk.collect.android.R2;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.listeners.SelectItemClickListener;
@@ -65,25 +66,25 @@ import timber.log.Timber;
  */
 public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnClickListener {
 
-    @BindView(R.id.audioButton)
+    @BindView(R2.id.audioButton)
     AudioButton audioButton;
 
-    @BindView(R.id.videoButton)
+    @BindView(R2.id.videoButton)
     MaterialButton videoButton;
 
-    @BindView(R.id.imageView)
+    @BindView(R2.id.imageView)
     ImageView imageView;
 
-    @BindView(R.id.missingImage)
+    @BindView(R2.id.missingImage)
     TextView missingImage;
 
-    @BindView(R.id.text_container)
+    @BindView(R2.id.text_container)
     FrameLayout textContainer;
 
-    @BindView(R.id.text_label)
+    @BindView(R2.id.text_label)
     TextView labelTextView;
 
-    @BindView(R.id.media_buttons)
+    @BindView(R2.id.media_buttons)
     LinearLayout mediaButtonsContainer;
 
     private int originalTextColor;
@@ -183,7 +184,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
         Intent intent = new Intent("android.intent.action.VIEW");
         Uri uri =
-                ContentUriProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", videoFile);
+                ContentUriProvider.getUriForFile(getContext(), "org.odk.collect.android" + ".provider", videoFile);
         FileUtils.grantFileReadPermissions(intent, uri, getContext());
         intent.setDataAndType(uri, "video/*");
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
@@ -215,13 +216,11 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.videoButton:
-                playVideo();
-                break;
-            case R.id.imageView:
-                onImageClick();
-                break;
+        int id = v.getId();
+        if (id == R.id.videoButton) {
+            playVideo();
+        } else if (id == R.id.imageView) {
+            onImageClick();
         }
     }
 
@@ -248,7 +247,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         try {
             Intent intent = new Intent("android.intent.action.VIEW");
             Uri uri =
-                    ContentUriProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", bigImageFile);
+                    ContentUriProvider.getUriForFile(getContext(), "org.odk.collect.android" + ".provider", bigImageFile);
             FileUtils.grantFileReadPermissions(intent, uri, getContext());
             intent.setDataAndType(uri, "image/*");
             getContext().startActivity(intent);

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.R2;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 
 import java.io.File;
@@ -19,10 +20,10 @@ import butterknife.ButterKnife;
 
 public class NoButtonsItem extends FrameLayout {
 
-    @BindView(R.id.imageView)
+    @BindView(R2.id.imageView)
     ImageView imageView;
 
-    @BindView(R.id.label)
+    @BindView(R2.id.label)
     TextView label;
 
     public NoButtonsItem(Context context, boolean enabled) {

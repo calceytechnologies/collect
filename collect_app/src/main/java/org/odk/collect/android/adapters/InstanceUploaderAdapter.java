@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.R2;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
@@ -72,17 +73,17 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     }
 
     static class ViewHolder {
-        @BindView(R.id.form_title)
+        @BindView(R2.id.form_title)
         TextView formTitle;
-        @BindView(R.id.form_subtitle)
+        @BindView(R2.id.form_subtitle)
         TextView formSubtitle;
-        @BindView(R.id.checkbox)
+        @BindView(R2.id.checkbox)
         CheckBox checkbox;
-        @BindView(R.id.progress_bar)
+        @BindView(R2.id.progress_bar)
         InstanceUploaderProgressBar progressBar;
-        @BindView(R.id.image)
+        @BindView(R2.id.image)
         ImageView statusIcon;
-        @BindView(R.id.close_box)
+        @BindView(R2.id.close_box)
         ImageView closeButton;
 
         ViewHolder(View view) {

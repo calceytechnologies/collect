@@ -53,29 +53,28 @@ public class QRCodeMenuDelegate implements MenuDelegate {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_scan_sd_card:
-                Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                photoPickerIntent.setType("image/*");
-                if (activityAvailability.isActivityAvailable(photoPickerIntent)) {
-                    activity.startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-                } else {
-                    ToastUtils.showShortToast(activity.getString(R.string.activity_not_found, activity.getString(R.string.choose_image)));
-                    Timber.w(activity.getString(R.string.activity_not_found, activity.getString(R.string.choose_image)));
-                }
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_item_scan_sd_card) {
+            Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            photoPickerIntent.setType("image/*");
+            if (activityAvailability.isActivityAvailable(photoPickerIntent)) {
+                activity.startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+            } else {
+                ToastUtils.showShortToast(activity.getString(R.string.activity_not_found, activity.getString(R.string.choose_image)));
+                Timber.w(activity.getString(R.string.activity_not_found, activity.getString(R.string.choose_image)));
+            }
 
-                return true;
+            return true;
+        } else if (itemId == R.id.menu_item_share) {
+            if (qrFilePath != null) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_STREAM, fileProvider.getURIForFile(qrFilePath));
+                activity.startActivity(intent);
+            }
 
-            case R.id.menu_item_share:
-                if (qrFilePath != null) {
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_SEND);
-                    intent.setType("image/*");
-                    intent.putExtra(Intent.EXTRA_STREAM, fileProvider.getURIForFile(qrFilePath));
-                    activity.startActivity(intent);
-                }
-
-                return true;
+            return true;
         }
 
         return false;

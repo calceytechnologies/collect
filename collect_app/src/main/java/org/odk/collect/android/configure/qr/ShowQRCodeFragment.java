@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.R2;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.async.Scheduler;
@@ -53,13 +54,13 @@ public class ShowQRCodeFragment extends Fragment {
     private final boolean[] checkedItems = {true, true};
     private final boolean[] passwordsSet = {true, true};
 
-    @BindView(R.id.ivQRcode)
+    @BindView(R2.id.ivQRcode)
     ImageView ivQRCode;
-    @BindView(R.id.circularProgressBar)
+    @BindView(R2.id.circularProgressBar)
     ProgressBar progressBar;
-    @BindView(R.id.tvPasswordWarning)
+    @BindView(R2.id.tvPasswordWarning)
     TextView tvPasswordWarning;
-    @BindView(R.id.status)
+    @BindView(R2.id.status)
     LinearLayout passwordStatus;
 
     private AlertDialog dialog;
@@ -120,7 +121,7 @@ public class ShowQRCodeFragment extends Fragment {
         ).get(QRCodeViewModel.class);
     }
 
-    @OnClick(R.id.tvPasswordWarning)
+    @OnClick(R2.id.tvPasswordWarning)
     void passwordWarningClicked() {
         if (dialog == null) {
             final String[] items = {

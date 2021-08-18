@@ -264,26 +264,22 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
             return true;
         }
 
-        switch (item.getItemId()) {
-            case R.id.menu_delete_child:
-                DialogUtils.showIfNotShowing(DeleteRepeatDialogFragment.class, getSupportFragmentManager());
-                return true;
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_delete_child) {
+            DialogUtils.showIfNotShowing(DeleteRepeatDialogFragment.class, getSupportFragmentManager());
+            return true;
+        } else if (itemId == R.id.menu_add_repeat) {
+            Collect.getInstance().getFormController().jumpToIndex(repeatGroupPickerIndex);
+            formEntryViewModel.jumpToNewRepeat();
+            formEntryViewModel.addRepeat();
 
-            case R.id.menu_add_repeat:
-                Collect.getInstance().getFormController().jumpToIndex(repeatGroupPickerIndex);
-                formEntryViewModel.jumpToNewRepeat();
-                formEntryViewModel.addRepeat();
-
-                finish();
-                return true;
-
-            case R.id.menu_go_up:
-                goUpLevel();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+            finish();
+            return true;
+        } else if (itemId == R.id.menu_go_up) {
+            goUpLevel();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     /**

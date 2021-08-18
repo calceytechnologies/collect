@@ -943,15 +943,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         // These actions should move into the `FormEntryMenuDelegate`
-        switch (item.getItemId()) {
-            case R.id.menu_languages:
-                createLanguageDialog();
-                return true;
-
-            case R.id.menu_save:
-                // don't exit
-                saveForm(false, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getGeneralSettings().getBoolean(KEY_COMPLETED_DEFAULT)), null, true);
-                return true;
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_languages) {
+            createLanguageDialog();
+            return true;
+        } else if (itemId == R.id.menu_save) {// don't exit
+            saveForm(false, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getGeneralSettings().getBoolean(KEY_COMPLETED_DEFAULT)), null, true);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

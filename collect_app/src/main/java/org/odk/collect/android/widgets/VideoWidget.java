@@ -187,38 +187,34 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     @Override
     public void onButtonClick(int id) {
-        switch (id) {
-            case R.id.capture_video:
-                if (selfie) {
-                    getPermissionsProvider().requestCameraAndRecordAudioPermissions((Activity) getContext(), new PermissionListener() {
-                        @Override
-                        public void granted() {
-                            captureVideo();
-                        }
+        if (id == R.id.capture_video) {
+            if (selfie) {
+                getPermissionsProvider().requestCameraAndRecordAudioPermissions((Activity) getContext(), new PermissionListener() {
+                    @Override
+                    public void granted() {
+                        captureVideo();
+                    }
 
-                        @Override
-                        public void denied() {
-                        }
-                    });
-                } else {
-                    getPermissionsProvider().requestCameraPermission((Activity) getContext(), new PermissionListener() {
-                        @Override
-                        public void granted() {
-                            captureVideo();
-                        }
+                    @Override
+                    public void denied() {
+                    }
+                });
+            } else {
+                getPermissionsProvider().requestCameraPermission((Activity) getContext(), new PermissionListener() {
+                    @Override
+                    public void granted() {
+                        captureVideo();
+                    }
 
-                        @Override
-                        public void denied() {
-                        }
-                    });
-                }
-                break;
-            case R.id.choose_video:
-                chooseVideo();
-                break;
-            case R.id.play_video:
-                playVideoFile();
-                break;
+                    @Override
+                    public void denied() {
+                    }
+                });
+            }
+        } else if (id == R.id.choose_video) {
+            chooseVideo();
+        } else if (id == R.id.play_video) {
+            playVideoFile();
         }
     }
 

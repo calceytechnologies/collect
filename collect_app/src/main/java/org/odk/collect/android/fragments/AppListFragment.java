@@ -173,10 +173,9 @@ public abstract class AppListFragment extends ListFragment {
             return true;
         }
 
-        switch (item.getItemId()) {
-            case R.id.menu_sort:
-                bottomSheetDialog.show();
-                return true;
+        if (item.getItemId() == R.id.menu_sort) {
+            bottomSheetDialog.show();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
