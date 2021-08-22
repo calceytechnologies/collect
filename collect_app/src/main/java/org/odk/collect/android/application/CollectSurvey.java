@@ -1,28 +1,10 @@
-/*
- * Copyright (C) 2017 University of Washington
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
- */
-
 package org.odk.collect.android.application;
-
-import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.StrictMode;
 
 import androidx.annotation.Nullable;
-import androidx.multidex.MultiDex;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
@@ -45,24 +27,22 @@ import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
 import org.odk.collect.projects.ProjectsDependencyModule;
 import org.odk.collect.projects.ProjectsRepository;
-import org.odk.collect.shared.Settings;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.strings.LocalizedApplication;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.util.Locale;
 
 import javax.inject.Inject;
 
-public class Collect extends Application implements
-        LocalizedApplication,
-        AudioRecorderDependencyComponentProvider,
-        ProjectsDependencyComponentProvider,
-        StateStore {
+import timber.log.Timber;
+
+public class CollectSurvey implements LocalizedApplication, AudioRecorderDependencyComponentProvider,
+        ProjectsDependencyComponentProvider, StateStore {
+
+    private static CollectSurvey singleton;
+    private Application application;
     public static String defaultSysLanguage;
-    private static Collect singleton;
 
     private final AppState appState = new AppState();
 
@@ -83,19 +63,13 @@ public class Collect extends Application implements
     private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
     private ProjectsDependencyComponent projectsDependencyComponent;
 
-    /**
-     * @deprecated we shouldn't have to reference a static singleton of the application. Code doing this
-     * should either have a {@link Context} instance passed to it (or have any references removed if
-     * possible).
-     */
-    @Deprecated
-    public static Collect getInstance() {
-        return getCollectInstance();
+    private CollectSurvey() {
     }
 
-    private static Collect getCollectInstance() {
+    public static CollectSurvey getCollectSurveyInstance() {
         if (singleton == null) {
-            singleton = new Collect();
+            defaultSysLanguage = "en";
+            return new CollectSurvey();
         }
         return singleton;
     }
@@ -108,49 +82,28 @@ public class Collect extends Application implements
         formController = controller;
     }
 
+    public void initialize(Application application) {
+        this.application = application;
+
+        singleton = this;
+
+        setupDagger();
+        //applicationInitializer.initialize();
+
+        setupStrictMode();
+
+    }
+
+    public Application getApplication() {
+        return application;
+    }
+
     public ExternalDataManager getExternalDataManager() {
         return externalDataManager;
     }
 
     public void setExternalDataManager(ExternalDataManager externalDataManager) {
         this.externalDataManager = externalDataManager;
-    }
-
-    /*
-        Adds support for multidex support library. For more info check out the link below,
-        https://developer.android.com/studio/build/multidex.html
-    */
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        testStorage();
-
-        singleton = this;
-
-        setupDagger();
-        applicationInitializer.initialize();
-
-        fixGoogleBug154855417();
-
-        setupStrictMode();
-    }
-
-    private void testStorage() {
-        // Throw specific error to avoid later ones if the app won't be able to access storage
-        try {
-            File externalFilesDir = getExternalFilesDir(null);
-            File testFile = new File(externalFilesDir + File.separator + ".test");
-            testFile.createNewFile();
-            testFile.delete();
-        } catch (IOException e) {
-            throw new IllegalStateException("App can't write to storage!");
-        }
     }
 
     /**
@@ -174,12 +127,12 @@ public class Collect extends Application implements
 
     private void setupDagger() {
         applicationComponent = DaggerAppDependencyComponent.builder()
-                .application(this)
+                .application(application)
                 .build();
-        applicationComponent.inject(this);
+        //applicationComponent.inject(this);
 
         audioRecorderDependencyComponent = DaggerAudioRecorderDependencyComponent.builder()
-                .application(this)
+                .application(application)
                 .build();
 
         projectsDependencyComponent = DaggerProjectsDependencyComponent.builder()
@@ -205,14 +158,6 @@ public class Collect extends Application implements
         return projectsDependencyComponent;
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        //noinspection deprecation
-        defaultSysLanguage = newConfig.locale.getLanguage();
-    }
-
     public AppDependencyComponent getComponent() {
         return applicationComponent;
     }
@@ -230,30 +175,13 @@ public class Collect extends Application implements
      * @return md5 hash of the form title, a space, the form ID
      */
     public static String getFormIdentifierHash(String formId, String formVersion) {
-        Form form = new FormsRepositoryProvider(Collect.getInstance()).get().getLatestByFormIdAndVersion(formId, formVersion);
+        Form form = new FormsRepositoryProvider(getCollectSurveyInstance().application).get()
+                .getLatestByFormIdAndVersion(formId, formVersion);
 
         String formTitle = form != null ? form.getDisplayName() : "";
 
         String formIdentifier = formTitle + " " + formId;
         return Md5.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
-    }
-
-    // https://issuetracker.google.com/issues/154855417
-    private void fixGoogleBug154855417() {
-        try {
-            Settings metaSharedPreferences = settingsProvider.getMetaSettings();
-
-            boolean hasFixedGoogleBug154855417 = metaSharedPreferences.getBoolean(KEY_GOOGLE_BUG_154855417_FIXED);
-
-            if (!hasFixedGoogleBug154855417) {
-                File corruptedZoomTables = new File(getFilesDir(), "ZoomTables.data");
-                corruptedZoomTables.delete();
-
-                metaSharedPreferences.save(KEY_GOOGLE_BUG_154855417_FIXED, true);
-            }
-        } catch (Exception ignored) {
-            // ignored
-        }
     }
 
     @NotNull

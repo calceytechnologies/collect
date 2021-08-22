@@ -1,6 +1,7 @@
 package org.odk.collect.android.utilities;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.application.CollectSurvey;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
@@ -20,7 +21,7 @@ public class LocaleHelper {
         }
         boolean isUsingSysLanguage = localeCode.equals("");
         if (isUsingSysLanguage) {
-            localeCode = Collect.defaultSysLanguage;
+            localeCode = CollectSurvey.defaultSysLanguage;
         }
         return localeCode;
     }

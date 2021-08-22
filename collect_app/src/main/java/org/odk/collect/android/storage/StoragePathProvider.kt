@@ -1,6 +1,7 @@
 package org.odk.collect.android.storage
 
 import org.odk.collect.android.application.Collect
+import org.odk.collect.android.application.CollectSurvey
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.shared.PathUtils.getAbsoluteFilePath
@@ -10,7 +11,8 @@ import java.io.File
 class StoragePathProvider @JvmOverloads constructor(
     private val currentProjectProvider: CurrentProjectProvider = DaggerUtils.getComponent(Collect.getInstance())
         .currentProjectProvider(),
-    val odkRootDirPath: String = Collect.getInstance().getExternalFilesDir(null)!!.absolutePath
+    val odkRootDirPath: String = CollectSurvey.getCollectSurveyInstance().application.
+    getExternalFilesDir(null)!!.absolutePath
 ) {
 
     fun getOdkRootDirPaths(): Array<String> {

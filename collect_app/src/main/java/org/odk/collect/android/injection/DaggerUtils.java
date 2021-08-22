@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.application.CollectSurvey;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 
 public class DaggerUtils {
@@ -25,10 +26,12 @@ public class DaggerUtils {
     private DaggerUtils() {}
 
     public static AppDependencyComponent getComponent(Activity activity) {
-        return ((Collect) activity.getApplication()).getComponent();
+        return CollectSurvey.getCollectSurveyInstance().getComponent();
+        //return ((Collect) context.getApplicationContext()).getComponent();
     }
 
     public static AppDependencyComponent getComponent(Context context) {
-        return ((Collect) context.getApplicationContext()).getComponent();
+        return CollectSurvey.getCollectSurveyInstance().getComponent();
+        //return ((Collect) context.getApplicationContext()).getComponent();
     }
 }

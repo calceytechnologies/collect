@@ -4,21 +4,23 @@ import android.content.Context;
 
 import androidx.preference.ListPreference;
 
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.application.CollectSurvey;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.shared.Settings;
 
 import java.util.Arrays;
 
 public class PrefUtils {
-    private PrefUtils() { }  // prevent instantiation of this utility class
+    private PrefUtils() {
+    }  // prevent instantiation of this utility class
 
     public static Settings getSharedPrefs() {
-        return DaggerUtils.getComponent(Collect.getInstance()).settingsProvider().getGeneralSettings();
+        return DaggerUtils.getComponent(CollectSurvey.getCollectSurveyInstance().getApplication())
+                .settingsProvider().getGeneralSettings();
     }
 
     public static ListPreference createListPref(
-        Context context, String key, String title, int[] labelIds, String[] values) {
+            Context context, String key, String title, int[] labelIds, String[] values) {
         String[] labels = new String[labelIds.length];
         for (int i = 0; i < labels.length; i++) {
             labels[i] = context.getString(labelIds[i]);
@@ -27,7 +29,7 @@ public class PrefUtils {
     }
 
     private static ListPreference createListPref(
-        Context context, String key, String title, String[] labels, String[] values) {
+            Context context, String key, String title, String[] labels, String[] values) {
         ensurePrefHasValidValue(key, values);
         ListPreference pref = new ListPreference(context);
         pref.setKey(key);

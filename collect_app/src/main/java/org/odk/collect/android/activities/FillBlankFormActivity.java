@@ -43,11 +43,13 @@ import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.views.ObviousProgressBar;
+import org.odk.collect.projects.Project;
 
 import javax.inject.Inject;
 
@@ -76,6 +78,9 @@ public class FillBlankFormActivity extends FormListActivity implements
     @Inject
     CurrentProjectProvider currentProjectProvider;
 
+    @Inject
+    ProjectImporter importNewProject;
+
     BlankFormListMenuDelegate menuDelegate;
 
     @Override
@@ -85,6 +90,9 @@ public class FillBlankFormActivity extends FormListActivity implements
         DaggerUtils.getComponent(this).inject(this);
 
         setTitle(getString(R.string.enter_data));
+
+        importNewProject.importNewProject(Project.Companion.getDEMO_PROJECT());
+        currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID);
 
         BlankFormsListViewModel blankFormsListViewModel = new ViewModelProvider(this, blankFormsListViewModelFactory).get(BlankFormsListViewModel.class);
         blankFormsListViewModel.isSyncing().observe(this, syncing -> {

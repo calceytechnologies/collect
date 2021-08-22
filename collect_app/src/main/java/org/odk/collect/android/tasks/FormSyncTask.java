@@ -17,6 +17,7 @@ package org.odk.collect.android.tasks;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.application.CollectSurvey;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.external.FormsContract;
@@ -47,8 +48,8 @@ public class FormSyncTask extends AsyncTask<Void, String, String> {
         super.onPostExecute(result);
 
         // Make sure content observers (CursorLoaders for instance) are notified of change
-        String projectId = DaggerUtils.getComponent(Collect.getInstance()).currentProjectProvider().getCurrentProject().getUuid();
-        Collect.getInstance().getContentResolver().notifyChange(FormsContract.getUri(projectId), null);
+        String projectId = DaggerUtils.getComponent(CollectSurvey.getCollectSurveyInstance().getApplication()).currentProjectProvider().getCurrentProject().getUuid();
+        CollectSurvey.getCollectSurveyInstance().getApplication().getContentResolver().notifyChange(FormsContract.getUri(projectId), null);
 
         statusMessage = result;
 
