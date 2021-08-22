@@ -30,6 +30,8 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.androidshared.data.AppState;
@@ -39,6 +41,7 @@ import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
 import org.odk.collect.forms.Form;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
+import org.odk.collect.projects.Project;
 import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
 import org.odk.collect.projects.ProjectsDependencyModule;
@@ -77,6 +80,12 @@ public class Collect implements LocalizedApplication, AudioRecorderDependencyCom
     SettingsProvider settingsProvider;
 
     @Inject
+    ProjectImporter projectImporter;
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
+
+    @Inject
     ProjectsRepository projectsRepository;
 
     private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
@@ -93,7 +102,6 @@ public class Collect implements LocalizedApplication, AudioRecorderDependencyCom
     }
 
     public static Collect getCollectInstance() {
-        defaultSysLanguage = "en";
         return singleton;
     }
 
@@ -132,9 +140,9 @@ public class Collect implements LocalizedApplication, AudioRecorderDependencyCom
 
         testStorage();
         setupDagger(application);
+        applicationInitializer.initialize();
 
-
-        //applicationInitializer.initialize();
+        testProjectConfiguration();
         fixGoogleBug154855417();
         setupStrictMode();
     }
@@ -153,6 +161,11 @@ public class Collect implements LocalizedApplication, AudioRecorderDependencyCom
         } catch (IOException e) {
             throw new IllegalStateException("App can't write to storage!");
         }
+    }
+
+    private void testProjectConfiguration() {
+        projectImporter.importNewProject(Project.Companion.getDEMO_PROJECT());
+        currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID);
     }
 
     /**
@@ -179,7 +192,7 @@ public class Collect implements LocalizedApplication, AudioRecorderDependencyCom
                 .appDependencyModule(new AppDependencyModule())
                 .application(application)
                 .build();
-        //applicationComponent.inject(this);
+        applicationComponent.inject(this);
 
         audioRecorderDependencyComponent = DaggerAudioRecorderDependencyComponent.builder()
                 .application(application)
