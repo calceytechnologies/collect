@@ -27,7 +27,7 @@ public class AnalyticsUtils {
     }
 
     public static void logFormEvent(String event) {
-        Analytics.log(event, "form", getFormHash(Collect.getInstance().getFormController()));
+        Analytics.log(event, "form", getFormHash(Collect.getCollectInstance().getFormController()));
     }
 
     public static void logFormEvent(String event, String formId, String formTitle) {

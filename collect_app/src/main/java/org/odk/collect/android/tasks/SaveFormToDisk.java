@@ -130,7 +130,7 @@ public class SaveFormToDisk {
         }
 
         // close all open databases of external data.
-        Collect.getInstance().getExternalDataManager().close();
+        Collect.getCollectInstance().getExternalDataManager().close();
 
         // if there is a meta/instanceName field, be sure we are using the latest value
         // just in case the validate somehow triggered an update.
@@ -172,7 +172,7 @@ public class SaveFormToDisk {
      * the instance currently managed by the {@link FormController}.
      */
     private void updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted) {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
         FormInstance formInstance = formController.getFormDef().getInstance();
 
         String instancePath = formController.getInstanceFile().getAbsolutePath();
@@ -330,7 +330,7 @@ public class SaveFormToDisk {
      * other methods.
      */
     private void exportData(boolean markCompleted, FormSaver.ProgressListener progressListener) throws IOException, EncryptionException {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
 
         progressListener.onProgressUpdate(TranslationHandler.getString(Collect.getInstance(), R.string.survey_saving_collecting_message));
 
@@ -391,7 +391,7 @@ public class SaveFormToDisk {
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
                 isEncrypted = true;
 
-                analytics.logEvent(ENCRYPT_SUBMISSION, AnalyticsUtils.getFormHash(Collect.getInstance().getFormController()), "");
+                analytics.logEvent(ENCRYPT_SUBMISSION, AnalyticsUtils.getFormHash(Collect.getCollectInstance().getFormController()), "");
             }
 
             // At this point, we have:

@@ -92,7 +92,7 @@ public class ItemsetDao {
         List<String> arguments = new ArrayList<>();
         String selectionString = getSelectionStringAndPopulateArguments(getQueryString(nodesetString), arguments);
 
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
         String[] selectionArgs = getSelectionArgs(arguments, nodesetString, formController, pathParseTool, formEntryPrompt);
 
         return selectionArgs == null ? null : getItemsFromDatabase(selectionString, selectionArgs, formController, adapter);

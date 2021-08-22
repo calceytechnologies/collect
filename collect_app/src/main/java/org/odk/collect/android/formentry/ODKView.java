@@ -243,7 +243,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 audioHelper,
                 ReferenceManager.instance(),
                 analytics,
-                AnalyticsUtils.getFormHash(Collect.getInstance().getFormController())
+                AnalyticsUtils.getFormHash(Collect.getCollectInstance().getFormController())
         );
 
         return promptAutoplayer.autoplayIfNeeded(firstPrompt);
@@ -492,7 +492,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * Saves answers for the widgets in this view. Called when the widgets are in an intent group.
      */
     public void setDataForFields(Bundle bundle) throws JavaRosaException {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
         if (formController == null) {
             return;
         }

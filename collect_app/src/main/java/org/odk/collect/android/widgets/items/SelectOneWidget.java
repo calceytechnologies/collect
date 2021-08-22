@@ -113,7 +113,7 @@ public class SelectOneWidget extends BaseSelectListWidget {
      * If there are "fast external itemset" selects right after this select, assume that they are linked to the current question and clear them.
      */
     private void clearFollowingItemsetWidgets() {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
         if (formController == null) {
             return;
         }

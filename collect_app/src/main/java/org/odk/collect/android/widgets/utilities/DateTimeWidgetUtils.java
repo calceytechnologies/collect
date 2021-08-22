@@ -51,7 +51,7 @@ public class DateTimeWidgetUtils {
     public static final String DATE_PICKER_DETAILS = "date_picker_details";
 
     public static void setWidgetWaitingForData(FormIndex formIndex) {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
         if (formController != null) {
             formController.setIndexWaitingForData(formIndex);
         }

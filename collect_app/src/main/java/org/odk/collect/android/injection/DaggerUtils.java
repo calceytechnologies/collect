@@ -25,10 +25,10 @@ public class DaggerUtils {
     private DaggerUtils() {}
 
     public static AppDependencyComponent getComponent(Activity activity) {
-        return ((Collect) activity.getApplication()).getComponent();
+        return Collect.getCollectInstance().getComponent();
     }
 
     public static AppDependencyComponent getComponent(Context context) {
-        return ((Collect) context.getApplicationContext()).getComponent();
+        return Collect.getCollectInstance().getComponent();
     }
 }

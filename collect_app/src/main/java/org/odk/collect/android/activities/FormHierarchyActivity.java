@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.activities;
 
+import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
@@ -57,8 +59,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
 
 public class FormHierarchyActivity extends CollectAbstractActivity implements DeleteRepeatDialogFragment.DeleteRepeatDialogCallback {
 
@@ -124,7 +124,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hierarchy_layout);
-        Collect.getInstance().getComponent().inject(this);
+        Collect.getCollectInstance().getComponent().inject(this);
 
         recyclerView = findViewById(R.id.list);
         recyclerView.setHasFixedSize(true);
@@ -135,7 +135,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
         // https://github.com/getodk/collect/issues/998
         if (formController == null) {
             finish();
@@ -144,7 +144,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
         }
 
         formEntryViewModel = new ViewModelProvider(this, formEntryViewModelFactory).get(FormEntryViewModel.class);
-        formEntryViewModel.formLoaded(Collect.getInstance().getFormController());
+        formEntryViewModel.formLoaded(Collect.getCollectInstance().getFormController());
 
         startIndex = formController.getFormIndex();
 
@@ -210,7 +210,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
     }
 
     private void updateOptionsMenu() {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
 
         // Not ready yet. Menu will be updated automatically once it's been prepared.
         if (optionsMenu == null || formController == null) {
@@ -238,7 +238,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
      * (e.g. if `jr:count` is explicitly set).
      */
     private boolean isGroupSizeLocked(FormIndex index) {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
         IFormElement element = formController.getCaptionPrompt(index).getFormElement();
         return element instanceof GroupDef && ((GroupDef) element).noAddRemove;
     }
@@ -269,7 +269,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
             DialogUtils.showIfNotShowing(DeleteRepeatDialogFragment.class, getSupportFragmentManager());
             return true;
         } else if (itemId == R.id.menu_add_repeat) {
-            Collect.getInstance().getFormController().jumpToIndex(repeatGroupPickerIndex);
+            Collect.getCollectInstance().getFormController().jumpToIndex(repeatGroupPickerIndex);
             formEntryViewModel.jumpToNewRepeat();
             formEntryViewModel.addRepeat();
 
@@ -308,7 +308,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
      * returns true if the current index was the only item in the repeat group.
      */
     private boolean didDeleteLastRepeatItem() {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
         FormIndex index = formController.getFormIndex();
         int event = formController.getEvent(index);
 
@@ -320,7 +320,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
 
     private boolean didDeleteFirstRepeatItem() {
         return Collect
-                .getInstance()
+                .getCollectInstance()
                 .getFormController()
                 .getFormIndex()
                 .getElementMultiplicity() == 0;
@@ -332,7 +332,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
      * e.g. after deleting the final remaining item in a repeat group.
      */
     private void goToPreviousEvent() {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
         try {
             formController.stepToPreviousScreenEvent();
         } catch (JavaRosaException e) {
@@ -348,7 +348,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
      * Navigates "up" in the form hierarchy.
      */
     protected void goUpLevel() {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
 
         // If `repeatGroupPickerIndex` is set it means we're currently displaying
         // a list of repeat instances. If we unset `repeatGroupPickerIndex`,
@@ -374,7 +374,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
      * Each level is separated by `>`.
      */
     private String getCurrentPath() {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
         FormIndex index = formController.getFormIndex();
 
         // Step out to the enclosing group if the current index is something
@@ -407,7 +407,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
      * Backs out until the index is at the beginning of a repeat group or the beginning of the form.
      */
     private void jumpToHierarchyStartIndex() {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
         FormIndex startIndex = formController.getFormIndex();
 
         // If we're not at the first level, we're inside a repeated group so we want to only
@@ -481,7 +481,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
      */
     private void refreshView(boolean isGoingUp) {
         try {
-            FormController formController = Collect.getInstance().getFormController();
+            FormController formController = Collect.getCollectInstance().getFormController();
 
             // Save the current index so we can return to the problematic question
             // in the event of an error.
@@ -697,7 +697,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
             case REPEAT_INSTANCE:
                 // Hide the picker.
                 repeatGroupPickerIndex = null;
-                Collect.getInstance().getFormController().jumpToIndex(index);
+                Collect.getCollectInstance().getFormController().jumpToIndex(index);
                 setResult(RESULT_OK);
                 refreshView();
                 break;
@@ -709,10 +709,10 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
      * If the selected question is in a field list, show the entire field list.
      */
     void onQuestionClicked(FormIndex index) {
-        Collect.getInstance().getFormController().jumpToIndex(index);
-        if (Collect.getInstance().getFormController().indexIsInFieldList()) {
+        Collect.getCollectInstance().getFormController().jumpToIndex(index);
+        if (Collect.getCollectInstance().getFormController().indexIsInFieldList()) {
             try {
-                Collect.getInstance().getFormController().stepToPreviousScreenEvent();
+                Collect.getCollectInstance().getFormController().stepToPreviousScreenEvent();
             } catch (JavaRosaException e) {
                 Timber.d(e);
                 createErrorDialog(e.getCause().getMessage());
@@ -729,7 +729,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
      */
     @Override
     public void onBackPressed() {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
         if (formController != null) {
             formController.getAuditEventLogger().flush();
             navigateToTheLastRelevantIndex(formController);
@@ -779,7 +779,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        FormController formController = Collect.getInstance().getFormController();
+                        FormController formController = Collect.getCollectInstance().getFormController();
                         formController.jumpToIndex(currentIndex);
                         break;
                 }

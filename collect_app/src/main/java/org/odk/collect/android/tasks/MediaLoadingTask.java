@@ -43,7 +43,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
     @Override
     protected File doInBackground(Uri... uris) {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
 
         if (formController != null) {
             File instanceFile = formController.getInstanceFile();

@@ -48,7 +48,7 @@ public final class InstancesDaoHelper {
         // default to false if we're mid form
         boolean complete = false;
 
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
         if (formController != null && formController.getInstanceFile() != null) {
             // First check if we're at the end of the form, then check the preferences
             complete = end && completedByDefault;

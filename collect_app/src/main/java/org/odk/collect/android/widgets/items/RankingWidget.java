@@ -98,7 +98,7 @@ public class RankingWidget extends ItemsWidget implements WidgetDataReceiver, Bu
 
     @Override
     public void onButtonClick(int buttonId) {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = Collect.getCollectInstance().getFormController();
         if (formController != null) {
             formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
         }

@@ -14,19 +14,19 @@
 
 package org.odk.collect.android.application;
 
+import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
+
 import android.app.Application;
-import android.content.Context;
-import android.content.res.Configuration;
 import android.os.StrictMode;
 
 import androidx.annotation.Nullable;
-import androidx.multidex.MultiDex;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.externaldata.ExternalDataManager;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.source.SettingsProvider;
@@ -54,17 +54,16 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
-
-public class Collect extends Application implements
-        LocalizedApplication,
-        AudioRecorderDependencyComponentProvider,
+public class Collect implements LocalizedApplication, AudioRecorderDependencyComponentProvider,
         ProjectsDependencyComponentProvider,
         StateStore {
     public static String defaultSysLanguage;
     private static Collect singleton;
 
     private final AppState appState = new AppState();
+
+    @NotNull
+    private Application application;
 
     @Nullable
     private FormController formController;
@@ -84,13 +83,32 @@ public class Collect extends Application implements
     private ProjectsDependencyComponent projectsDependencyComponent;
 
     /**
-     * @deprecated we shouldn't have to reference a static singleton of the application. Code doing this
-     * should either have a {@link Context} instance passed to it (or have any references removed if
-     * possible).
+     * Initialise Collect instance so it could execute from Main Application module
      */
-    @Deprecated
-    public static Collect getInstance() {
+    static {
+        singleton = new Collect();
+    }
+
+    private Collect() {
+    }
+
+    public static Collect getCollectInstance() {
+        defaultSysLanguage = "en";
         return singleton;
+    }
+
+    public static Application getInstance() {
+        return singleton.application;
+    }
+
+
+    /**
+     * Update language when system language updates.
+     *
+     * @param lang language
+     */
+    public static void updateSysDefaultLanguage(String lang) {
+        defaultSysLanguage = lang;
     }
 
     public FormController getFormController() {
@@ -109,35 +127,26 @@ public class Collect extends Application implements
         this.externalDataManager = externalDataManager;
     }
 
-    /*
-        Adds support for multidex support library. For more info check out the link below,
-        https://developer.android.com/studio/build/multidex.html
-    */
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
+    public void initializeCollect(Application application) {
+        this.application = application;
+
+        testStorage();
+        setupDagger(application);
+
+
+        //applicationInitializer.initialize();
+        fixGoogleBug154855417();
+        setupStrictMode();
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        testStorage();
-
-        singleton = this;
-
-        setupDagger();
-        applicationInitializer.initialize();
-
-        fixGoogleBug154855417();
-
-        setupStrictMode();
+    public Application getApplication() {
+        return application;
     }
 
     private void testStorage() {
         // Throw specific error to avoid later ones if the app won't be able to access storage
         try {
-            File externalFilesDir = getExternalFilesDir(null);
+            File externalFilesDir = application.getExternalFilesDir(null);
             File testFile = new File(externalFilesDir + File.separator + ".test");
             testFile.createNewFile();
             testFile.delete();
@@ -165,14 +174,15 @@ public class Collect extends Application implements
         }
     }
 
-    private void setupDagger() {
+    private void setupDagger(Application application) {
         applicationComponent = DaggerAppDependencyComponent.builder()
-                .application(this)
+                .appDependencyModule(new AppDependencyModule())
+                .application(application)
                 .build();
-        applicationComponent.inject(this);
+        //applicationComponent.inject(this);
 
         audioRecorderDependencyComponent = DaggerAudioRecorderDependencyComponent.builder()
-                .application(this)
+                .application(application)
                 .build();
 
         projectsDependencyComponent = DaggerProjectsDependencyComponent.builder()
@@ -198,14 +208,6 @@ public class Collect extends Application implements
         return projectsDependencyComponent;
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        //noinspection deprecation
-        defaultSysLanguage = newConfig.locale.getLanguage();
-    }
-
     public AppDependencyComponent getComponent() {
         return applicationComponent;
     }
@@ -223,7 +225,8 @@ public class Collect extends Application implements
      * @return md5 hash of the form title, a space, the form ID
      */
     public static String getFormIdentifierHash(String formId, String formVersion) {
-        Form form = new FormsRepositoryProvider(Collect.getInstance()).get().getLatestByFormIdAndVersion(formId, formVersion);
+        Form form = new FormsRepositoryProvider(Collect.getInstance()).get()
+                .getLatestByFormIdAndVersion(formId, formVersion);
 
         String formTitle = form != null ? form.getDisplayName() : "";
 
@@ -239,7 +242,7 @@ public class Collect extends Application implements
             boolean hasFixedGoogleBug154855417 = metaSharedPreferences.getBoolean(KEY_GOOGLE_BUG_154855417_FIXED);
 
             if (!hasFixedGoogleBug154855417) {
-                File corruptedZoomTables = new File(getFilesDir(), "ZoomTables.data");
+                File corruptedZoomTables = new File(application.getFilesDir(), "ZoomTables.data");
                 corruptedZoomTables.delete();
 
                 metaSharedPreferences.save(KEY_GOOGLE_BUG_154855417_FIXED, true);

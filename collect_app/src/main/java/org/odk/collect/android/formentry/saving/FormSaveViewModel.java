@@ -157,7 +157,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             audioRecorder.cleanUp();
         }
 
-        ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
+        ExternalDataManager manager = Collect.getCollectInstance().getExternalDataManager();
         if (manager != null) {
             manager.close();
         }

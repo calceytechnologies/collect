@@ -47,7 +47,7 @@ public class AuthDialogUtility {
     PropertyManager propertyManager;
 
     public AuthDialogUtility() {
-        Collect.getInstance().getComponent().inject(this);
+        Collect.getCollectInstance().getComponent().inject(this);
     }
 
     /**

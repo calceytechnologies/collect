@@ -185,9 +185,9 @@ public final class ExternalDataUtil {
                     //                    }
 
                     ExternalDataManager externalDataManager =
-                            Collect.getInstance().getExternalDataManager();
+                            Collect.getCollectInstance().getExternalDataManager();
                     FormInstance formInstance =
-                            Collect.getInstance().getFormController().getFormDef().getInstance();
+                            Collect.getCollectInstance().getFormController().getFormDef().getInstance();
                     EvaluationContext baseEvaluationContext = new EvaluationContext(formInstance);
                     EvaluationContext evaluationContext = new EvaluationContext(
                             baseEvaluationContext, formEntryPrompt.getIndex().getReference());
@@ -216,10 +216,10 @@ public final class ExternalDataUtil {
             if (!fileName.endsWith(".csv")) {
                 fileName = fileName + ".csv";
             }
-            FormController formController = Collect.getInstance().getFormController();
+            FormController formController = Collect.getCollectInstance().getFormController();
             String filePath = fileName;
             if (formController != null) {
-                filePath = Collect.getInstance().getFormController().getMediaFolder() + File.separator + fileName;
+                filePath = Collect.getCollectInstance().getFormController().getMediaFolder() + File.separator + fileName;
             }
             if (!new File(filePath).exists()) {
                 throw new FileNotFoundException(filePath);

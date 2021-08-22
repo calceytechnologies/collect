@@ -57,7 +57,7 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        Collect.getInstance().getComponent().inject(this);
+        Collect.getCollectInstance().getComponent().inject(this);
     }
 
     @Override

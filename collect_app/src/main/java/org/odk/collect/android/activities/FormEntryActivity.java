@@ -371,7 +371,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Collect.getInstance().getComponent().inject(this);
+        Collect.getCollectInstance().getComponent().inject(this);
         formsRepository = formsRepositoryProvider.get();
 
         setContentView(R.layout.form_entry);
@@ -581,7 +581,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             // Not a restart from a screen orientation change (or other).
-            Collect.getInstance().setFormController(null);
+            Collect.getCollectInstance().setFormController(null);
 
             Intent intent = getIntent();
             if (intent != null) {
@@ -736,7 +736,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     // This method may return null if called before form loading is finished
     @Nullable
     private FormController getFormController() {
-        return Collect.getInstance().getFormController();
+        return Collect.getCollectInstance().getFormController();
     }
 
     @Override
@@ -1526,7 +1526,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     List<TreeElement> attrs = p.getBindAttributes();
                     for (int i = 0; i < attrs.size(); i++) {
                         if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                            analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", AnalyticsUtils.getFormHash(Collect.getInstance().getFormController()));
+                            analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", AnalyticsUtils.getFormHash(Collect.getCollectInstance().getFormController()));
 
                             saveForm(false, false, null, false);
                             autoSaved = true;
@@ -2128,10 +2128,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 t.cancel(true);
                 t.destroy();
 
-                Collect.getInstance().setFormController(formController);
+                Collect.getCollectInstance().setFormController(formController);
 
                 backgroundLocationViewModel.formFinishedLoading();
-                Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
+                Collect.getCollectInstance().setExternalDataManager(task.getExternalDataManager());
 
                 // Set the language if one has already been set in the past
                 String[] languageTest = formController.getLanguages();

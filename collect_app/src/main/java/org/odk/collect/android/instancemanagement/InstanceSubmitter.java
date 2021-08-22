@@ -84,7 +84,7 @@ public class InstanceSubmitter {
                 throw new SubmitException(Type.GOOGLE_ACCOUNT_NOT_PERMITTED);
             }
         } else {
-            OpenRosaHttpInterface httpInterface = Collect.getInstance().getComponent().openRosaHttpInterface();
+            OpenRosaHttpInterface httpInterface = Collect.getCollectInstance().getComponent().openRosaHttpInterface();
             uploader = new InstanceServerUploader(httpInterface, new WebCredentialsUtils(generalSettings), new HashMap<>(), generalSettings);
             deviceId = new PropertyManager().getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
         }

@@ -108,7 +108,7 @@ public class WidgetFactory {
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
         String appearance = Appearances.getSanitizedAppearanceHint(prompt);
-        QuestionDetails questionDetails = new QuestionDetails(prompt, AnalyticsUtils.getFormHash(Collect.getInstance().getFormController()), readOnlyOverride);
+        QuestionDetails questionDetails = new QuestionDetails(prompt, AnalyticsUtils.getFormHash(Collect.getCollectInstance().getFormController()), readOnlyOverride);
 
         final QuestionWidget questionWidget;
         switch (prompt.getControlType()) {
@@ -203,7 +203,7 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_OSM_CAPTURE:
                 questionWidget = new OSMWidget(context, questionDetails, waitingForDataRegistry,
-                        new ActivityAvailability(context), Collect.getInstance().getFormController());
+                        new ActivityAvailability(context), Collect.getCollectInstance().getFormController());
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
                 RecordingRequester recordingRequester = recordingRequesterProvider.create(prompt, useExternalRecorder);

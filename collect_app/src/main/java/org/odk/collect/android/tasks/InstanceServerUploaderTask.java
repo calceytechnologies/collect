@@ -55,7 +55,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
     private String customPassword;
 
     public InstanceServerUploaderTask() {
-        Collect.getInstance().getComponent().inject(this);
+        Collect.getCollectInstance().getComponent().inject(this);
     }
 
     @Override
