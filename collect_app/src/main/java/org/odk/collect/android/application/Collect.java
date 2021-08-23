@@ -142,7 +142,7 @@ public class Collect extends Application implements LocalizedApplication, AudioR
         setupDagger(application);
         applicationInitializer.initialize();
 
-        testProjectConfiguration();
+//        testProjectConfiguration();
         fixGoogleBug154855417();
         setupStrictMode();
     }

@@ -99,6 +99,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         enterDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent i = new Intent(getApplicationContext(),
                         FillBlankFormActivity.class);
                 startActivity(i);
