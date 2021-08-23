@@ -35,10 +35,6 @@ import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.androidshared.data.AppState;
-import org.odk.collect.androidshared.data.StateStore;
-import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
-import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
-import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
 import org.odk.collect.forms.Form;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.Project;
@@ -57,13 +53,10 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-public class Collect extends Application implements LocalizedApplication, AudioRecorderDependencyComponentProvider,
-        ProjectsDependencyComponentProvider,
-        StateStore {
+public class Collect implements LocalizedApplication, ProjectsDependencyComponentProvider {
+
     public static String defaultSysLanguage;
     private static Collect singleton;
-
-    private final AppState appState = new AppState();
 
     @NotNull
     private Application application;
@@ -88,7 +81,6 @@ public class Collect extends Application implements LocalizedApplication, AudioR
     @Inject
     ProjectsRepository projectsRepository;
 
-    private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
     private ProjectsDependencyComponent projectsDependencyComponent;
 
     /**
@@ -137,12 +129,11 @@ public class Collect extends Application implements LocalizedApplication, AudioR
 
     public void initializeCollect(Application application) {
         this.application = application;
-
         testStorage();
         setupDagger(application);
         applicationInitializer.initialize();
 
-//        testProjectConfiguration();
+        // testProjectConfiguration();
         fixGoogleBug154855417();
         setupStrictMode();
     }
@@ -192,11 +183,7 @@ public class Collect extends Application implements LocalizedApplication, AudioR
                 .appDependencyModule(new AppDependencyModule())
                 .application(application)
                 .build();
-        applicationComponent.inject(getCollectInstance());
-
-        audioRecorderDependencyComponent = DaggerAudioRecorderDependencyComponent.builder()
-                .application(getCollectInstance())
-                .build();
+        applicationComponent.inject(this);
 
         projectsDependencyComponent = DaggerProjectsDependencyComponent.builder()
                 .projectsDependencyModule(new ProjectsDependencyModule() {
@@ -207,12 +194,6 @@ public class Collect extends Application implements LocalizedApplication, AudioR
                     }
                 })
                 .build();
-    }
-
-    @NotNull
-    @Override
-    public AudioRecorderDependencyComponent getAudioRecorderDependencyComponent() {
-        return audioRecorderDependencyComponent;
     }
 
     @NotNull
@@ -269,11 +250,5 @@ public class Collect extends Application implements LocalizedApplication, AudioR
     @Override
     public Locale getLocale() {
         return new Locale(LocaleHelper.getLocaleCode(settingsProvider.getGeneralSettings()));
-    }
-
-    @NotNull
-    @Override
-    public AppState getState() {
-        return appState;
     }
 }
