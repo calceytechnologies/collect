@@ -57,13 +57,9 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-public class Collect implements LocalizedApplication, AudioRecorderDependencyComponentProvider,
-        ProjectsDependencyComponentProvider,
-        StateStore {
+public class Collect implements LocalizedApplication, ProjectsDependencyComponentProvider {
     public static String defaultSysLanguage;
     private static Collect singleton;
-
-    private final AppState appState = new AppState();
 
     @NotNull
     private Application application;
@@ -194,10 +190,6 @@ public class Collect implements LocalizedApplication, AudioRecorderDependencyCom
                 .build();
         applicationComponent.inject(this);
 
-        audioRecorderDependencyComponent = DaggerAudioRecorderDependencyComponent.builder()
-                .application(application)
-                .build();
-
         projectsDependencyComponent = DaggerProjectsDependencyComponent.builder()
                 .projectsDependencyModule(new ProjectsDependencyModule() {
                     @NotNull
@@ -207,12 +199,6 @@ public class Collect implements LocalizedApplication, AudioRecorderDependencyCom
                     }
                 })
                 .build();
-    }
-
-    @NotNull
-    @Override
-    public AudioRecorderDependencyComponent getAudioRecorderDependencyComponent() {
-        return audioRecorderDependencyComponent;
     }
 
     @NotNull
@@ -269,11 +255,5 @@ public class Collect implements LocalizedApplication, AudioRecorderDependencyCom
     @Override
     public Locale getLocale() {
         return new Locale(LocaleHelper.getLocaleCode(settingsProvider.getGeneralSettings()));
-    }
-
-    @NotNull
-    @Override
-    public AppState getState() {
-        return appState;
     }
 }
