@@ -79,8 +79,8 @@ android {
     }
     compileSdkVersion rootProject.androidCompileSdk
 
-    buildFeatures {
-        viewBinding true
+    viewBinding {
+        enabled = true
     }
 
     defaultConfig {
