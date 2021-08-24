@@ -85,7 +85,9 @@ public class CollectLauncherActivity extends AppCompatActivity {
             currentProjectViewModel.getCurrentProject().observe(this, project -> {
 
                 ToastUtils.showLongToast("Already login to  " + project.getName());
+                endSplashScreen();
             });
+
         }
     }
 
@@ -102,7 +104,7 @@ public class CollectLauncherActivity extends AppCompatActivity {
 
        String UUID =  settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson);
        if(UUID != null){
-           ToastUtils.showLongToast("Project alredy setup with " + UUID);
+           ToastUtils.showLongToast("Project already setup with " + UUID);
 
        }else{
            createProject(settingsJson);

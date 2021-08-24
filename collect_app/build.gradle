@@ -361,7 +361,7 @@ dependencies {
     implementation project(':analytics')
     implementation project(':audioclips')
     implementation project(':forms')
-    implementation project(':audiorecorder')PermissionsProvider
+    implementation project(':audiorecorder')
     implementation project(':projects')
     implementation project(':location')
 
