@@ -6,4 +6,55 @@
     android:layout_height="match_parent"
     tools:context=".activities.CollectLauncherActivity">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <org.odk.collect.android.views.MultiClickSafeButton
+            android:id="@+id/login"
+            style="@style/Widget.Collect.Button.FullWidth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_extra_small"
+            tools:text="LOGIN" />
+
+        <org.odk.collect.android.views.MultiClickSafeButton
+            android:id="@+id/mainmenu"
+            style="@style/Widget.Collect.Button.FullWidth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_extra_small"
+            tools:text="MAIN MENU" />
+
+        <org.odk.collect.android.views.MultiClickSafeButton
+            android:id="@+id/get_forms"
+            style="@style/Widget.Collect.Button.FullWidth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_extra_small"
+            tools:text="Download Forms" />
+
+        <org.odk.collect.android.views.MultiClickSafeButton
+            android:id="@+id/open_forms"
+            style="@style/Widget.Collect.Button.FullWidth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_extra_small"
+            tools:text="Open Form" />
+
+        <org.odk.collect.android.views.MultiClickSafeButton
+            android:id="@+id/upload_forms"
+            style="@style/Widget.Collect.Button.FullWidth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_extra_small"
+            tools:text="Upload Form" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
