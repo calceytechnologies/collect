@@ -72,8 +72,8 @@ def mapboxToken = secrets.getProperty('MAPBOX_ACCESS_TOKEN', '')
 android {
     compileSdkVersion rootProject.androidCompileSdk
 
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding true
     }
 
     defaultConfig {
@@ -353,13 +353,13 @@ dependencies {
     implementation project(':analytics')
     implementation project(':audioclips')
     implementation project(':forms')
-    implementation project(':audiorecorder')
+    implementation project(':audiorecorder')PermissionsProvider
     implementation project(':projects')
     implementation project(':location')
 
     // Makes binding to Views easy:
     implementation "com.jakewharton:butterknife:10.2.3"
-    annotationProcessor "com.jakewharton:butterknife-compiler:10.2.3"
+    kapt "com.jakewharton:butterknife-compiler:10.2.3"
 
     // Annotations understood by FindBugs
     compileOnly 'com.google.code.findbugs:annotations:3.0.1'
