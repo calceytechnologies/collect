@@ -73,7 +73,7 @@ public class PropertyManager implements IPropertyManager {
     }
 
     public PropertyManager() {
-        Collect.getCollectInstance().getComponent().inject(this);
+        Collect.getInstance().getComponent().inject(this);
 
         reload();
     }

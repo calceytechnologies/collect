@@ -10,7 +10,7 @@ public class FormControllerWaitingForDataRegistry implements WaitingForDataRegis
 
     @Override
     public void waitForData(FormIndex index) {
-        Collect collect = Collect.getCollectInstance();
+        Collect collect = Collect.getInstance();
         if (collect == null) {
             throw new IllegalStateException("Collect application instance is null.");
         }
@@ -26,7 +26,7 @@ public class FormControllerWaitingForDataRegistry implements WaitingForDataRegis
 
     @Override
     public boolean isWaitingForData(FormIndex index) {
-        Collect collect = Collect.getCollectInstance();
+        Collect collect = Collect.getInstance();
         if (collect == null) {
             throw new IllegalStateException("Collect application instance is null.");
         }
@@ -41,7 +41,7 @@ public class FormControllerWaitingForDataRegistry implements WaitingForDataRegis
 
     @Override
     public void cancelWaitingForData() {
-        Collect collect = Collect.getCollectInstance();
+        Collect collect = Collect.getInstance();
         if (collect == null) {
             throw new IllegalStateException("Collect application instance is null.");
         }

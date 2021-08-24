@@ -63,7 +63,7 @@ public final class CollectHelpers {
                 .application(ApplicationProvider.getApplicationContext())
                 .appDependencyModule(appDependencyModule)
                 .build();
-        Collect.getCollectInstance().setComponent(testComponent);
+        Collect.getInstance().setComponent(testComponent);
     }
 
     public static void createThemedContext() {

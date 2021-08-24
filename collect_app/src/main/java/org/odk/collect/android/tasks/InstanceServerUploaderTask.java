@@ -55,7 +55,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
     private String customPassword;
 
     public InstanceServerUploaderTask() {
-        Collect.getCollectInstance().getComponent().inject(this);
+        Collect.getInstance().getComponent().inject(this);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl, null);
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
                 outcome.messagesByInstanceId.put(instance.getDbId().toString(),
-                        customMessage != null ? customMessage : TranslationHandler.getString(Collect.getInstance(), R.string.success));
+                        customMessage != null ? customMessage : TranslationHandler.getString(Collect.getApplication(), R.string.success));
 
                 analytics.logEvent(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion()));
             } catch (UploadAuthRequestedException e) {

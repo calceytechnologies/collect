@@ -58,7 +58,7 @@ public class SavePointTask extends AsyncTask<Void, Void, String> {
             long start = System.currentTimeMillis();
 
             try {
-                FormController formController = Collect.getCollectInstance().getFormController();
+                FormController formController = Collect.getInstance().getFormController();
                 File temp = SaveFormToDisk.getSavepointFile(formController.getInstanceFile().getName());
                 ByteArrayPayload payload = formController.getFilledInFormXml();
 

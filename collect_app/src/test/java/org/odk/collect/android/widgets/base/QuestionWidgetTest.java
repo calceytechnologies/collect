@@ -93,7 +93,7 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
 
         when(formEntryPrompt.getIndex()).thenReturn(formIndex);
 
-        Collect.getCollectInstance().setFormController(formController);
+        Collect.getInstance().setFormController(formController);
 
         widget = null;
     }

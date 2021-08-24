@@ -38,7 +38,7 @@ public abstract class InstanceUploader {
     InstancesAppState instancesAppState;
 
     public InstanceUploader() {
-        DaggerUtils.getComponent(Collect.getInstance()).inject(this);
+        DaggerUtils.getComponent(Collect.getApplication()).inject(this);
     }
 
     public static final String FAIL = "Error: ";
@@ -62,7 +62,7 @@ public abstract class InstanceUploader {
         List<Instance> instances = new ArrayList<>();
 
         for (Long id : instanceDatabaseIds) {
-            instances.add(new InstancesRepositoryProvider(Collect.getInstance()).get().get(id));
+            instances.add(new InstancesRepositoryProvider(Collect.getApplication()).get().get(id));
         }
 
         return instances;

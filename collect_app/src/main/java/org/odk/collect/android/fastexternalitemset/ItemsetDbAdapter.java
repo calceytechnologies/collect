@@ -42,7 +42,7 @@ public class ItemsetDbAdapter implements Closeable {
      */
     private static class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper() {
-            super(new AltDatabasePathContext(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA), Collect.getInstance()), DATABASE_NAME, null, DATABASE_VERSION);
+            super(new AltDatabasePathContext(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA), Collect.getApplication()), DATABASE_NAME, null, DATABASE_VERSION);
         }
 
         @Override

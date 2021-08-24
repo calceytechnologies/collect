@@ -171,7 +171,7 @@ public class UserInterfacePreferencesFragment extends BaseProjectPreferencesFrag
 
         if (requestCode == IMAGE_CHOOSER) {
             File customImage = new File(new StoragePathProvider().getCustomSplashScreenImagePath());
-            FileUtils.saveAnswerFileFromUri(intent.getData(), customImage, Collect.getInstance());
+            FileUtils.saveAnswerFileFromUri(intent.getData(), customImage, Collect.getApplication());
 
             setSplashPath(customImage.getAbsolutePath());
         }

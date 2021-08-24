@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="font_family_regular" translatable="false">sans-serif</string>
+    <string name="font_semi_bold" translatable="false">fonts/Montserrat-SemiBold.ttf</string>
+    <string name="font_bold" translatable="false">fonts/Montserrat-Bold.ttf</string>
+    <string name="font_medium" translatable="false">fonts/Montserrat-Medium.ttf</string>
+    <string name="font_regular" translatable="false">fonts/Montserrat-Medium.ttf</string>
 </resources>

@@ -16,7 +16,7 @@ object ToastUtils {
 
     @JvmStatic
     fun showShortToast(messageResource: Int) {
-        showToast(TranslationHandler.getString(Collect.getInstance(), messageResource))
+        showToast(TranslationHandler.getString(Collect.getApplication(), messageResource))
     }
 
     @JvmStatic
@@ -26,7 +26,7 @@ object ToastUtils {
 
     @JvmStatic
     fun showLongToast(messageResource: Int) {
-        showToast(TranslationHandler.getString(Collect.getInstance(), messageResource), Toast.LENGTH_LONG)
+        showToast(TranslationHandler.getString(Collect.getApplication(), messageResource), Toast.LENGTH_LONG)
     }
 
     @JvmStatic
@@ -36,13 +36,13 @@ object ToastUtils {
 
     private fun showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
         hideOldToast()
-        toast = Toast.makeText(Collect.getInstance(), message, duration)
+        toast = Toast.makeText(Collect.getApplication(), message, duration)
         toast.show()
     }
 
     private fun showToastInMiddle(message: String, duration: Int = Toast.LENGTH_SHORT) {
         hideOldToast()
-        toast = Toast.makeText(Collect.getInstance(), message, duration)
+        toast = Toast.makeText(Collect.getApplication(), message, duration)
         try {
             val group = toast.view as ViewGroup?
             val messageTextView = group!!.getChildAt(0) as TextView

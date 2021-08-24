@@ -67,13 +67,13 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
     public void requestLocationUpdates() {
         // Do initialization on first location request so the client doesn't need to be serialized
         if (maxAccuracyLocationClient == null) {
-            maxAccuracyLocationClient = new MaxAccuracyWithinTimeoutLocationClientWrapper(new GoogleFusedLocationClient(Collect.getInstance()), this);
+            maxAccuracyLocationClient = new MaxAccuracyWithinTimeoutLocationClientWrapper(new GoogleFusedLocationClient(Collect.getApplication()), this);
         }
 
         // Only start acquiring location if the Collect preference allows it and Google Play
         // Services are available. If it's not allowed, leave the target field blank.
         if (isBackgroundLocationEnabled()
-            && new PlayServicesChecker().isGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext())) {
+            && new PlayServicesChecker().isGooglePlayServicesAvailable(Collect.getApplication().getApplicationContext())) {
             maxAccuracyLocationClient.requestLocationUpdates(SECONDS_TO_CONSIDER_UPDATES);
         }
     }
@@ -100,7 +100,7 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
 
     private boolean isBackgroundLocationEnabled() {
         return DaggerUtils
-                .getComponent(Collect.getInstance())
+                .getComponent(Collect.getApplication())
                 .settingsProvider()
                 .getGeneralSettings()
                 .getBoolean(KEY_BACKGROUND_LOCATION);

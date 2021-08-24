@@ -43,7 +43,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
     @Override
     protected File doInBackground(Uri... uris) {
-        FormController formController = Collect.getCollectInstance().getFormController();
+        FormController formController = Collect.getInstance().getFormController();
 
         if (formController != null) {
             File instanceFile = formController.getInstanceFile();
@@ -51,7 +51,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
                 String extension = ContentUriHelper.getFileExtensionFromUri(uris[0]);
 
                 File newFile = FileUtils.createDestinationMediaFile(instanceFile.getParent(), extension);
-                FileUtils.saveAnswerFileFromUri(uris[0], newFile, Collect.getInstance());
+                FileUtils.saveAnswerFileFromUri(uris[0], newFile, Collect.getApplication());
                 QuestionWidget questionWidget = formEntryActivity.get().getWidgetWaitingForBinaryData();
 
                 // apply image conversion if the widget is an image widget

@@ -31,7 +31,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
 
     public InstanceUploaderAdapter(Context context, Cursor cursor) {
         super(context, cursor);
-        Collect.getCollectInstance().getComponent().inject(this);
+        Collect.getInstance().getComponent().inject(this);
         compositeDisposable = new CompositeDisposable();
     }
 

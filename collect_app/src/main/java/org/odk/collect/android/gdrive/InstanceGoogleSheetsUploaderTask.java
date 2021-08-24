@@ -61,18 +61,18 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
 
             if (isCancelled()) {
                 outcome.messagesByInstanceId.put(instance.getDbId().toString(),
-                        TranslationHandler.getString(Collect.getInstance(), R.string.instance_upload_cancelled));
+                        TranslationHandler.getString(Collect.getApplication(), R.string.instance_upload_cancelled));
                 return outcome;
             }
 
             publishProgress(i + 1, instancesToUpload.size());
 
             // Get corresponding blank form and verify there is exactly 1
-            List<Form> forms = new FormsRepositoryProvider(Collect.getInstance()).get().getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
+            List<Form> forms = new FormsRepositoryProvider(Collect.getApplication()).get().getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
 
             if (forms.size() != 1) {
                 outcome.messagesByInstanceId.put(instance.getDbId().toString(),
-                        TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id));
+                        TranslationHandler.getString(Collect.getApplication(), R.string.not_exactly_one_blank_form_for_this_form_id));
             } else {
                 try {
                     String destinationUrl = uploader.getUrlToSubmitTo(instance, null, null, settingsProvider.getGeneralSettings().getString(KEY_GOOGLE_SHEETS_URL));

@@ -401,7 +401,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     @Nullable
     @Deprecated
     public final String getInstanceFolder() {
-        Collect collect = Collect.getCollectInstance();
+        Collect collect = Collect.getInstance();
         if (collect == null) {
             throw new IllegalStateException("Collect application instance is null.");
         }

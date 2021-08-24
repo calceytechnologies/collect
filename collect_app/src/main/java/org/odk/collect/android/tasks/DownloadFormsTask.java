@@ -60,7 +60,7 @@ public class DownloadFormsTask extends
                 publishProgress(serverFormDetails.getFormName(), currentFormNumber, totalForms);
 
                 formDownloader.downloadForm(serverFormDetails, count -> {
-                    String message = Collect.getInstance().getString(R.string.form_download_progress,
+                    String message = Collect.getApplication().getString(R.string.form_download_progress,
                             serverFormDetails.getFormName(),
                             String.valueOf(count),
                             String.valueOf(serverFormDetails.getManifest().getMediaFiles().size())
@@ -69,9 +69,9 @@ public class DownloadFormsTask extends
                     publishProgress(message, currentFormNumber, totalForms);
                 }, this::isCancelled);
 
-                results.put(serverFormDetails, Collect.getInstance().getString(R.string.success));
+                results.put(serverFormDetails, Collect.getApplication().getString(R.string.success));
             } catch (FormDownloadException e) {
-                results.put(serverFormDetails, e.getMessage() != null ? e.getMessage() : TranslationHandler.getString(Collect.getInstance(), R.string.failure));
+                results.put(serverFormDetails, e.getMessage() != null ? e.getMessage() : TranslationHandler.getString(Collect.getApplication(), R.string.failure));
             } catch (InterruptedException e) {
                 return emptyMap();
             }

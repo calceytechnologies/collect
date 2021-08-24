@@ -31,7 +31,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
     private final String formsDir;
 
     public FormsDirDiskFormsSynchronizer() {
-        this(DaggerUtils.getComponent(Collect.getInstance()).formsRepositoryProvider().get(), DaggerUtils.getComponent(Collect.getInstance()).storagePathProvider().getOdkDirPath(StorageSubdirectory.FORMS));
+        this(DaggerUtils.getComponent(Collect.getApplication()).formsRepositoryProvider().get(), DaggerUtils.getComponent(Collect.getApplication()).storagePathProvider().getOdkDirPath(StorageSubdirectory.FORMS));
     }
 
     public FormsDirDiskFormsSynchronizer(FormsRepository formsRepository, String formsDir) {
@@ -171,7 +171,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
             if (errors.length() != 0) {
                 statusMessage = errors.toString();
             } else {
-                Timber.d(TranslationHandler.getString(Collect.getInstance(), R.string.finished_disk_scan));
+                Timber.d(TranslationHandler.getString(Collect.getApplication(), R.string.finished_disk_scan));
             }
             return statusMessage;
         } finally {
@@ -224,7 +224,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
             builder.displayName(title);
         } else {
             throw new IllegalArgumentException(
-                    TranslationHandler.getString(Collect.getInstance(), R.string.xform_parse_error,
+                    TranslationHandler.getString(Collect.getApplication(), R.string.xform_parse_error,
                             formDefFile.getName(), "title"));
         }
         String formid = fields.get(FileUtils.FORMID);
@@ -232,7 +232,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
             builder.formId(formid);
         } else {
             throw new IllegalArgumentException(
-                    TranslationHandler.getString(Collect.getInstance(), R.string.xform_parse_error,
+                    TranslationHandler.getString(Collect.getApplication(), R.string.xform_parse_error,
                             formDefFile.getName(), "id"));
         }
         String version = fields.get(FileUtils.VERSION);
@@ -245,7 +245,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                 builder.submissionUri(submission);
             } else {
                 throw new IllegalArgumentException(
-                        TranslationHandler.getString(Collect.getInstance(), R.string.xform_parse_error,
+                        TranslationHandler.getString(Collect.getApplication(), R.string.xform_parse_error,
                                 formDefFile.getName(), "submission url"));
             }
         }

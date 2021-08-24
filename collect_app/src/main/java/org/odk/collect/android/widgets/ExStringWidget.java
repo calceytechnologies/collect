@@ -181,7 +181,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     public void onButtonClick(int buttonId) {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
         try {
-            Intent intent = new ExternalAppIntentProvider().getIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability, Collect.getInstance().getPackageManager());
+            Intent intent = new ExternalAppIntentProvider().getIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability, Collect.getApplication().getPackageManager());
             // ACTION_SENDTO used for sending text messages or emails doesn't require any results
             if (ACTION_SENDTO.equals(intent.getAction())) {
                 getContext().startActivity(intent);

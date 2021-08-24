@@ -371,7 +371,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Collect.getCollectInstance().getComponent().inject(this);
+        Collect.getInstance().getComponent().inject(this);
         formsRepository = formsRepositoryProvider.get();
 
         setContentView(R.layout.form_entry);
@@ -581,7 +581,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             // Not a restart from a screen orientation change (or other).
-            Collect.getCollectInstance().setFormController(null);
+            Collect.getInstance().setFormController(null);
 
             Intent intent = getIntent();
             if (intent != null) {
@@ -599,7 +599,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         if (uriMimeType != null && uriMimeType.equals(InstancesContract.CONTENT_ITEM_TYPE)) {
-            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
+            Instance instance = new InstancesRepositoryProvider(Collect.getApplication()).get().get(ContentUriHelper.getIdFromUri(uri));
 
             if (instance == null) {
                 createErrorDialog(getString(R.string.bad_uri, uri), true);
@@ -609,7 +609,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             instancePath = instance.getInstanceFilePath();
             if (!new File(instancePath).exists()) {
                 analytics.logEvent(AnalyticsEvents.OPEN_DELETED_INSTANCE);
-                new InstanceDeleter(new InstancesRepositoryProvider(Collect.getInstance()).get(), formsRepository).delete(instance.getDbId());
+                new InstanceDeleter(new InstancesRepositoryProvider(Collect.getApplication()).get(), formsRepository).delete(instance.getDbId());
                 createErrorDialog(getString(R.string.instance_deleted_message), true);
                 return;
             }
@@ -736,7 +736,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     // This method may return null if called before form loading is finished
     @Nullable
     private FormController getFormController() {
-        return Collect.getCollectInstance().getFormController();
+        return Collect.getInstance().getFormController();
     }
 
     @Override
@@ -1231,7 +1231,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             if (saveName == null && uriMimeType != null
                     && uriMimeType.equals(InstancesContract.CONTENT_ITEM_TYPE)) {
-                Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(instanceUri));
+                Instance instance = new InstancesRepositoryProvider(Collect.getApplication()).get().get(ContentUriHelper.getIdFromUri(instanceUri));
                 if (instance != null) {
                     saveName = instance.getDisplayName();
                 }
@@ -1526,7 +1526,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     List<TreeElement> attrs = p.getBindAttributes();
                     for (int i = 0; i < attrs.size(); i++) {
                         if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                            analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", AnalyticsUtils.getFormHash(Collect.getCollectInstance().getFormController()));
+                            analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", AnalyticsUtils.getFormHash(Collect.getInstance().getFormController()));
 
                             saveForm(false, false, null, false);
                             autoSaved = true;
@@ -2128,10 +2128,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 t.cancel(true);
                 t.destroy();
 
-                Collect.getCollectInstance().setFormController(formController);
+                Collect.getInstance().setFormController(formController);
 
                 backgroundLocationViewModel.formFinishedLoading();
-                Collect.getCollectInstance().setExternalDataManager(task.getExternalDataManager());
+                Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
                 // Set the language if one has already been set in the past
                 String[] languageTest = formController.getLanguages();

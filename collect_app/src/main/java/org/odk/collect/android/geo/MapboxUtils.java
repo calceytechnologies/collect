@@ -22,7 +22,7 @@ public class MapboxUtils {
         try {
             // To use the Mapbox base maps, we have to initialize the Mapbox SDK with
             // an access token. Configure this token in collect_app/secrets.properties.
-            mapbox = Mapbox.getInstance(Collect.getInstance(), BuildConfig.MAPBOX_ACCESS_TOKEN);
+            mapbox = Mapbox.getInstance(Collect.getApplication(), BuildConfig.MAPBOX_ACCESS_TOKEN);
             Mapbox.setConnected(true);
         } catch (Exception | Error e) {
             // To keep our APK from getting too big, we decided to include the

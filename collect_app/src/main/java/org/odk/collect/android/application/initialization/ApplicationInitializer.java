@@ -61,7 +61,7 @@ public class ApplicationInitializer {
         initializeStorage();
         performUpgradeIfNeeded();
         initializeFrameworks();
-        initializeLocale();
+        //initializeLocale();
 
         launchState.appLaunched();
     }
@@ -86,9 +86,9 @@ public class ApplicationInitializer {
         new UserPropertiesInitializer(analytics, projectsRepository).initialize();
     }
 
-    private void initializeLocale() {
-        Collect.defaultSysLanguage = Locale.getDefault().getLanguage();
-    }
+//    private void initializeLocale() {
+//        Collect.defaultSysLanguage = Locale.getDefault().getLanguage();
+//    }
 
     private void initializeJavaRosa() {
         propertyManager.reload();

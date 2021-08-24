@@ -35,7 +35,7 @@ public class UiUtils {
     }
 
     public static int getDimen(@DimenRes int dimenResId) {
-        return Collect.getInstance().getResources().getDimensionPixelSize(dimenResId);
+        return Collect.getApplication().getResources().getDimensionPixelSize(dimenResId);
     }
 
     /**

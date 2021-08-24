@@ -59,7 +59,7 @@ public class GuidanceHintFormTest {
         onView(withId(R.id.menu_goto)).perform(click());
         onView(withId(R.id.jumpBeginningButton)).perform(click());
 
-        FormEntryPrompt prompt = Collect.getInstance().getFormController().getQuestionPrompt();
+        FormEntryPrompt prompt = Collect.getApplication().getFormController().getQuestionPrompt();
         String guidance = prompt.getSpecialFormQuestionText(prompt.getQuestion().getHelpTextID(), "guidance");
         assertFalse(TextUtils.isEmpty(guidance));
 
@@ -75,7 +75,7 @@ public class GuidanceHintFormTest {
         onView(withId(R.id.menu_goto)).perform(click());
         onView(withId(R.id.jumpBeginningButton)).perform(click());
 
-        FormEntryPrompt prompt = Collect.getInstance().getFormController().getQuestionPrompt();
+        FormEntryPrompt prompt = Collect.getApplication().getFormController().getQuestionPrompt();
         String guidance = prompt.getSpecialFormQuestionText(prompt.getQuestion().getHelpTextID(), "guidance");
         assertFalse(TextUtils.isEmpty(guidance));
 
