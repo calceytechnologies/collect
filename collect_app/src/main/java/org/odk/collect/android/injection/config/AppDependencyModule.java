@@ -25,6 +25,8 @@ import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
+import org.odk.collect.android.application.FormManagementService;
+import org.odk.collect.android.application.FormManagementServiceImpl;
 import org.odk.collect.android.application.initialization.AnalyticsInitializer;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsMigrator;
@@ -615,5 +617,11 @@ public class AppDependencyModule {
     @Provides
     public PreferenceVisibilityHandler providesDisabledPreferencesRemover(SettingsProvider settingsProvider, VersionInformation versionInformation) {
         return new PreferenceVisibilityHandler(settingsProvider, versionInformation);
+    }
+
+    @Provides
+    @Singleton
+    public FormManagementService providesFormManagementService() {
+        return new FormManagementServiceImpl();
     }
 }
