@@ -94,6 +94,7 @@ import org.odk.collect.android.projects.ProjectCreator;
 import org.odk.collect.android.projects.ProjectDeleter;
 import org.odk.collect.android.projects.ProjectDetailsCreator;
 import org.odk.collect.android.projects.ProjectImporter;
+import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ActivityAvailability;
@@ -224,6 +225,12 @@ public class AppDependencyModule {
     @Provides
     public ActivityAvailability providesActivityAvailability(Context context) {
         return new ActivityAvailability(context);
+    }
+
+    @Provides
+    @Singleton
+    public StorageInitializer providesStorageInitializer(StoragePathProvider storagePathProvider) {
+        return new StorageInitializer(storagePathProvider);
     }
 
     @Provides
@@ -515,7 +522,7 @@ public class AppDependencyModule {
 
     @Provides
     public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, StoragePathProvider storagePathProvider) {
-        return new ProjectImporter(projectsRepository);
+        return new ProjectImporter(storagePathProvider, projectsRepository);
     }
 
     @Provides
@@ -537,7 +544,7 @@ public class AppDependencyModule {
 
     @Provides
     public CurrentProjectViewModel.Factory providesCurrentProjectViewModel(CurrentProjectProvider currentProjectProvider, AnalyticsInitializer analyticsInitializer, StoragePathProvider storagePathProvider, ProjectsRepository projectsRepository) {
-        return new CurrentProjectViewModel.Factory(currentProjectProvider, analyticsInitializer);
+        return new CurrentProjectViewModel.Factory(currentProjectProvider, analyticsInitializer, storagePathProvider);
     }
 
     @Provides
@@ -585,8 +592,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PropertyManager propertyManager, Analytics analytics, LaunchState launchState, AppUpgrader appUpgrader, AnalyticsInitializer analyticsInitializer, ProjectsRepository projectsRepository) {
-        return new ApplicationInitializer(context, userAgentProvider, propertyManager, analytics, launchState, appUpgrader, analyticsInitializer, projectsRepository);
+    public ApplicationInitializer providesApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, LaunchState launchState, AppUpgrader appUpgrader, AnalyticsInitializer analyticsInitializer, ProjectsRepository projectsRepository) {
+        return new ApplicationInitializer(context, userAgentProvider, propertyManager, analytics, storageInitializer, launchState, appUpgrader, analyticsInitializer, projectsRepository);
     }
 
     @Provides

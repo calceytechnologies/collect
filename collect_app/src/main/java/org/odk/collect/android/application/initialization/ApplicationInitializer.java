@@ -20,6 +20,7 @@ import org.odk.collect.android.application.initialization.upgrade.AppUpgrader;
 import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
+import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.LaunchState;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.utilities.UserAgentProvider;
@@ -34,6 +35,7 @@ public class ApplicationInitializer {
     private final UserAgentProvider userAgentProvider;
     private final PropertyManager propertyManager;
     private final Analytics analytics;
+    private final StorageInitializer storageInitializer;
     private final LaunchState launchState;
     private final AppUpgrader appUpgrader;
     private final AnalyticsInitializer analyticsInitializer;
@@ -41,13 +43,14 @@ public class ApplicationInitializer {
 
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider,
                                   PropertyManager propertyManager, Analytics analytics,
-                                  LaunchState launchState, AppUpgrader appUpgrader,
-                                  AnalyticsInitializer analyticsInitializer,
-                                  ProjectsRepository projectsRepository) {
+                                  StorageInitializer storageInitializer, LaunchState launchState,
+                                  AppUpgrader appUpgrader,
+                                  AnalyticsInitializer analyticsInitializer, ProjectsRepository projectsRepository) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.propertyManager = propertyManager;
         this.analytics = analytics;
+        this.storageInitializer = storageInitializer;
         this.launchState = launchState;
         this.appUpgrader = appUpgrader;
         this.analyticsInitializer = analyticsInitializer;
@@ -55,6 +58,7 @@ public class ApplicationInitializer {
     }
 
     public void initialize() {
+        initializeStorage();
         performUpgradeIfNeeded();
         initializeFrameworks();
         initializeLocale();
@@ -66,6 +70,10 @@ public class ApplicationInitializer {
         if (launchState.isUpgradedFirstLaunch()) {
             appUpgrader.upgrade();
         }
+    }
+
+    private void initializeStorage() {
+        storageInitializer.createOdkDirsOnStorage();
     }
 
     private void initializeFrameworks() {

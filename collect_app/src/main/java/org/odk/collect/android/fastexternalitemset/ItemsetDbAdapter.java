@@ -10,7 +10,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.AltDatabasePathContext;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.shared.PathUtils;
 
 import java.io.Closeable;
 import java.math.BigInteger;
@@ -122,7 +121,7 @@ public class ItemsetDbAdapter implements Closeable {
 
         ContentValues cv = new ContentValues();
         cv.put(KEY_ITEMSET_HASH, formHash);
-        cv.put(KEY_PATH, PathUtils.getRelativeFilePath(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS), path));
+        cv.put(KEY_PATH, new StoragePathProvider().getRelativeFormPath(path));
         db.insert(ITEMSET_TABLE, null, cv);
 
         return true;
@@ -162,7 +161,7 @@ public class ItemsetDbAdapter implements Closeable {
         // and remove the entry from the itemsets table
         String where = KEY_PATH + "=?";
         String[] whereArgs = {
-                PathUtils.getRelativeFilePath(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS), path)
+                new StoragePathProvider().getRelativeFormPath(path)
         };
         db.delete(ITEMSET_TABLE, where, whereArgs);
     }
@@ -170,7 +169,7 @@ public class ItemsetDbAdapter implements Closeable {
     public Cursor getItemsets(String path) {
         String selection = KEY_PATH + "=?";
         String[] selectionArgs = {
-                PathUtils.getRelativeFilePath(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS), path)
+                new StoragePathProvider().getRelativeFormPath(path)
         };
         return db.query(ITEMSET_TABLE, null, selection, selectionArgs, null, null, null);
     }
@@ -189,7 +188,7 @@ public class ItemsetDbAdapter implements Closeable {
         if (c != null) {
             if (c.getCount() == 1) {
                 c.moveToFirst();
-                String table = getMd5FromString(PathUtils.getAbsoluteFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), c.getString(c.getColumnIndex(KEY_PATH))));
+                String table = getMd5FromString(storagePathProvider.getAbsoluteFormFilePath(c.getString(c.getColumnIndex(KEY_PATH))));
                 db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + table);
             }
             c.close();
@@ -197,7 +196,7 @@ public class ItemsetDbAdapter implements Closeable {
 
         String where = KEY_PATH + "=?";
         String[] whereArgs = {
-                PathUtils.getRelativeFilePath(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS), path)
+                storagePathProvider.getRelativeFormPath(path)
         };
         db.delete(ITEMSET_TABLE, where, whereArgs);
     }

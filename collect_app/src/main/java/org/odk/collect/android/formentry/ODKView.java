@@ -51,8 +51,10 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.exception.ExternalParamsException;
@@ -76,6 +78,7 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
+import org.odk.collect.android.widgets.UrlWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
@@ -120,6 +123,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     @Inject
     public AudioHelperFactory audioHelperFactory;
+
+    @Inject
+    public Analytics analytics;
 
     @Inject
     ActivityAvailability activityAvailability;
@@ -198,6 +204,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
         setupAudioErrors();
         autoplayIfNeeded(advancingPage);
+
+        logAnalyticsForWidgets();
     }
 
     private void setupAudioErrors() {
@@ -233,7 +241,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     private Boolean autoplayAudio(FormEntryPrompt firstPrompt) {
         PromptAutoplayer promptAutoplayer = new PromptAutoplayer(
                 audioHelper,
-                ReferenceManager.instance()
+                ReferenceManager.instance(),
+                analytics,
+                AnalyticsUtils.getFormHash(Collect.getInstance().getFormController())
         );
 
         return promptAutoplayer.autoplayIfNeeded(firstPrompt);
@@ -676,5 +686,13 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             widgetValueChangedListener.widgetValueChanged(changedWidget);
         }
 
+    }
+
+    private void logAnalyticsForWidgets() {
+        for (QuestionWidget widget : widgets) {
+            if (widget instanceof UrlWidget) {
+                formEntryViewModel.logFormEvent(AnalyticsEvents.URL_QUESTION);
+            }
+        }
     }
 }

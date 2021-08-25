@@ -433,7 +433,7 @@ public abstract class Page<T extends Page<T>> {
 
     public T copyForm(String formFilename) {
         try {
-            AdbFormLoadingUtils.copyFormToDemoProject(formFilename);
+            AdbFormLoadingUtils.copyFormToStorage(formFilename);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -443,17 +443,7 @@ public abstract class Page<T extends Page<T>> {
 
     public T copyForm(String formFilename, List<String> mediaFileNames) {
         try {
-            AdbFormLoadingUtils.copyFormToStorage(formFilename, mediaFileNames, false, formFilename, "Demo project");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return (T) this;
-    }
-
-    public T copyForm(String formFilename, String projectName) {
-        try {
-            AdbFormLoadingUtils.copyFormToStorage(formFilename, projectName);
+            AdbFormLoadingUtils.copyFormToStorage(formFilename, mediaFileNames, false, formFilename);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -463,7 +453,7 @@ public abstract class Page<T extends Page<T>> {
 
     public T copyInstance(String instanceFileName) {
         try {
-            AdbFormLoadingUtils.copyInstanceToDemoProject(instanceFileName);
+            AdbFormLoadingUtils.copyInstanceToStorage(instanceFileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
