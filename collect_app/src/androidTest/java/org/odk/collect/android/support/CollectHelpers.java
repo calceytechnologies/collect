@@ -14,13 +14,13 @@ public final class CollectHelpers {
     }
 
     public static FormController waitForFormController() throws InterruptedException {
-        if (Collect.getInstance().getFormController() == null) {
+        if (Collect.getApplication().getFormController() == null) {
             do {
                 Thread.sleep(1);
-            } while (Collect.getInstance().getFormController() == null);
+            } while (Collect.getApplication().getFormController() == null);
         }
 
-        return Collect.getInstance().getFormController();
+        return Collect.getApplication().getFormController();
     }
 
     public static AppDependencyComponent getAppDependencyComponent() {

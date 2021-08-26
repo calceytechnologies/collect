@@ -48,7 +48,7 @@ public class SaveFormIndexTask extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... params) {
         long start = System.currentTimeMillis();
 
-        FormController formController = Collect.getCollectInstance().getFormController();
+        FormController formController = Collect.getInstance().getFormController();
 
         try {
             File tempFormIndexFile = SaveFormToDisk.getFormIndexFile(formController.getInstanceFile().getName());
@@ -88,7 +88,7 @@ public class SaveFormIndexTask extends AsyncTask<Void, Void, String> {
     public static FormIndex loadFormIndexFromFile() {
         FormIndex formIndex = null;
         try {
-            String instanceName = Collect.getCollectInstance()
+            String instanceName = Collect.getInstance()
                     .getFormController()
                     .getInstanceFile()
                     .getName();

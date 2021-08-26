@@ -137,7 +137,7 @@ public class ExternalAppsUtils {
             return text.endsWith("'") ? text.substring(1, text.length() - 1) : text.substring(1);
         }
 
-        FormDef formDef = Collect.getCollectInstance().getFormController().getFormDef();
+        FormDef formDef = Collect.getInstance().getFormController().getFormDef();
         FormInstance formInstance = formDef.getInstance();
         EvaluationContext evaluationContext = new EvaluationContext(formDef.getEvaluationContext(), reference);
         if (text.startsWith("/")) {
@@ -147,10 +147,10 @@ public class ExternalAppsUtils {
             return XPathFuncExpr.unpack(xpathNodeset);
         } else if (text.equals("instanceProviderID()")) {
             // instanceProviderID returns -1 if the current instance has not been saved to disk already
-            String path = Collect.getCollectInstance().getFormController().getInstanceFile().getAbsolutePath();
+            String path = Collect.getInstance().getFormController().getInstanceFile().getAbsolutePath();
 
             String instanceProviderID = "-1";
-            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().getOneByPath(path);
+            Instance instance = new InstancesRepositoryProvider(Collect.getApplication()).get().getOneByPath(path);
             if (instance != null) {
                 instanceProviderID = instance.getDbId().toString();
             }

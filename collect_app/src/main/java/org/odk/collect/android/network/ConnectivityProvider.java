@@ -18,6 +18,6 @@ public class ConnectivityProvider implements NetworkStateProvider {
     }
 
     private ConnectivityManager getConnectivityManager() {
-        return (ConnectivityManager) Collect.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return (ConnectivityManager) Collect.getApplication().getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 }

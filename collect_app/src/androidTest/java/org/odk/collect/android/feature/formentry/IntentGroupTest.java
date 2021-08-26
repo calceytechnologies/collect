@@ -252,6 +252,6 @@ public class IntentGroupTest {
     }
 
     private Uri getUriForFile(File file) {
-        return FileProvider.getUriForFile(Collect.getInstance(), BuildConfig.APPLICATION_ID + ".provider", file);
+        return FileProvider.getUriForFile(Collect.getApplication(), BuildConfig.APPLICATION_ID + ".provider", file);
     }
 }

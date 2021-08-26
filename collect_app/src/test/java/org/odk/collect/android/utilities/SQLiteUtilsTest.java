@@ -22,7 +22,7 @@ public class SQLiteUtilsTest {
     public void doesColumnExistTest() {
         String tableName = "testTable";
 
-        SQLiteDatabase db = Collect.getInstance().openOrCreateDatabase("testDatabase", MODE_PRIVATE, null);
+        SQLiteDatabase db = Collect.getApplication().openOrCreateDatabase("testDatabase", MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE " + tableName + " (id integer, column1 text);");
 
         assertTrue(SQLiteUtils.doesColumnExist(db, tableName, "id"));
@@ -36,7 +36,7 @@ public class SQLiteUtilsTest {
         final String tableName = "testTable";
         final String columnName = CustomSQLiteQueryBuilder.quoteIdentifier("col");
 
-        SQLiteDatabase db = Collect.getInstance().openOrCreateDatabase("testDatabase", MODE_PRIVATE, null);
+        SQLiteDatabase db = Collect.getApplication().openOrCreateDatabase("testDatabase", MODE_PRIVATE, null);
 
         assertFalse(SQLiteUtils.doesTableExist(db, tableName));
 

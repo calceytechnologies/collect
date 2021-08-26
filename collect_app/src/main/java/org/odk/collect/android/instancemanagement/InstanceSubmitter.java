@@ -84,7 +84,7 @@ public class InstanceSubmitter {
                 throw new SubmitException(Type.GOOGLE_ACCOUNT_NOT_PERMITTED);
             }
         } else {
-            OpenRosaHttpInterface httpInterface = Collect.getCollectInstance().getComponent().openRosaHttpInterface();
+            OpenRosaHttpInterface httpInterface = Collect.getInstance().getComponent().openRosaHttpInterface();
             uploader = new InstanceServerUploader(httpInterface, new WebCredentialsUtils(generalSettings), new HashMap<>(), generalSettings);
             deviceId = new PropertyManager().getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
         }
@@ -105,7 +105,7 @@ public class InstanceSubmitter {
                 }
 
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
-                resultMessagesByInstanceId.put(instance.getDbId().toString(), customMessage != null ? customMessage : TranslationHandler.getString(Collect.getInstance(), R.string.success));
+                resultMessagesByInstanceId.put(instance.getDbId().toString(), customMessage != null ? customMessage : TranslationHandler.getString(Collect.getApplication(), R.string.success));
 
                 // If the submission was successful, delete the instance if either the app-level
                 // delete preference is set or the form definition requests auto-deletion.
@@ -114,7 +114,7 @@ public class InstanceSubmitter {
                 // communicated to the user. Maybe successful delete should also be communicated?
                 if (InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, instance.getFormId(), instance.getFormVersion(),
                         generalSettings.getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND))) {
-                    new InstanceDeleter(new InstancesRepositoryProvider(Collect.getInstance()).get(), new FormsRepositoryProvider(Collect.getInstance()).get()).delete(instance.getDbId());
+                    new InstanceDeleter(new InstancesRepositoryProvider(Collect.getApplication()).get(), new FormsRepositoryProvider(Collect.getApplication()).get()).delete(instance.getDbId());
                 }
 
                 String action = protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS) ?
@@ -123,7 +123,7 @@ public class InstanceSubmitter {
                 analytics.logEvent(SUBMISSION, action, label);
 
                 String submissionEndpoint = generalSettings.getString(ProjectKeys.KEY_SUBMISSION_URL);
-                if (!submissionEndpoint.equals(TranslationHandler.getString(Collect.getInstance(), R.string.default_odk_submission))) {
+                if (!submissionEndpoint.equals(TranslationHandler.getString(Collect.getApplication(), R.string.default_odk_submission))) {
                     String submissionEndpointHash = Md5.getMd5Hash(new ByteArrayInputStream(submissionEndpoint.getBytes()));
                     analytics.logEvent(CUSTOM_ENDPOINT_SUB, submissionEndpointHash);
                 }
@@ -135,6 +135,6 @@ public class InstanceSubmitter {
             }
         }
 
-        return new Pair<>(anyFailure, InstanceUploaderUtils.getUploadResultMessage(instancesRepository, Collect.getInstance(), resultMessagesByInstanceId));
+        return new Pair<>(anyFailure, InstanceUploaderUtils.getUploadResultMessage(instancesRepository, Collect.getApplication(), resultMessagesByInstanceId));
     }
 }

@@ -109,7 +109,7 @@ public class SaveFormToDisk {
     public SaveToDiskResult saveForm(FormSaver.ProgressListener progressListener) {
         SaveToDiskResult saveToDiskResult = new SaveToDiskResult();
 
-        progressListener.onProgressUpdate(TranslationHandler.getString(Collect.getInstance(), R.string.survey_saving_validating_message));
+        progressListener.onProgressUpdate(TranslationHandler.getString(Collect.getApplication(), R.string.survey_saving_validating_message));
 
         try {
             int validateStatus = formController.validateAnswers(shouldFinalize);
@@ -130,7 +130,7 @@ public class SaveFormToDisk {
         }
 
         // close all open databases of external data.
-        Collect.getCollectInstance().getExternalDataManager().close();
+        Collect.getInstance().getExternalDataManager().close();
 
         // if there is a meta/instanceName field, be sure we are using the latest value
         // just in case the validate somehow triggered an update.
@@ -172,11 +172,11 @@ public class SaveFormToDisk {
      * the instance currently managed by the {@link FormController}.
      */
     private void updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted) {
-        FormController formController = Collect.getCollectInstance().getFormController();
+        FormController formController = Collect.getInstance().getFormController();
         FormInstance formInstance = formController.getFormDef().getInstance();
 
         String instancePath = formController.getInstanceFile().getAbsolutePath();
-        InstancesRepository instances = new InstancesRepositoryProvider(Collect.getInstance()).get();
+        InstancesRepository instances = new InstancesRepositoryProvider(Collect.getApplication()).get();
         Instance instance = instances.getOneByPath(instancePath);
 
         Instance.Builder instanceBuilder;
@@ -206,11 +206,11 @@ public class SaveFormToDisk {
                 instanceBuilder.geometry(geometryContentValues.second);
             }
 
-            Instance newInstance = new InstancesRepositoryProvider(Collect.getInstance()).get().save(instanceBuilder.build());
+            Instance newInstance = new InstancesRepositoryProvider(Collect.getApplication()).get().save(instanceBuilder.build());
             uri = InstancesContract.getUri(currentProjectId, newInstance.getDbId());
         } else {
             Timber.i("No instance found, creating");
-            Form form = new FormsRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
+            Form form = new FormsRepositoryProvider(Collect.getApplication()).get().get(ContentUriHelper.getIdFromUri(uri));
 
             // add missing fields into values
             instanceBuilder.instanceFilePath(instancePath);
@@ -231,7 +231,7 @@ public class SaveFormToDisk {
             }
         }
 
-        Instance newInstance = new InstancesRepositoryProvider(Collect.getInstance()).get().save(instanceBuilder.build());
+        Instance newInstance = new InstancesRepositoryProvider(Collect.getApplication()).get().save(instanceBuilder.build());
         uri = InstancesContract.getUri(currentProjectId, newInstance.getDbId());
     }
 
@@ -330,9 +330,9 @@ public class SaveFormToDisk {
      * other methods.
      */
     private void exportData(boolean markCompleted, FormSaver.ProgressListener progressListener) throws IOException, EncryptionException {
-        FormController formController = Collect.getCollectInstance().getFormController();
+        FormController formController = Collect.getInstance().getFormController();
 
-        progressListener.onProgressUpdate(TranslationHandler.getString(Collect.getInstance(), R.string.survey_saving_collecting_message));
+        progressListener.onProgressUpdate(TranslationHandler.getString(Collect.getApplication(), R.string.survey_saving_collecting_message));
 
         ByteArrayPayload payload = formController.getFilledInFormXml();
         // write out xml
@@ -342,7 +342,7 @@ public class SaveFormToDisk {
             mediaUtils.deleteMediaFile(fileName);
         }
 
-        progressListener.onProgressUpdate(TranslationHandler.getString(Collect.getInstance(), R.string.survey_saving_saving_message));
+        progressListener.onProgressUpdate(TranslationHandler.getString(Collect.getApplication(), R.string.survey_saving_saving_message));
 
         writeFile(payload, instancePath);
 
@@ -374,7 +374,7 @@ public class SaveFormToDisk {
             // write out submission.xml -- the data to actually submit to aggregate
 
             progressListener.onProgressUpdate(
-                    TranslationHandler.getString(Collect.getInstance(), R.string.survey_saving_finalizing_message));
+                    TranslationHandler.getString(Collect.getApplication(), R.string.survey_saving_finalizing_message));
 
             writeFile(payload, submissionXml.getAbsolutePath());
 
@@ -386,12 +386,12 @@ public class SaveFormToDisk {
                 // and encrypt the submission (this is a one-way operation)...
 
                 progressListener.onProgressUpdate(
-                        TranslationHandler.getString(Collect.getInstance(), R.string.survey_saving_encrypting_message));
+                        TranslationHandler.getString(Collect.getApplication(), R.string.survey_saving_encrypting_message));
 
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
                 isEncrypted = true;
 
-                analytics.logEvent(ENCRYPT_SUBMISSION, AnalyticsUtils.getFormHash(Collect.getCollectInstance().getFormController()), "");
+                analytics.logEvent(ENCRYPT_SUBMISSION, AnalyticsUtils.getFormHash(Collect.getInstance().getFormController()), "");
             }
 
             // At this point, we have:
@@ -423,7 +423,7 @@ public class SaveFormToDisk {
             // if encrypted, delete all plaintext files
             // (anything not named instanceXml or anything not ending in .enc)
             if (isEncrypted) {
-                InstancesRepository instancesRepository = new InstancesRepositoryProvider(Collect.getInstance()).get();
+                InstancesRepository instancesRepository = new InstancesRepositoryProvider(Collect.getApplication()).get();
                 Instance instance = instancesRepository.get(ContentUriHelper.getIdFromUri(uri));
 
                 // Clear the geometry. Done outside of updateInstanceDatabase to avoid multiple
@@ -450,7 +450,7 @@ public class SaveFormToDisk {
      * that the instance with the given uri is an instance of.
      */
     private static String getGeometryXpathForInstance(Instance instance) {
-        Form form = new FormsRepositoryProvider(Collect.getInstance()).get().getLatestByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
+        Form form = new FormsRepositoryProvider(Collect.getApplication()).get().getLatestByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
         if (form != null) {
             return form.getGeometryXpath();
         } else {

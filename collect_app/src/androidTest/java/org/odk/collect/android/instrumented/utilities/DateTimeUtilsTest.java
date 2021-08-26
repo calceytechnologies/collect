@@ -60,7 +60,7 @@ public class DateTimeUtilsTest {
         myanmarDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.MYANMAR, DatePickerDetails.DatePickerMode.SPINNERS);
         persianDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.PERSIAN, DatePickerDetails.DatePickerMode.SPINNERS);
 
-        context = Collect.getInstance();
+        context = Collect.getApplication();
         defaultLocale = Locale.getDefault();
         defaultTimezone = TimeZone.getDefault();
     }

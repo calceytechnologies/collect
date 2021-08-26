@@ -89,7 +89,7 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
     private void onButtonClick() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
         try {
-            Intent intent = externalAppIntentProvider.getIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability, Collect.getInstance().getPackageManager());
+            Intent intent = externalAppIntentProvider.getIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability, Collect.getApplication().getPackageManager());
             fireActivityForResult(intent);
         } catch (Exception | Error e) {
             ToastUtils.showLongToast(e.getMessage());

@@ -33,7 +33,7 @@ class WebMapService implements Serializable {
 
     @Deprecated WebMapService(int cacheNameStringId, int minZoomLevel,
         int maxZoomLevel, int tileSize, String copyright, String... urlTemplates) {
-        this(TranslationHandler.getString(Collect.getInstance(), cacheNameStringId),
+        this(TranslationHandler.getString(Collect.getApplication(), cacheNameStringId),
             minZoomLevel, maxZoomLevel, tileSize, copyright, urlTemplates);
     }
 

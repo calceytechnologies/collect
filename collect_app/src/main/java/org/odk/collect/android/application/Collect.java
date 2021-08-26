@@ -15,6 +15,8 @@
 package org.odk.collect.android.application;
 
 import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_APP_THEME;
 
 import android.app.Application;
 import android.os.StrictMode;
@@ -34,11 +36,6 @@ import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
-import org.odk.collect.androidshared.data.AppState;
-import org.odk.collect.androidshared.data.StateStore;
-import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
-import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
-import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
 import org.odk.collect.forms.Form;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.Project;
@@ -57,17 +54,12 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public class Collect implements LocalizedApplication, ProjectsDependencyComponentProvider {
-    public static String defaultSysLanguage;
+
+    public static final String defaultSysLanguage = "en";
     private static Collect singleton;
-
-    @NotNull
-    private Application application;
-
-    @Nullable
-    private FormController formController;
-    private ExternalDataManager externalDataManager;
-    private AppDependencyComponent applicationComponent;
 
     @Inject
     ApplicationInitializer applicationInitializer;
@@ -84,67 +76,103 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
     @Inject
     ProjectsRepository projectsRepository;
 
-    private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
+    @NotNull
+    private Application application;
+
+    @Nullable
+    private FormController formController;
+    private ExternalDataManager externalDataManager;
+    private AppDependencyComponent applicationComponent;
     private ProjectsDependencyComponent projectsDependencyComponent;
 
     /**
-     * Initialise Collect instance so it could execute from Main Application module
+     * Private constructor restrict following class from initialising.
      */
-    static {
-        singleton = new Collect();
-    }
-
     private Collect() {
     }
 
-    public static Collect getCollectInstance() {
-        return singleton;
+    /**
+     * Create a single instance of Collect or retrieve already created single single instance.
+     *
+     * @return <class>Collect</class>
+     */
+    public static Collect getInstance() {
+        synchronized (Collect.class) {
+            if (singleton == null)
+                singleton = new Collect();
+
+            return singleton;
+        }
     }
 
-    public static Application getInstance() {
+    /**
+     * Returns application context.
+     *
+     * @return <class>Application</class>
+     */
+    public static Application getApplication() {
         return singleton.application;
     }
 
-
     /**
-     * Update language when system language updates.
+     * init collect module from main application
+     * Initial module creation will begin from following functions.
      *
-     * @param lang language
+     * @param application App application (this will work as shared instance through-out the module)
+     * @param langCode language to translate
      */
-    public static void updateSysDefaultLanguage(String lang) {
-        defaultSysLanguage = lang;
-    }
-
-    public FormController getFormController() {
-        return formController;
-    }
-
-    public void setFormController(@Nullable FormController controller) {
-        formController = controller;
-    }
-
-    public ExternalDataManager getExternalDataManager() {
-        return externalDataManager;
-    }
-
-    public void setExternalDataManager(ExternalDataManager externalDataManager) {
-        this.externalDataManager = externalDataManager;
-    }
-
-    public void initializeCollect(Application application) {
+    public void init(Application application, String langCode) {
         this.application = application;
 
-        testStorage();
-        setupDagger(application);
+        initDaggerModules();
+        updateLanguageCode(langCode);
         applicationInitializer.initialize();
 
-//        testProjectConfiguration();
+        if (BuildConfig.DEBUG) {
+            testProjectConfiguration();
+        }
+
+        testStorage();
         fixGoogleBug154855417();
         setupStrictMode();
     }
 
-    public Application getApplication() {
-        return application;
+    /**
+     * Initialise dagger modules.
+     */
+    private void initDaggerModules() {
+        applicationComponent = DaggerAppDependencyComponent.builder()
+                .appDependencyModule(new AppDependencyModule())
+                .application(this.application)
+                .build();
+        applicationComponent.inject(this);
+
+        projectsDependencyComponent = DaggerProjectsDependencyComponent.builder()
+                .projectsDependencyModule(new ProjectsDependencyModule() {
+                    @NotNull
+                    @Override
+                    public ProjectsRepository providesProjectsRepository() {
+                        return projectsRepository;
+                    }
+                })
+                .build();
+    }
+
+
+    /**
+     * Update module language.
+     * @param language language
+     */
+    private void updateLanguageCode(String language) {
+        settingsProvider.getGeneralSettings().save(KEY_APP_LANGUAGE, language);
+    }
+
+    /**
+     * Update application theme.
+     * @param theme theme
+     */
+    private void updateThemePack(String theme) {
+        settingsProvider.getGeneralSettings().save(KEY_APP_THEME, theme);
     }
 
     private void testStorage() {
@@ -155,13 +183,8 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
             testFile.createNewFile();
             testFile.delete();
         } catch (IOException e) {
-            throw new IllegalStateException("App can't write to storage!");
+            throw new IllegalStateException("Collect module can't write to storage!");
         }
-    }
-
-    private void testProjectConfiguration() {
-        projectImporter.importNewProject(Project.Companion.getDEMO_PROJECT());
-        currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID);
     }
 
     /**
@@ -183,28 +206,41 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
         }
     }
 
-    private void setupDagger(Application application) {
-        applicationComponent = DaggerAppDependencyComponent.builder()
-                .appDependencyModule(new AppDependencyModule())
-                .application(application)
-                .build();
-        applicationComponent.inject(this);
-
-        projectsDependencyComponent = DaggerProjectsDependencyComponent.builder()
-                .projectsDependencyModule(new ProjectsDependencyModule() {
-                    @NotNull
-                    @Override
-                    public ProjectsRepository providesProjectsRepository() {
-                        return projectsRepository;
-                    }
-                })
-                .build();
+    /**
+     * Test function to init demo project.
+     */
+    private void testProjectConfiguration() {
+        projectImporter.importNewProject(Project.Companion.getDEMO_PROJECT());
+        currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID);
     }
 
     @NotNull
     @Override
     public ProjectsDependencyComponent getProjectsDependencyComponent() {
         return projectsDependencyComponent;
+    }
+
+    @NotNull
+    @Override
+    public Locale getLocale() {
+        return new Locale(LocaleHelper.getLocaleCode(settingsProvider.getGeneralSettings()));
+    }
+
+    /**
+     * Gets a unique, privacy-preserving identifier for a form based on its id and version.
+     *
+     * @param formId      id of a form
+     * @param formVersion version of a form
+     * @return md5 hash of the form title, a space, the form ID
+     */
+    public static String getFormIdentifierHash(String formId, String formVersion) {
+        Form form = new FormsRepositoryProvider(Collect.getApplication()).get()
+                .getLatestByFormIdAndVersion(formId, formVersion);
+
+        String formTitle = form != null ? form.getDisplayName() : "";
+
+        String formIdentifier = formTitle + " " + formId;
+        return Md5.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
     }
 
     public AppDependencyComponent getComponent() {
@@ -216,21 +252,20 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
         applicationComponent.inject(this);
     }
 
-    /**
-     * Gets a unique, privacy-preserving identifier for a form based on its id and version.
-     *
-     * @param formId      id of a form
-     * @param formVersion version of a form
-     * @return md5 hash of the form title, a space, the form ID
-     */
-    public static String getFormIdentifierHash(String formId, String formVersion) {
-        Form form = new FormsRepositoryProvider(Collect.getInstance()).get()
-                .getLatestByFormIdAndVersion(formId, formVersion);
+    public FormController getFormController() {
+        return formController;
+    }
 
-        String formTitle = form != null ? form.getDisplayName() : "";
+    public void setFormController(@Nullable FormController controller) {
+        formController = controller;
+    }
 
-        String formIdentifier = formTitle + " " + formId;
-        return Md5.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
+    public ExternalDataManager getExternalDataManager() {
+        return externalDataManager;
+    }
+
+    public void setExternalDataManager(ExternalDataManager externalDataManager) {
+        this.externalDataManager = externalDataManager;
     }
 
     // https://issuetracker.google.com/issues/154855417
@@ -246,14 +281,8 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
 
                 metaSharedPreferences.save(KEY_GOOGLE_BUG_154855417_FIXED, true);
             }
-        } catch (Exception ignored) {
-            // ignored
+        } catch (Exception exception) {
+            Timber.e(exception);
         }
-    }
-
-    @NotNull
-    @Override
-    public Locale getLocale() {
-        return new Locale(LocaleHelper.getLocaleCode(settingsProvider.getGeneralSettings()));
     }
 }

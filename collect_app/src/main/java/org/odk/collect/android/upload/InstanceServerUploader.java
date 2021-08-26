@@ -93,7 +93,7 @@ public class InstanceServerUploader extends InstanceUploader {
             } catch (IllegalArgumentException e) {
                 submissionComplete(instance, false);
                 Timber.d(e.getMessage() != null ? e.getMessage() : e.toString());
-                throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.url_error));
+                throw new UploadException(TranslationHandler.getString(Collect.getApplication(), R.string.url_error));
             }
 
             HttpHeadResult headResult;
@@ -119,7 +119,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
             if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                 submissionComplete(instance, false);
-                throw new UploadAuthRequestedException(TranslationHandler.getString(Collect.getInstance(), R.string.server_auth_credentials, submissionUri.getHost()),
+                throw new UploadAuthRequestedException(TranslationHandler.getString(Collect.getApplication(), R.string.server_auth_credentials, submissionUri.getHost()),
                         submissionUri);
             } else if (headResult.getStatusCode() == HttpsURLConnection.HTTP_NO_CONTENT) {
                 // Redirect header received

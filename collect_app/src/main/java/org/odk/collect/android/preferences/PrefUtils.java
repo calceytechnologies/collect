@@ -14,7 +14,7 @@ public class PrefUtils {
     private PrefUtils() { }  // prevent instantiation of this utility class
 
     public static Settings getSharedPrefs() {
-        return DaggerUtils.getComponent(Collect.getInstance()).settingsProvider().getGeneralSettings();
+        return DaggerUtils.getComponent(Collect.getApplication()).settingsProvider().getGeneralSettings();
     }
 
     public static ListPreference createListPref(

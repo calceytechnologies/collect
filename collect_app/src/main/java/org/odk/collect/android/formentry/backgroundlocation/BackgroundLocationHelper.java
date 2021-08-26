@@ -40,14 +40,14 @@ public class BackgroundLocationHelper {
     }
 
     boolean arePlayServicesAvailable() {
-        return new PlayServicesChecker().isGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext());
+        return new PlayServicesChecker().isGooglePlayServicesAvailable(Collect.getApplication().getApplicationContext());
     }
 
     /**
      * @return true if the global form controller has been initialized.
      */
     boolean isCurrentFormSet() {
-        return Collect.getCollectInstance().getFormController() != null;
+        return Collect.getInstance().getFormController() != null;
     }
 
     /**
@@ -56,7 +56,7 @@ public class BackgroundLocationHelper {
      * Precondition: the global form controller has been initialized.
      */
     boolean currentFormCollectsBackgroundLocation() {
-        return Collect.getCollectInstance().getFormController().currentFormCollectsBackgroundLocation();
+        return Collect.getInstance().getFormController().currentFormCollectsBackgroundLocation();
     }
 
     /**
@@ -66,7 +66,7 @@ public class BackgroundLocationHelper {
      * Precondition: the global form controller has been initialized.
      */
     boolean currentFormAuditsLocation() {
-        return Collect.getCollectInstance().getFormController().currentFormAuditsLocation();
+        return Collect.getInstance().getFormController().currentFormAuditsLocation();
     }
 
     /**
@@ -75,7 +75,7 @@ public class BackgroundLocationHelper {
      * Precondition: the global form controller has been initialized.
      */
     AuditConfig getCurrentFormAuditConfig() {
-        return Collect.getCollectInstance().getFormController().getSubmissionMetadata().auditConfig;
+        return Collect.getInstance().getFormController().getSubmissionMetadata().auditConfig;
     }
 
     /**
@@ -84,7 +84,7 @@ public class BackgroundLocationHelper {
      * Precondition: the global form controller has been initialized.
      */
     void logAuditEvent(AuditEvent.AuditEventType eventType) {
-        Collect.getCollectInstance().getFormController().getAuditEventLogger().logEvent(eventType, false, System.currentTimeMillis());
+        Collect.getInstance().getFormController().getAuditEventLogger().logEvent(eventType, false, System.currentTimeMillis());
     }
 
     /**
@@ -93,6 +93,6 @@ public class BackgroundLocationHelper {
      * Precondition: the global form controller has been initialized.
      */
     void provideLocationToAuditLogger(Location location) {
-        Collect.getCollectInstance().getFormController().getAuditEventLogger().addLocation(location);
+        Collect.getInstance().getFormController().getAuditEventLogger().addLocation(location);
     }
 }

@@ -8,9 +8,9 @@ import org.odk.collect.shared.PathUtils.getRelativeFilePath
 import java.io.File
 
 class StoragePathProvider @JvmOverloads constructor(
-    private val currentProjectProvider: CurrentProjectProvider = DaggerUtils.getComponent(Collect.getInstance())
+    private val currentProjectProvider: CurrentProjectProvider = DaggerUtils.getComponent(Collect.getApplication())
         .currentProjectProvider(),
-    val odkRootDirPath: String = Collect.getInstance().getExternalFilesDir(null)!!.absolutePath
+    val odkRootDirPath: String = Collect.getApplication().getExternalFilesDir(null)!!.absolutePath
 ) {
 
     fun getOdkRootDirPaths(): Array<String> {

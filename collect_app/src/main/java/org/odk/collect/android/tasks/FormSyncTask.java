@@ -47,8 +47,8 @@ public class FormSyncTask extends AsyncTask<Void, String, String> {
         super.onPostExecute(result);
 
         // Make sure content observers (CursorLoaders for instance) are notified of change
-        String projectId = DaggerUtils.getComponent(Collect.getInstance()).currentProjectProvider().getCurrentProject().getUuid();
-        Collect.getInstance().getContentResolver().notifyChange(FormsContract.getUri(projectId), null);
+        String projectId = DaggerUtils.getComponent(Collect.getApplication()).currentProjectProvider().getCurrentProject().getUuid();
+        Collect.getApplication().getContentResolver().notifyChange(FormsContract.getUri(projectId), null);
 
         statusMessage = result;
 

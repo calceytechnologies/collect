@@ -170,7 +170,7 @@ public class CursorLoaderFactory {
             Uri formUri = newestByFormId ?
                     FormsContract.getContentNewestFormsByFormIdUri(currentProjectProvider.getCurrentProject().getUuid()) :
                     FormsContract.getUri(currentProjectProvider.getCurrentProject().getUuid());
-            cursorLoader = new CursorLoader(Collect.getInstance(), getUriWithAnalyticsParam(formUri), null, DatabaseFormColumns.DELETED_DATE + " IS NULL", new String[]{}, sortOrder);
+            cursorLoader = new CursorLoader(Collect.getApplication(), getUriWithAnalyticsParam(formUri), null, DatabaseFormColumns.DELETED_DATE + " IS NULL", new String[]{}, sortOrder);
         } else {
             String selection = DatabaseFormColumns.DISPLAY_NAME + " LIKE ? AND " + DatabaseFormColumns.DELETED_DATE + " IS NULL";
             String[] selectionArgs = {"%" + charSequence + "%"};
@@ -178,7 +178,7 @@ public class CursorLoaderFactory {
             Uri formUri = newestByFormId ?
                     FormsContract.getContentNewestFormsByFormIdUri(currentProjectProvider.getCurrentProject().getUuid()) :
                     FormsContract.getUri(currentProjectProvider.getCurrentProject().getUuid());
-            cursorLoader = new CursorLoader(Collect.getInstance(), getUriWithAnalyticsParam(formUri), null, selection, selectionArgs, sortOrder);
+            cursorLoader = new CursorLoader(Collect.getApplication(), getUriWithAnalyticsParam(formUri), null, selection, selectionArgs, sortOrder);
         }
         return cursorLoader;
     }
@@ -187,7 +187,7 @@ public class CursorLoaderFactory {
         Uri uri = InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid());
 
         return new CursorLoader(
-                Collect.getInstance(),
+                Collect.getApplication(),
                 getUriWithAnalyticsParam(uri),
                 null,
                 selection,

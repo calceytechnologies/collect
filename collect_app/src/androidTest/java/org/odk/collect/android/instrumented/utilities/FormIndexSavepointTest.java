@@ -48,7 +48,7 @@ public class FormIndexSavepointTest {
         // for loadFormIndexFromFile
         File instancePath = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES) + File.separator + instanceName);
         when(formController.getInstanceFile()).thenReturn(instancePath);
-        Collect.getCollectInstance().setFormController(formController);
+        Collect.getInstance().setFormController(formController);
 
         FormIndex originalFormIndex = FormIndex.createBeginningOfFormIndex();
         File indexFile = SaveFormToDisk.getFormIndexFile(instanceName);

@@ -99,7 +99,7 @@ object ProjectKeys {
         get() {
             val hashMap = HashMap<String, Any>()
             // odk_server_preferences.xml
-            hashMap[KEY_SERVER_URL] = Collect.getInstance().getString(R.string.default_server_url)
+            hashMap[KEY_SERVER_URL] = Collect.getApplication().getString(R.string.default_server_url)
             hashMap[KEY_USERNAME] = ""
             hashMap[KEY_PASSWORD] = ""
             // form_management_preferences.xml
@@ -128,18 +128,18 @@ object ProjectKeys {
             hashMap[KEY_ANALYTICS] = true
             // custom_server_paths_preferenceshs_preferences.xml
             hashMap[KEY_FORMLIST_URL] =
-                Collect.getInstance().getString(R.string.default_odk_formlist)
+                Collect.getApplication().getString(R.string.default_odk_formlist)
             hashMap[KEY_SUBMISSION_URL] =
-                Collect.getInstance().getString(R.string.default_odk_submission)
+                Collect.getApplication().getString(R.string.default_odk_submission)
             // server_preferences.xml
             hashMap[KEY_PROTOCOL] = PROTOCOL_SERVER
             // user_interface_preferences.xml
-            hashMap[KEY_APP_THEME] = Collect.getInstance().getString(R.string.app_theme_light)
+            hashMap[KEY_APP_THEME] = Collect.getApplication().getString(R.string.app_theme_light)
             hashMap[KEY_APP_LANGUAGE] = ""
             hashMap[KEY_FONT_SIZE] = QuestionFontSizeUtils.DEFAULT_FONT_SIZE.toString()
             hashMap[KEY_NAVIGATION] = NAVIGATION_BOTH
             hashMap[KEY_SHOW_SPLASH] = false
-            hashMap[KEY_SPLASH_PATH] = Collect.getInstance().getString(R.string.default_splash_path)
+            hashMap[KEY_SPLASH_PATH] = Collect.getApplication().getString(R.string.default_splash_path)
             hashMap[KEY_MAGENTA_THEME] = false
             hashMap[KEY_EXTERNAL_APP_RECORDING] = true
             // map_preferences.xml

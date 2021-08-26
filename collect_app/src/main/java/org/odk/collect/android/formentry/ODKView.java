@@ -243,7 +243,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 audioHelper,
                 ReferenceManager.instance(),
                 analytics,
-                AnalyticsUtils.getFormHash(Collect.getCollectInstance().getFormController())
+                AnalyticsUtils.getFormHash(Collect.getInstance().getFormController())
         );
 
         return promptAutoplayer.autoplayIfNeeded(firstPrompt);
@@ -420,8 +420,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             Map<String, String> parameters = ExternalAppsUtils.extractParameters(intentString);
 
             Intent i = new Intent(intentName);
-            if (i.resolveActivity(Collect.getInstance().getPackageManager()) == null) {
-                Intent launchIntent = Collect.getInstance().getPackageManager().getLaunchIntentForPackage(intentName);
+            if (i.resolveActivity(Collect.getApplication().getPackageManager()) == null) {
+                Intent launchIntent = Collect.getApplication().getPackageManager().getLaunchIntentForPackage(intentName);
 
                 if (launchIntent != null) {
                     // Make sure FLAG_ACTIVITY_NEW_TASK is not set because it doesn't work with startActivityForResult
@@ -492,7 +492,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * Saves answers for the widgets in this view. Called when the widgets are in an intent group.
      */
     public void setDataForFields(Bundle bundle) throws JavaRosaException {
-        FormController formController = Collect.getCollectInstance().getFormController();
+        FormController formController = Collect.getInstance().getFormController();
         if (formController == null) {
             return;
         }

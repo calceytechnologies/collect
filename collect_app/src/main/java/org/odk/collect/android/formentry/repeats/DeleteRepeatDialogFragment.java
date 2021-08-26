@@ -21,7 +21,7 @@ import static android.content.DialogInterface.BUTTON_POSITIVE;
 public class DeleteRepeatDialogFragment extends DialogFragment {
 
     private DeleteRepeatDialogCallback callback;
-    FormController formController = Collect.getCollectInstance().getFormController();
+    FormController formController = Collect.getInstance().getFormController();
 
     @Override
     public void onAttach(@NonNull Context context) {

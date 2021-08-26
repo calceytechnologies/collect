@@ -121,7 +121,7 @@ public class AboutActivity extends CollectAbstractActivity implements
                             }
                         }
                     } catch (android.content.ActivityNotFoundException anfe) {
-                        Toast.makeText(Collect.getInstance(),
+                        Toast.makeText(Collect.getApplication(),
                                 getString(R.string.activity_not_found, "market view"),
                                 Toast.LENGTH_SHORT).show();
                         Timber.d(anfe);

@@ -57,7 +57,7 @@ public class BitmapScaledToDisplayTest {
     }
 
     private static class ScaleImageTest {
-        private final File cache = Collect.getInstance().getApplicationContext().getExternalCacheDir();
+        private final File cache = Collect.getApplication().getApplicationContext().getExternalCacheDir();
         private final File imageFile = new File(cache, "testImage.jpeg");
         private Bitmap scaledBitmap;
 

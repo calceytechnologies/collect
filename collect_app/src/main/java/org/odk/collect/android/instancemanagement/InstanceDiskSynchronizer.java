@@ -68,8 +68,8 @@ public class InstanceDiskSynchronizer {
 
     public InstanceDiskSynchronizer(SettingsProvider settingsProvider) {
         this.settingsProvider = settingsProvider;
-        instancesRepository = new InstancesRepositoryProvider(Collect.getInstance()).get();
-        AppDependencyComponent component = DaggerUtils.getComponent(Collect.getInstance());
+        instancesRepository = new InstancesRepositoryProvider(Collect.getApplication()).get();
+        AppDependencyComponent component = DaggerUtils.getComponent(Collect.getApplication());
         currentProjectProvider = component.currentProjectProvider();
     }
 
@@ -118,7 +118,7 @@ public class InstanceDiskSynchronizer {
                         try {
                             // TODO: optimize this by caching the previously found form definition
                             // TODO: optimize this by caching unavailable form definition to skip
-                            List<Form> forms = new FormsRepositoryProvider(Collect.getInstance()).get().getAllByFormId(instanceFormId);
+                            List<Form> forms = new FormsRepositoryProvider(Collect.getApplication()).get().getAllByFormId(instanceFormId);
 
                             if (!forms.isEmpty()) {
                                 Form form = forms.get(0);
@@ -147,7 +147,7 @@ public class InstanceDiskSynchronizer {
                     }
                 }
                 if (counter > 0) {
-                    currentStatus += TranslationHandler.getString(Collect.getInstance(), R.string.instance_scan_count, counter);
+                    currentStatus += TranslationHandler.getString(Collect.getApplication(), R.string.instance_scan_count, counter);
                 }
             }
         } finally {
