@@ -68,7 +68,8 @@ public class FormManagementContractImpl implements FormManagementContract {
      */
 
     @Override
-    public synchronized void openForm(@NotNull Context context, @NotNull String formId, @Nullable String version) {
+    public synchronized void openForm(@NotNull Context context, @NotNull String formId,
+                                      @Nullable String version) {
         if (formId != null) {
             Form form = getForm(formId, version);
             if (form != null) {
@@ -116,7 +117,8 @@ public class FormManagementContractImpl implements FormManagementContract {
                 if (instances != null && !instances.isEmpty()) {
                     InstanceUploaderTask instanceUploaderTask = new InstanceServerUploaderTask();
                     instanceUploaderTask.setUploaderListener(listener);
-                    instanceUploaderTask.setRepositories(instancesRepositoryProvider.get(), formsRepositoryProvider.get(), settingsProvider);
+                    instanceUploaderTask.setRepositories(instancesRepositoryProvider.get(),
+                            formsRepositoryProvider.get(), settingsProvider);
                     instanceUploaderTask.execute(getInstanceIds(instances));
                 }
             }
@@ -134,10 +136,16 @@ public class FormManagementContractImpl implements FormManagementContract {
         return formsRepositoryProvider.get().getLatestByFormIdAndVersion(formId, version);
     }
 
+    /**
+     * Get forms to upload.
+     *
+     * @param formId form id
+     * @return List of instance
+     */
     private List<Instance> getUploadForms(String formId) {
         return instancesRepositoryProvider.get().getAllByFormId(formId).stream()
                 .filter(instance -> !instance.getStatus().equals(Instance.STATUS_INCOMPLETE)
-                        && !instance.getStatus().equals(Instance.STATUS_COMPLETE))
+                        && !instance.getStatus().equals(Instance.STATUS_SUBMITTED))
                 .collect(Collectors.toList());
     }
 
