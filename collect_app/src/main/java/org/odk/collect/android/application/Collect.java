@@ -60,6 +60,7 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
 
     public static final String defaultSysLanguage = "en";
     private static Collect singleton;
+    public static String AppID ;
 
     @Inject
     ApplicationInitializer applicationInitializer;
@@ -123,14 +124,15 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
      */
     public void init(Application application, String langCode) {
         this.application = application;
+        AppID = application.getApplicationInfo().packageName;
 
         initDaggerModules();
         updateLanguageCode(langCode);
         applicationInitializer.initialize();
 
-        if (BuildConfig.DEBUG) {
-            testProjectConfiguration();
-        }
+//        if (BuildConfig.DEBUG) {
+//            testProjectConfiguration();
+//        }
 
         testStorage();
         fixGoogleBug154855417();

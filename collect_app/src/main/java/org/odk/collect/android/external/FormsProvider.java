@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.forms.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.FormDeleter;
@@ -76,7 +77,7 @@ public class FormsProvider extends ContentProvider {
     // Forms unique by ID, keeping only the latest one downloaded
     private static final int NEWEST_FORMS_BY_FORM_ID = 3;
 
-    private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+    private static UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     @Inject
     Clock clock;
@@ -119,7 +120,7 @@ public class FormsProvider extends ContentProvider {
         if (uri.getQueryParameter(CursorLoaderFactory.INTERNAL_QUERY_PARAM) == null) {
             logServerEvent(projectId, AnalyticsEvents.FORMS_PROVIDER_QUERY);
         }
-
+        initiateURIMatcher();
         Cursor cursor;
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
@@ -177,6 +178,7 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public String getType(@NonNull Uri uri) {
+        initiateURIMatcher();
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
             case NEWEST_FORMS_BY_FORM_ID:
@@ -224,6 +226,8 @@ public class FormsProvider extends ContentProvider {
 
         FormDeleter formDeleter = new FormDeleter(getFormsRepository(projectId), instancesRepositoryProvider.get(projectId));
 
+        initiateURIMatcher();
+
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
                 try (Cursor cursor = databaseQuery(projectId, null, where, whereArgs, null, null, null)) {
@@ -260,7 +264,7 @@ public class FormsProvider extends ContentProvider {
         String cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId);
 
         int count;
-
+        initiateURIMatcher();
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
                 try (Cursor cursor = databaseQuery(projectId, null, where, whereArgs, null, null, null)) {
@@ -322,10 +326,14 @@ public class FormsProvider extends ContentProvider {
         AnalyticsUtils.logServerEvent(event, settingsProvider.getGeneralSettings(projectId));
     }
 
-    static {
-        URI_MATCHER.addURI(FormsContract.AUTHORITY, "forms", FORMS);
-        URI_MATCHER.addURI(FormsContract.AUTHORITY, "forms/#", FORM_ID);
+
+    private static void  initiateURIMatcher(){
+        URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+        String AUTHORITY = Collect.AppID+".provider.odk.forms";
+
+        URI_MATCHER.addURI(AUTHORITY, "forms", FORMS);
+        URI_MATCHER.addURI(AUTHORITY, "forms/#", FORM_ID);
         // Only available for query and type
-        URI_MATCHER.addURI(FormsContract.AUTHORITY, "newest_forms_by_form_id", NEWEST_FORMS_BY_FORM_ID);
+        URI_MATCHER.addURI(AUTHORITY, "newest_forms_by_form_id", NEWEST_FORMS_BY_FORM_ID);
     }
 }

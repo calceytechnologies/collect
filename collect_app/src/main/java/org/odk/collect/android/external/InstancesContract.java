@@ -18,17 +18,22 @@ package org.odk.collect.android.external;
 
 import android.net.Uri;
 
+import org.odk.collect.android.application.Collect;
+
 public final class InstancesContract {
 
-    public static final String AUTHORITY = "org.odk.collect.android.provider.odk.instances";
+
+    //public static final String AUTHORITY = Collect.AppID+".provider.odk.instances";
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.instance";
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.instance";
 
     public static Uri getUri(String projectId) {
+        String AUTHORITY = Collect.AppID+".provider.odk.instances";
         return Uri.parse("content://" + AUTHORITY + "/instances?projectId=" + projectId);
     }
 
     public static Uri getUri(String projectId, Long instanceDbId) {
+        String AUTHORITY = Collect.AppID+".provider.odk.instances";
         return Uri.parse("content://" + AUTHORITY + "/instances/" + instanceDbId + "?projectId=" + projectId);
     }
 

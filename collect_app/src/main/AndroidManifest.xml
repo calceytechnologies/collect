@@ -249,11 +249,11 @@
         -->
         <provider
             android:name=".external.FormsProvider"
-            android:authorities="org.odk.collect.android.provider.odk.forms"
+            android:authorities="${applicationId}.provider.odk.forms"
             android:exported="true" />
         <provider
             android:name=".external.InstanceProvider"
-            android:authorities="org.odk.collect.android.provider.odk.instances"
+            android:authorities="${applicationId}.provider.odk.instances"
             android:exported="true" /> <!-- Enable Shortcuts for Command Actions -->
         <activity
             android:name=".external.AndroidShortcutsActivity"

@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -60,7 +61,7 @@ public class InstanceProvider extends ContentProvider {
 
     private static final int INSTANCES = 1;
     private static final int INSTANCE_ID = 2;
-    private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+    private static UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     @Inject
     InstancesRepositoryProvider instancesRepositoryProvider;
@@ -94,6 +95,7 @@ public class InstanceProvider extends ContentProvider {
             logServerEvent(projectId, AnalyticsEvents.INSTANCE_PROVIDER_QUERY);
         }
 
+        initiateURIMatcher();
         Cursor c;
         switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
@@ -120,6 +122,7 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public String getType(@NonNull Uri uri) {
+        initiateURIMatcher();
         switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
                 return CONTENT_TYPE;
@@ -139,6 +142,7 @@ public class InstanceProvider extends ContentProvider {
         String projectId = getProjectId(uri);
         logServerEvent(projectId, AnalyticsEvents.INSTANCE_PROVIDER_INSERT);
 
+        initiateURIMatcher();
         // Validate the requested uri
         if (URI_MATCHER.match(uri) != INSTANCES) {
             throw new IllegalArgumentException("Unknown URI " + uri);
@@ -189,7 +193,7 @@ public class InstanceProvider extends ContentProvider {
         logServerEvent(projectId, AnalyticsEvents.INSTANCE_PROVIDER_DELETE);
 
         int count;
-
+        initiateURIMatcher();
         switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
                 try (Cursor cursor = dbQuery(projectId, new String[]{_ID}, where, whereArgs, null)) {
@@ -242,7 +246,7 @@ public class InstanceProvider extends ContentProvider {
         String instancesPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, projectId);
 
         int count;
-
+        initiateURIMatcher();
         switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
                 try (Cursor cursor = dbQuery(projectId, null, where, whereArgs, null)) {
@@ -310,8 +314,14 @@ public class InstanceProvider extends ContentProvider {
         AnalyticsUtils.logServerEvent(event, settingsProvider.getGeneralSettings(projectId));
     }
 
-    static {
-        URI_MATCHER.addURI(InstancesContract.AUTHORITY, "instances", INSTANCES);
-        URI_MATCHER.addURI(InstancesContract.AUTHORITY, "instances/#", INSTANCE_ID);
+
+    private static void initiateURIMatcher(){
+
+        URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+        String AUTHORITY = Collect.AppID+".provider.odk.instances";
+
+        URI_MATCHER.addURI(AUTHORITY, "instances", INSTANCES);
+        URI_MATCHER.addURI(AUTHORITY, "instances/#", INSTANCE_ID);
     }
+
 }
