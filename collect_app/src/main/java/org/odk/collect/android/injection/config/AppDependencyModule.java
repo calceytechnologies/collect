@@ -1,5 +1,10 @@
 package org.odk.collect.android.injection.config;
 
+import static androidx.core.content.FileProvider.getUriForFile;
+import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_INSTALL_ID;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+
 import android.app.Application;
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -20,13 +25,12 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.analytics.BlockableFirebaseAnalytics;
 import org.odk.collect.analytics.NoopAnalytics;
-import org.odk.collect.android.*;
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
-import org.odk.collect.android.application.FormManagementService;
-import org.odk.collect.android.application.FormManagementServiceImpl;
+import org.odk.collect.android.application.FormManagementContract;
+import org.odk.collect.android.application.FormManagementContractImpl;
 import org.odk.collect.android.application.initialization.AnalyticsInitializer;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsMigrator;
@@ -85,9 +89,9 @@ import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.keys.MetaKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.android.preferences.source.SharedPreferencesSettingsProvider;
@@ -142,11 +146,6 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
-
-import static androidx.core.content.FileProvider.getUriForFile;
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
-import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_INSTALL_ID;
 
 /**
  * Add dependency providers here (annotated with @Provides)
@@ -621,7 +620,12 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public FormManagementService providesFormManagementService() {
-        return new FormManagementServiceImpl();
+    public FormManagementContract providesFormManagementService(FormDownloader formDownloader,
+                                                                SettingsProvider settingsProvider,
+                                                                CurrentProjectProvider currentProjectProvider,
+                                                                FormsRepositoryProvider formsRepositoryProvider,
+                                                                InstancesRepositoryProvider instancesRepositoryProvider) {
+        return new FormManagementContractImpl(formDownloader, settingsProvider,
+                currentProjectProvider, formsRepositoryProvider, instancesRepositoryProvider);
     }
 }
