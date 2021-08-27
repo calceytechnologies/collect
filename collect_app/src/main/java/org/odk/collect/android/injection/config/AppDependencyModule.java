@@ -24,6 +24,7 @@ import org.odk.collect.android.*;
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.FormManagementService;
 import org.odk.collect.android.application.FormManagementServiceImpl;
@@ -294,7 +295,7 @@ public class AppDependencyModule {
 
     @Provides
     public FileProvider providesFileProvider(Context context) {
-        return filePath -> getUriForFile(context, "org.odk.collect.android" + ".provider", new File(filePath));
+        return filePath -> getUriForFile(context, Collect.AppID + ".fileProvider", new File(filePath));
     }
 
     @Provides

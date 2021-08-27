@@ -27,6 +27,7 @@ import android.widget.Button;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -182,7 +183,7 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
 
         try {
             Uri uri = ContentUriProvider.getUriForFile(getContext(),
-                    "org.odk.collect.android" + ".provider",
+                    Collect.AppID + ".fileProvider",
                     new File(tmpImageFilePath));
             // if this gets modified, the onActivityResult in
             // FormEntyActivity will also need to be updated.

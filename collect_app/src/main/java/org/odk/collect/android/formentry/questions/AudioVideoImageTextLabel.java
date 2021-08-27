@@ -42,6 +42,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.R2;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.listeners.SelectItemClickListener;
@@ -184,7 +185,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
         Intent intent = new Intent("android.intent.action.VIEW");
         Uri uri =
-                ContentUriProvider.getUriForFile(getContext(), "org.odk.collect.android" + ".provider", videoFile);
+                ContentUriProvider.getUriForFile(getContext(), Collect.AppID + ".fileProvider", videoFile);
         FileUtils.grantFileReadPermissions(intent, uri, getContext());
         intent.setDataAndType(uri, "video/*");
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
@@ -247,7 +248,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         try {
             Intent intent = new Intent("android.intent.action.VIEW");
             Uri uri =
-                    ContentUriProvider.getUriForFile(getContext(), "org.odk.collect.android" + ".provider", bigImageFile);
+                    ContentUriProvider.getUriForFile(getContext(), Collect.AppID + ".fileProvider", bigImageFile);
             FileUtils.grantFileReadPermissions(intent, uri, getContext());
             intent.setDataAndType(uri, "image/*");
             getContext().startActivity(intent);

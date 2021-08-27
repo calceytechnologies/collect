@@ -21,6 +21,7 @@ import android.net.Uri;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 
 import java.io.File;
 
@@ -45,7 +46,7 @@ public class MediaUtils {
     }
 
     public void openFile(Context context, File file, String mimeType) {
-        Uri contentUri = ContentUriProvider.getUriForFile(context, "org.odk.collect.android" + ".provider", file);
+        Uri contentUri = ContentUriProvider.getUriForFile(context, Collect.AppID + ".fileProvider", file);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         if (mimeType == null || mimeType.isEmpty()) {
