@@ -62,6 +62,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -483,72 +484,72 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     }
 
     @Override
-    public void formListDownloadingComplete(HashMap<String, ServerFormDetails> formList, FormSourceException exception) {
-        DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
-        downloadFormListTask.setDownloaderListener(null);
-        downloadFormListTask = null;
-
-        if (exception == null) {
-            // Everything worked. Clear the list and add the results.
-            viewModel.setFormDetailsByFormId(formList);
-            viewModel.clearFormList();
-
-            ArrayList<String> ids = new ArrayList<>(viewModel.getFormDetailsByFormId().keySet());
-            for (int i = 0; i < formList.size(); i++) {
-                String formDetailsKey = ids.get(i);
-                ServerFormDetails details = viewModel.getFormDetailsByFormId().get(formDetailsKey);
-
-                if (!displayOnlyUpdatedForms || details.isUpdated()) {
-                    HashMap<String, String> item = new HashMap<>();
-                    item.put(FORMNAME, details.getFormName());
-                    item.put(FORMID_DISPLAY,
-                            ((details.getFormVersion() == null) ? "" : (getString(R.string.version) + " "
-                                    + details.getFormVersion() + " ")) + "ID: " + details.getFormId());
-                    item.put(FORMDETAIL_KEY, formDetailsKey);
-                    item.put(FORM_ID_KEY, details.getFormId());
-                    item.put(FORM_VERSION_KEY, details.getFormVersion());
-
-                    // Insert the new form in alphabetical order.
-                    if (viewModel.getFormList().isEmpty()) {
-                        viewModel.addForm(item);
-                    } else {
-                        int j;
-                        for (j = 0; j < viewModel.getFormList().size(); j++) {
-                            HashMap<String, String> compareMe = viewModel.getFormList().get(j);
-                            String name = compareMe.get(FORMNAME);
-                            if (name.compareTo(viewModel.getFormDetailsByFormId().get(ids.get(i)).getFormName()) > 0) {
-                                break;
-                            }
-                        }
-                        viewModel.addForm(j, item);
-                    }
-                }
-            }
-
-            filteredFormList.addAll(viewModel.getFormList());
-            updateAdapter();
-            selectSupersededForms();
-            downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
-            toggleButton.setEnabled(listView.getCount() > 0);
-            toggleButtonLabel(toggleButton, listView);
-
-            if (viewModel.isDownloadOnlyMode()) {
-                performDownloadModeDownload();
-            }
-        } else {
-            if (exception instanceof FormSourceException.AuthRequired) {
-                createAuthDialog();
-            } else {
-                String dialogMessage = new FormSourceExceptionMapper(this).getMessage(exception);
-                String dialogTitle = getString(R.string.load_remote_form_error);
-
-                if (viewModel.isDownloadOnlyMode()) {
-                    setReturnResult(false, dialogMessage, viewModel.getFormResults());
-                }
-
-                createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
-            }
-        }
+    public void formListDownloadingComplete(List<ServerFormDetails> formList, FormSourceException exception) {
+//        DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
+//        downloadFormListTask.setDownloaderListener(null);
+//        downloadFormListTask = null;
+//
+//        if (exception == null) {
+//            // Everything worked. Clear the list and add the results.
+//            viewModel.setFormDetailsByFormId(formList);
+//            viewModel.clearFormList();
+//
+//            ArrayList<String> ids = new ArrayList<>(viewModel.getFormDetailsByFormId().keySet());
+//            for (int i = 0; i < formList.size(); i++) {
+//                String formDetailsKey = ids.get(i);
+//                ServerFormDetails details = viewModel.getFormDetailsByFormId().get(formDetailsKey);
+//
+//                if (!displayOnlyUpdatedForms || details.isUpdated()) {
+//                    HashMap<String, String> item = new HashMap<>();
+//                    item.put(FORMNAME, details.getFormName());
+//                    item.put(FORMID_DISPLAY,
+//                            ((details.getFormVersion() == null) ? "" : (getString(R.string.version) + " "
+//                                    + details.getFormVersion() + " ")) + "ID: " + details.getFormId());
+//                    item.put(FORMDETAIL_KEY, formDetailsKey);
+//                    item.put(FORM_ID_KEY, details.getFormId());
+//                    item.put(FORM_VERSION_KEY, details.getFormVersion());
+//
+//                    // Insert the new form in alphabetical order.
+//                    if (viewModel.getFormList().isEmpty()) {
+//                        viewModel.addForm(item);
+//                    } else {
+//                        int j;
+//                        for (j = 0; j < viewModel.getFormList().size(); j++) {
+//                            HashMap<String, String> compareMe = viewModel.getFormList().get(j);
+//                            String name = compareMe.get(FORMNAME);
+//                            if (name.compareTo(viewModel.getFormDetailsByFormId().get(ids.get(i)).getFormName()) > 0) {
+//                                break;
+//                            }
+//                        }
+//                        viewModel.addForm(j, item);
+//                    }
+//                }
+//            }
+//
+//            filteredFormList.addAll(viewModel.getFormList());
+//            updateAdapter();
+//            selectSupersededForms();
+//            downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
+//            toggleButton.setEnabled(listView.getCount() > 0);
+//            toggleButtonLabel(toggleButton, listView);
+//
+//            if (viewModel.isDownloadOnlyMode()) {
+//                performDownloadModeDownload();
+//            }
+//        } else {
+//            if (exception instanceof FormSourceException.AuthRequired) {
+//                createAuthDialog();
+//            } else {
+//                String dialogMessage = new FormSourceExceptionMapper(this).getMessage(exception);
+//                String dialogTitle = getString(R.string.load_remote_form_error);
+//
+//                if (viewModel.isDownloadOnlyMode()) {
+//                    setReturnResult(false, dialogMessage, viewModel.getFormResults());
+//                }
+//
+//                createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
+//            }
+//        }
     }
 
     private void performDownloadModeDownload() {

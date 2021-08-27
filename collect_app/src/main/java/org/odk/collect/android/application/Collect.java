@@ -87,9 +87,6 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
     @Inject
     ProjectCreator projectCreator;
 
-    @Inject
-    FormManagementContract formManagementContract;
-
     @NotNull
     private Application application;
 
@@ -154,15 +151,6 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
         testStorage();
         fixGoogleBug154855417();
         setupStrictMode();
-    }
-
-    /**
-     * Get dagger injected form management instance.
-     *
-     * @return FormManagementContract
-     */
-    public FormManagementContract getFormManagementContract() {
-        return formManagementContract;
     }
 
     /**

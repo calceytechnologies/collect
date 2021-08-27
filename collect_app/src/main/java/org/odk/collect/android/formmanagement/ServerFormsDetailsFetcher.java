@@ -17,15 +17,15 @@
 package org.odk.collect.android.formmanagement;
 
 import org.odk.collect.android.openrosa.OpenRosaFormSource;
+import org.odk.collect.android.utilities.FormUtils;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormListItem;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
-import org.odk.collect.android.utilities.FormUtils;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.ManifestFile;
 import org.odk.collect.forms.MediaFile;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
@@ -39,6 +39,7 @@ public class ServerFormsDetailsFetcher {
     private final FormsRepository formsRepository;
     private final FormSource formSource;
     private final DiskFormsSynchronizer diskFormsSynchronizer;
+    private List<FormListItem> formList;
 
     public ServerFormsDetailsFetcher(FormsRepository formsRepository,
                                      FormSource formSource,
@@ -46,6 +47,10 @@ public class ServerFormsDetailsFetcher {
         this.formsRepository = formsRepository;
         this.formSource = formSource;
         this.diskFormsSynchronizer = diskFormsSynchronizer;
+    }
+
+    public void setFormList(List<FormListItem> formList) {
+        this.formList = formList;
     }
 
     public void updateUrl(String url) {
@@ -59,7 +64,14 @@ public class ServerFormsDetailsFetcher {
     public List<ServerFormDetails> fetchFormDetails() throws FormSourceException {
         diskFormsSynchronizer.synchronize();
 
-        List<FormListItem> formListItems = formSource.fetchFormList();
+        // commented due to integration with DreamSave app
+        // List<FormListItem> formListItems = formSource.fetchFormList();
+
+
+        if( this.formList == null || this.formList.isEmpty())
+            return null;
+
+        List<FormListItem> formListItems = this.formList;
         List<ServerFormDetails> serverFormDetailsList = new ArrayList<>();
 
         for (FormListItem listItem : formListItems) {

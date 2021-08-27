@@ -5,9 +5,12 @@ import android.content.Context;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
+import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.forms.FormListItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.annotations.Nullable;
 
@@ -32,15 +35,16 @@ public interface FormManagementContract {
      */
     void openForm(@NotNull Context context, @NotNull String formId, @Nullable String version);
 
+
     /**
      * Download forms based on provided list of server details.
      * <note>This could be a single instance or multiple instances</note>
      *
-     * @param serverFormDetails list of server details
+     * @param formListItems list of server details
      * @param listener          listener to detect download execution
      */
-    void downloadForms(@NotNull ArrayList<ServerFormDetails> serverFormDetails,
-                       @NotNull DownloadFormsTaskListener listener);
+    void downloadFormDetails(@NotNull List<FormListItem> formListItems,
+                             @NotNull DownloadFormsTaskListener listener);
 
     /**
      * Uploads given formIds to backend server.

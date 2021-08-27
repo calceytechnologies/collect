@@ -624,8 +624,9 @@ public class AppDependencyModule {
                                                                 SettingsProvider settingsProvider,
                                                                 CurrentProjectProvider currentProjectProvider,
                                                                 FormsRepositoryProvider formsRepositoryProvider,
+                                                                ServerFormsDetailsFetcher serverFormsDetailsFetcher,
                                                                 InstancesRepositoryProvider instancesRepositoryProvider) {
         return new FormManagementContractImpl(formDownloader, settingsProvider,
-                currentProjectProvider, formsRepositoryProvider, instancesRepositoryProvider);
+                currentProjectProvider, formsRepositoryProvider,serverFormsDetailsFetcher, instancesRepositoryProvider);
     }
 }

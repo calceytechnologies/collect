@@ -11,10 +11,12 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
@@ -22,6 +24,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormListItem;
 import org.odk.collect.forms.instances.Instance;
 
 import java.util.ArrayList;
@@ -38,6 +41,7 @@ public class FormManagementContractImpl implements FormManagementContract {
     private final CurrentProjectProvider currentProjectProvider;
     private final SettingsProvider settingsProvider;
     private final FormsRepositoryProvider formsRepositoryProvider;
+    private final ServerFormsDetailsFetcher serverFormsDetailsFetcher;
     private final InstancesRepositoryProvider instancesRepositoryProvider;
 
     /**
@@ -50,22 +54,17 @@ public class FormManagementContractImpl implements FormManagementContract {
                                       SettingsProvider settingsProvider,
                                       CurrentProjectProvider currentProjectProvider,
                                       FormsRepositoryProvider formsRepositoryProvider,
+                                      ServerFormsDetailsFetcher serverFormsDetailsFetcher,
                                       InstancesRepositoryProvider instancesRepositoryProvider) {
 
         this.formDownloader = formDownloader;
         this.settingsProvider = settingsProvider;
         this.currentProjectProvider = currentProjectProvider;
         this.formsRepositoryProvider = formsRepositoryProvider;
+        this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
         this.instancesRepositoryProvider = instancesRepositoryProvider;
     }
 
-    /**
-     * Opens a form based on form id and version.
-     *
-     * @param context context context
-     * @param formId  form id to access
-     * @param version form version
-     */
 
     @Override
     public synchronized void openForm(@NotNull Context context, @NotNull String formId,
@@ -85,30 +84,25 @@ public class FormManagementContractImpl implements FormManagementContract {
         }
     }
 
-    /**
-     * Download forms based on provided list of server details.
-     * <note>This could be a single instance or multiple instances</note>
-     *
-     * @param serverFormDetails list of server details
-     * @param listener          listener to detect download execution
-     */
-
     @Override
-    public synchronized void downloadForms(@NotNull ArrayList<ServerFormDetails> serverFormDetails,
-                                           @Nullable DownloadFormsTaskListener listener) {
-        if (serverFormDetails != null && !serverFormDetails.isEmpty() && listener != null) {
-            DownloadFormsTask downloadFormsTask = new DownloadFormsTask(formDownloader);
-            downloadFormsTask.setDownloaderListener(listener);
-            downloadFormsTask.execute(serverFormDetails);
+    public synchronized void downloadFormDetails(@NotNull List<FormListItem> formListItems,
+                                                 @NotNull DownloadFormsTaskListener listener) {
+        if (formListItems != null && listener != null) {
+            serverFormsDetailsFetcher.setFormList(formListItems);
+            DownloadFormListTask formListTask = new DownloadFormListTask(serverFormsDetailsFetcher);
+            formListTask.setDownloaderListener((formList, exception) -> {
+                if (exception == null & formList != null) {
+                    // form meta data download completes
+                    downloadForms(formList, listener);
+                } else {
+                    // form meta data download failed
+                    listener.formsDownloadingCancelled();
+                }
+            });
+            formListTask.execute();
         }
     }
 
-    /**
-     * Uploads given formIds to backend server.
-     *
-     * @param formIds  list of form ids
-     * @param listener listener to detect form upload
-     */
     @Override
     public void uploadForms(@NonNull @NotNull String[] formIds, @NotNull InstanceUploaderListener listener) {
         if (formIds != null && listener != null) {
@@ -157,5 +151,17 @@ public class FormManagementContractImpl implements FormManagementContract {
      */
     private Long[] getInstanceIds(List<Instance> instances) {
         return instances.stream().map(Instance::getDbId).toArray(Long[]::new);
+    }
+
+    /**
+     * Download meta data cached forms from backend.
+     *
+     * @param formList forms
+     * @param listener listener
+     */
+    private void downloadForms(List<ServerFormDetails> formList, DownloadFormsTaskListener listener) {
+        DownloadFormsTask downloadFormsTask = new DownloadFormsTask(formDownloader);
+        downloadFormsTask.setDownloaderListener(listener);
+        downloadFormsTask.execute((ArrayList<ServerFormDetails>) formList);
     }
 }
