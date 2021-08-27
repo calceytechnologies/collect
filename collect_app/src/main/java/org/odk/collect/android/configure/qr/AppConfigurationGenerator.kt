@@ -11,11 +11,28 @@ class AppConfigurationGenerator(
     private val currentProjectProvider: CurrentProjectProvider
 ) {
 
-    fun getAppConfigurationAsJsonWithServerDetails(url: String, username: String, password: String): String {
+    fun getAppConfigurationAsJsonWithServerDetails(
+        url: String,
+        username: String,
+        password: String
+    ): String {
         val generalSettings = JSONObject().apply {
             put(ProjectKeys.KEY_SERVER_URL, url)
             put(ProjectKeys.KEY_USERNAME, username)
             put(ProjectKeys.KEY_PASSWORD, password)
+        }
+
+        return JSONObject().apply {
+            put(AppConfigurationKeys.GENERAL, generalSettings)
+            put(AppConfigurationKeys.ADMIN, JSONObject())
+            put(AppConfigurationKeys.PROJECT, JSONObject())
+        }.toString()
+    }
+
+    fun getAppConfigurationAsJsonWithTokenDetails(url: String, token: String): String {
+        val generalSettings = JSONObject().apply {
+            put(ProjectKeys.KEY_SERVER_URL, url)
+            put(ProjectKeys.KEY_API_KEY, token)
         }
 
         return JSONObject().apply {
@@ -72,7 +89,10 @@ class AppConfigurationGenerator(
         val defaultAdminSettings = ProtectedProjectKeys.defaults
 
         for (key in ProtectedProjectKeys.allKeys()) {
-            if (key == ProtectedProjectKeys.KEY_ADMIN_PW && !includedPasswordKeys.contains(ProtectedProjectKeys.KEY_ADMIN_PW)) {
+            if (key == ProtectedProjectKeys.KEY_ADMIN_PW && !includedPasswordKeys.contains(
+                    ProtectedProjectKeys.KEY_ADMIN_PW
+                )
+            ) {
                 continue
             }
             val value = adminSettings[key]

@@ -18,7 +18,7 @@ import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_1
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_APP_LANGUAGE;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_APP_THEME;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SERVER_URL;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_TOKEN;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_API_KEY;
 
 import android.app.Application;
 import android.os.StrictMode;
@@ -87,6 +87,9 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
     @Inject
     ProjectCreator projectCreator;
 
+    @Inject
+    FormManagementContract formManagementContract;
+
     @NotNull
     private Application application;
 
@@ -132,13 +135,13 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
      * @param application App application (this will work as shared instance through-out the module)
      * @param langCode    language to translate
      * @param url         server url
-     * @param token       server token
+     * @param apiKey       server token
      */
-    public void init(Application application, String langCode, String url, String token) {
+    public void init(Application application, String langCode, String url, String apiKey) {
         this.application = application;
 
         initDaggerModules();
-        configureProject(url, token);
+        configureProject(url, apiKey);
         updateLanguageCode(langCode);
         applicationInitializer.initialize();
 
@@ -147,9 +150,19 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
             //testProjectConfiguration();
         }
 
+
         testStorage();
         fixGoogleBug154855417();
         setupStrictMode();
+    }
+
+    /**
+     * Get dagger injected form management instance.
+     *
+     * @return FormManagementContract
+     */
+    public FormManagementContract getFormManagementContract() {
+        return formManagementContract;
     }
 
     /**
@@ -186,23 +199,20 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
      * Set server configurations.
      *
      * @param url   server url
-     * @param token token to access
+     * @param apiKey token to access
      */
-    private void configureProject(String url, String token) {
-        String settingsJson = appConfigurationGenerator.getAppConfigurationAsJsonWithServerDetails(
-                url,
-                "",
-                ""
-        );
+    private void configureProject(String url, String apiKey) {
+        String settingsJson = appConfigurationGenerator
+                .getAppConfigurationAsJsonWithTokenDetails(url, apiKey);
 
         SettingsConnectionMatcher settingsConnectionMatcher = new SettingsConnectionMatcher(projectsRepository, settingsProvider);
         String UUID = settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson);
-        if(UUID == null){
+        if (UUID == null) {
             projectCreator.createNewProject(settingsJson);
         }
 
         settingsProvider.getGeneralSettings().save(KEY_SERVER_URL, url);
-        settingsProvider.getGeneralSettings().save(KEY_TOKEN, token);
+        settingsProvider.getGeneralSettings().save(KEY_API_KEY, apiKey);
     }
 
     /**
