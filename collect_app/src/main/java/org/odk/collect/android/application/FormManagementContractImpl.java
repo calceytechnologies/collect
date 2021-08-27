@@ -37,32 +37,29 @@ import io.reactivex.annotations.Nullable;
 
 public class FormManagementContractImpl implements FormManagementContract {
 
-    private final FormDownloader formDownloader;
-    private final CurrentProjectProvider currentProjectProvider;
-    private final SettingsProvider settingsProvider;
-    private final FormsRepositoryProvider formsRepositoryProvider;
-    private final ServerFormsDetailsFetcher serverFormsDetailsFetcher;
-    private final InstancesRepositoryProvider instancesRepositoryProvider;
+    @Inject
+    FormDownloader formDownloader;
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
+
+    @Inject
+    SettingsProvider settingsProvider;
+
+    @Inject
+    FormsRepositoryProvider formsRepositoryProvider;
+
+    @Inject
+    ServerFormsDetailsFetcher serverFormsDetailsFetcher;
+
+    @Inject
+    InstancesRepositoryProvider instancesRepositoryProvider;
 
     /**
      * Initialise dagger injected constructor.
-     *
-     * @param currentProjectProvider project provider
      */
-    @Inject
-    public FormManagementContractImpl(FormDownloader formDownloader,
-                                      SettingsProvider settingsProvider,
-                                      CurrentProjectProvider currentProjectProvider,
-                                      FormsRepositoryProvider formsRepositoryProvider,
-                                      ServerFormsDetailsFetcher serverFormsDetailsFetcher,
-                                      InstancesRepositoryProvider instancesRepositoryProvider) {
-
-        this.formDownloader = formDownloader;
-        this.settingsProvider = settingsProvider;
-        this.currentProjectProvider = currentProjectProvider;
-        this.formsRepositoryProvider = formsRepositoryProvider;
-        this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
-        this.instancesRepositoryProvider = instancesRepositoryProvider;
+    public FormManagementContractImpl() {
+        Collect.getInstance().getComponent().inject(this);
     }
 
 

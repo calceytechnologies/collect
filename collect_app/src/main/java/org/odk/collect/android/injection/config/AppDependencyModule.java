@@ -617,16 +617,4 @@ public class AppDependencyModule {
     public PreferenceVisibilityHandler providesDisabledPreferencesRemover(SettingsProvider settingsProvider, VersionInformation versionInformation) {
         return new PreferenceVisibilityHandler(settingsProvider, versionInformation);
     }
-
-    @Provides
-    @Singleton
-    public FormManagementContract providesFormManagementService(FormDownloader formDownloader,
-                                                                SettingsProvider settingsProvider,
-                                                                CurrentProjectProvider currentProjectProvider,
-                                                                FormsRepositoryProvider formsRepositoryProvider,
-                                                                ServerFormsDetailsFetcher serverFormsDetailsFetcher,
-                                                                InstancesRepositoryProvider instancesRepositoryProvider) {
-        return new FormManagementContractImpl(formDownloader, settingsProvider,
-                currentProjectProvider, formsRepositoryProvider,serverFormsDetailsFetcher, instancesRepositoryProvider);
-    }
 }

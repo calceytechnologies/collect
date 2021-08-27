@@ -15,10 +15,10 @@
 package org.odk.collect.android.application;
 
 import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_API_KEY;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_APP_LANGUAGE;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_APP_THEME;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SERVER_URL;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_API_KEY;
 
 import android.app.Application;
 import android.os.StrictMode;
@@ -132,7 +132,7 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
      * @param application App application (this will work as shared instance through-out the module)
      * @param langCode    language to translate
      * @param url         server url
-     * @param apiKey       server token
+     * @param apiKey      server token
      */
     public void init(Application application, String langCode, String url, String apiKey) {
         this.application = application;
@@ -174,6 +174,17 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
                 .build();
     }
 
+
+    /**
+     * Get form management instance to execute form management functions.
+     *
+     * @return FormManagementContract
+     */
+    public FormManagementContract getFormManagementContract() {
+        return new FormManagementContractImpl();
+    }
+
+
     /**
      * Update module language.
      *
@@ -186,7 +197,7 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
     /**
      * Set server configurations.
      *
-     * @param url   server url
+     * @param url    server url
      * @param apiKey token to access
      */
     private void configureProject(String url, String apiKey) {
