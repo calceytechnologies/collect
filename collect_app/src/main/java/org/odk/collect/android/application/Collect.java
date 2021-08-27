@@ -26,6 +26,8 @@ import androidx.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
+import org.odk.collect.android.external.FormsProvider;
+import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.externaldata.ExternalDataManager;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
@@ -137,6 +139,16 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
         testStorage();
         fixGoogleBug154855417();
         setupStrictMode();
+
+        initProviders();
+    }
+
+    /**
+     * Initiate forms and instance providers
+     */
+    private void initProviders(){
+        InstanceProvider.initiateURIMatcher();
+        FormsProvider.initiateURIMatcher();
     }
 
     /**

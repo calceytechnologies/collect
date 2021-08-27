@@ -120,7 +120,7 @@ public class FormsProvider extends ContentProvider {
         if (uri.getQueryParameter(CursorLoaderFactory.INTERNAL_QUERY_PARAM) == null) {
             logServerEvent(projectId, AnalyticsEvents.FORMS_PROVIDER_QUERY);
         }
-        initiateURIMatcher();
+
         Cursor cursor;
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
@@ -178,7 +178,7 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public String getType(@NonNull Uri uri) {
-        initiateURIMatcher();
+
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
             case NEWEST_FORMS_BY_FORM_ID:
@@ -226,7 +226,6 @@ public class FormsProvider extends ContentProvider {
 
         FormDeleter formDeleter = new FormDeleter(getFormsRepository(projectId), instancesRepositoryProvider.get(projectId));
 
-        initiateURIMatcher();
 
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
@@ -264,7 +263,7 @@ public class FormsProvider extends ContentProvider {
         String cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId);
 
         int count;
-        initiateURIMatcher();
+
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
                 try (Cursor cursor = databaseQuery(projectId, null, where, whereArgs, null, null, null)) {
@@ -327,7 +326,7 @@ public class FormsProvider extends ContentProvider {
     }
 
 
-    private static void  initiateURIMatcher(){
+    public static void  initiateURIMatcher(){
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
         String AUTHORITY = Collect.AppID+".provider.odk.forms";
 
