@@ -4,7 +4,6 @@ import android.app.Application;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.activities.CollectLauncherActivity;
 import org.odk.collect.android.external.AndroidShortcutsActivity;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.DeleteSavedFormActivity;
@@ -287,8 +286,6 @@ public interface AppDependencyComponent {
     void inject(InstanceUploader instanceUploader);
 
     void inject(FormUriActivity formUriActivity);
-
-    void inject(CollectLauncherActivity collectLauncherActivity);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 
