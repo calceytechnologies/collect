@@ -16,6 +16,7 @@ import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
@@ -29,7 +30,9 @@ import org.odk.collect.forms.instances.Instance;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -115,6 +118,20 @@ public class FormManagementContractImpl implements FormManagementContract {
                     listener.uploadCanceled();
                 }
             }
+        }
+    }
+
+    @Override
+    public void removeUploadedForms(@NotNull Set<String> instanceIds) {
+        // filters stream to upload
+        Stream<Instance> instancesToDelete = instanceIds.stream()
+                .map(id -> new InstancesRepositoryProvider(Collect.getApplication()).get().get(Long.parseLong(id)))
+                .filter(instance -> instance.getStatus().equals(Instance.STATUS_SUBMITTED));
+
+        if(instancesToDelete != null && instanceIds.size() != 0){
+            // remove instances
+            DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepositoryProvider.get(), formsRepositoryProvider.get());
+            dit.execute(instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
         }
     }
 
