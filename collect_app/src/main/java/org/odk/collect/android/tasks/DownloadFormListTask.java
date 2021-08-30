@@ -82,7 +82,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
                         detailsHashMap.put(details.getFormId(), details);
                     }
 
-                    stateListener.formListDownloadingComplete(detailsHashMap, result.second);
+                    stateListener.formListDownloadingComplete(result.first, result.second);
                 } else {
                     stateListener.formListDownloadingComplete(null, result.second);
                 }

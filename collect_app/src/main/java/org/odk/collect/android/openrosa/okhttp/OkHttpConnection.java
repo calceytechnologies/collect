@@ -12,6 +12,7 @@ import org.odk.collect.android.openrosa.HttpHeadResult;
 import org.odk.collect.android.openrosa.HttpPostResult;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.OpenRosaServerClient;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
@@ -46,7 +47,9 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @NonNull
     private final String userAgent;
 
-    public OkHttpConnection(@NonNull OkHttpOpenRosaServerClientProvider clientFactory, @NonNull FileToContentTypeMapper fileToContentTypeMapper, @NonNull String userAgent) {
+    public OkHttpConnection(@NonNull OkHttpOpenRosaServerClientProvider clientFactory,
+                            @NonNull FileToContentTypeMapper fileToContentTypeMapper,
+                            @NonNull String userAgent) {
         this.clientFactory = clientFactory;
         this.fileToContentTypeMapper = fileToContentTypeMapper;
         this.userAgent = userAgent;

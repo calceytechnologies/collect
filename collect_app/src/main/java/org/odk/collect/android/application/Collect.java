@@ -15,19 +15,21 @@
 package org.odk.collect.android.application;
 
 import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_API_KEY;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_APP_LANGUAGE;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_APP_THEME;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SERVER_URL;
 
 import android.app.Application;
 import android.os.StrictMode;
 
 import androidx.annotation.Nullable;
-
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.external.FormsProvider;
 import org.odk.collect.android.external.InstanceProvider;
+import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.externaldata.ExternalDataManager;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
@@ -35,7 +37,9 @@ import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ProjectCreator;
 import org.odk.collect.android.projects.ProjectImporter;
+import org.odk.collect.android.projects.SettingsConnectionMatcher;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.forms.Form;
@@ -78,6 +82,12 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
 
     @Inject
     ProjectsRepository projectsRepository;
+
+    @Inject
+    AppConfigurationGenerator appConfigurationGenerator;
+
+    @Inject
+    ProjectCreator projectCreator;
 
     @NotNull
     private Application application;
@@ -122,19 +132,25 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
      * Initial module creation will begin from following functions.
      *
      * @param application App application (this will work as shared instance through-out the module)
-     * @param langCode language to translate
+     * @param langCode    language to translate
+     * @param url         server url
+     * @param apiKey      server token
      */
-    public void init(Application application, String langCode) {
+    public void init(Application application, String langCode, String url, String apiKey) {
         this.application = application;
         AppID = application.getApplicationInfo().packageName;
 
         initDaggerModules();
+        configureProject(url, apiKey);
         updateLanguageCode(langCode);
         applicationInitializer.initialize();
 
-//        if (BuildConfig.DEBUG) {
-//            testProjectConfiguration();
-//        }
+
+        if (BuildConfig.DEBUG) {
+            //uncomment this for load demo project
+            //testProjectConfiguration();
+        }
+
 
         testStorage();
         fixGoogleBug154855417();
@@ -171,10 +187,19 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
                 })
                 .build();
     }
-
+    
+    /**
+     * Get form management instance to execute form management functions.
+     *
+     * @return FormManagementContract
+     */
+    public FormManagementContract getFormManagementContract() {
+        return new FormManagementContractImpl();
+    }
 
     /**
      * Update module language.
+     *
      * @param language language
      */
     private void updateLanguageCode(String language) {
@@ -182,7 +207,28 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
     }
 
     /**
+     * Set server configurations.
+     *
+     * @param url    server url
+     * @param apiKey token to access
+     */
+    private void configureProject(String url, String apiKey) {
+        String settingsJson = appConfigurationGenerator
+                .getAppConfigurationAsJsonWithTokenDetails(url, apiKey);
+
+        SettingsConnectionMatcher settingsConnectionMatcher = new SettingsConnectionMatcher(projectsRepository, settingsProvider);
+        String UUID = settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson);
+        if (UUID == null) {
+            projectCreator.createNewProject(settingsJson);
+        }
+
+        settingsProvider.getGeneralSettings().save(KEY_SERVER_URL, url);
+        settingsProvider.getGeneralSettings().save(KEY_API_KEY, apiKey);
+    }
+
+    /**
      * Update application theme.
+     *
      * @param theme theme
      */
     private void updateThemePack(String theme) {

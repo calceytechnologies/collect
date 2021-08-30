@@ -14,6 +14,7 @@ object ProjectKeys {
     const val KEY_SERVER_URL = "server_url"
     const val KEY_USERNAME = "username"
     const val KEY_PASSWORD = "password"
+    const val KEY_API_KEY = "api_key"
 
     // custom_server_paths_preferences.xml
     const val KEY_FORMLIST_URL = "formlist_url"
@@ -94,12 +95,13 @@ object ProjectKeys {
     // experimental
     const val KEY_MAGENTA_THEME = "magenta"
 
+
     @JvmStatic
     val defaults: HashMap<String, Any>
         get() {
             val hashMap = HashMap<String, Any>()
             // odk_server_preferences.xml
-            hashMap[KEY_SERVER_URL] = Collect.getApplication().getString(R.string.default_server_url)
+            hashMap[KEY_SERVER_URL] = ""
             hashMap[KEY_USERNAME] = ""
             hashMap[KEY_PASSWORD] = ""
             // form_management_preferences.xml

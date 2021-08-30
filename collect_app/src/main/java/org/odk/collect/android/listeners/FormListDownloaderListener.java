@@ -18,10 +18,11 @@ import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.forms.FormSourceException;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface FormListDownloaderListener {
-    void formListDownloadingComplete(HashMap<String, ServerFormDetails> formList, FormSourceException exception);
+    void formListDownloadingComplete(List<ServerFormDetails> formList, FormSourceException exception);
 }

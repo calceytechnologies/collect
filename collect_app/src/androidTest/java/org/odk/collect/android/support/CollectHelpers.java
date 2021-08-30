@@ -14,34 +14,26 @@ public final class CollectHelpers {
     }
 
     public static FormController waitForFormController() throws InterruptedException {
-        if (Collect.getApplication().getFormController() == null) {
+        if (Collect.getInstance().getFormController() == null) {
             do {
                 Thread.sleep(1);
-            } while (Collect.getApplication().getFormController() == null);
+            } while (Collect.getInstance().getFormController() == null);
         }
 
-        return Collect.getApplication().getFormController();
+        return Collect.getInstance().getFormController();
     }
 
     public static AppDependencyComponent getAppDependencyComponent() {
-        Collect application = getApplication();
+        Collect application = Collect.getInstance();
         return application.getComponent();
     }
 
-    private static Collect getApplication() {
-        return (Collect) InstrumentationRegistry
-                .getInstrumentation()
-                .getTargetContext()
-                .getApplicationContext();
-    }
 
     public static void overrideAppDependencyModule(AppDependencyModule appDependencyModule) {
-        Collect application = getApplication();
-
         AppDependencyComponent testComponent = DaggerAppDependencyComponent.builder()
-                .application(application)
+                .application(Collect.getApplication())
                 .appDependencyModule(appDependencyModule)
                 .build();
-        application.setComponent(testComponent);
+        Collect.getInstance().setComponent(testComponent);
     }
 }
