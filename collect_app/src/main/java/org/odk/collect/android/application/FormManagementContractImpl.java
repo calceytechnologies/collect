@@ -111,6 +111,8 @@ public class FormManagementContractImpl implements FormManagementContract {
                     instanceUploaderTask.setRepositories(instancesRepositoryProvider.get(),
                             formsRepositoryProvider.get(), settingsProvider);
                     instanceUploaderTask.execute(getInstanceIds(instances));
+                } else {
+                    listener.uploadCanceled();
                 }
             }
         }
