@@ -138,8 +138,7 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
      */
     public void init(Application application, String langCode, String url, String apiKey) {
         this.application = application;
-        AppID = application.getApplicationInfo().packageName;
-
+        initApplicationId();
         initDaggerModules();
         configureProject(url, apiKey);
         updateLanguageCode(langCode);
@@ -156,6 +155,15 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
         fixGoogleBug154855417();
         setupStrictMode();
 
+
+    }
+
+    /**
+     * Initiate DreamSave application ID
+     */
+    private void initApplicationId(){
+
+        AppID = this.application.getApplicationInfo().packageName;
         initProviders();
     }
 
@@ -187,7 +195,7 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
                 })
                 .build();
     }
-    
+
     /**
      * Get form management instance to execute form management functions.
      *
