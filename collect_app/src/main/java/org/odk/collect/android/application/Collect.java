@@ -201,8 +201,14 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
      * @param apiKey token to access
      */
     private void configureProject(String url, String apiKey) {
-        String settingsJson = appConfigurationGenerator
-                .getAppConfigurationAsJsonWithTokenDetails(url, apiKey);
+//        String settingsJson = appConfigurationGenerator
+//                .getAppConfigurationAsJsonWithTokenDetails(url, apiKey);
+
+        String settingsJson = appConfigurationGenerator.getAppConfigurationAsJsonWithServerDetails(
+                url,
+                "ganidu",
+                "UdjS%W5T"
+        );
 
         SettingsConnectionMatcher settingsConnectionMatcher = new SettingsConnectionMatcher(projectsRepository, settingsProvider);
         String UUID = settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson);

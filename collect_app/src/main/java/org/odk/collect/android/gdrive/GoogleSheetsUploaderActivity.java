@@ -269,6 +269,11 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     }
 
     @Override
+    public void uploadCanceled() {
+
+    }
+
+    @Override
     public void progressUpdate(int progress, int total) {
         alertMsg = getString(R.string.sending_items, String.valueOf(progress), String.valueOf(total));
         GoogleSheetsUploaderProgressDialog progressDialog = getProgressDialog();
