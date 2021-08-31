@@ -29,14 +29,13 @@ import org.odk.collect.forms.FormListItem;
 import org.odk.collect.forms.instances.Instance;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
-
-import io.reactivex.annotations.Nullable;
 
 public class FormManagementContractImpl implements FormManagementContract {
 
@@ -67,10 +66,9 @@ public class FormManagementContractImpl implements FormManagementContract {
 
 
     @Override
-    public synchronized void openForm(@NotNull Context context, @NotNull String formId,
-                                      @Nullable String version) {
+    public synchronized void openForm(@NotNull Context context, @NotNull String formId) {
         if (formId != null) {
-            Form form = getForm(formId, version);
+            Form form = getForm(formId);
             if (form != null) {
                 Uri formUri = FormsContract.getUri(currentProjectProvider
                         .getCurrentProject().getUuid(), form.getDbId());
@@ -128,7 +126,7 @@ public class FormManagementContractImpl implements FormManagementContract {
                 .map(id -> new InstancesRepositoryProvider(Collect.getApplication()).get().get(Long.parseLong(id)))
                 .filter(instance -> instance.getStatus().equals(Instance.STATUS_SUBMITTED));
 
-        if(instancesToDelete != null && instanceIds.size() != 0){
+        if (instancesToDelete != null && instanceIds.size() != 0) {
             // remove instances
             DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepositoryProvider.get(), formsRepositoryProvider.get());
             dit.execute(instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
@@ -138,12 +136,18 @@ public class FormManagementContractImpl implements FormManagementContract {
     /**
      * Get latest form based on form id and version
      *
-     * @param formId  formId
-     * @param version version
-     * @return
+     * @param formId formId
+     * @return latest form
      */
-    private Form getForm(String formId, String version) {
-        return formsRepositoryProvider.get().getLatestByFormIdAndVersion(formId, version);
+    private Form getForm(String formId) {
+        List<Form> forms = formsRepositoryProvider.get().getAllByFormId(formId);
+
+        if (!forms.isEmpty()) {
+            return forms.stream().max(Comparator.comparingLong(Form::getDate)).get();
+        } else {
+            return null;
+        }
+
     }
 
     /**

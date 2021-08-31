@@ -29,9 +29,8 @@ public interface FormManagementContract {
      *
      * @param context context
      * @param formId  form id to access
-     * @param version form version
      */
-    void openForm(@NotNull Context context, @NotNull String formId, @Nullable String version);
+    void openForm(@NotNull Context context, @NotNull String formId);
 
 
     /**
