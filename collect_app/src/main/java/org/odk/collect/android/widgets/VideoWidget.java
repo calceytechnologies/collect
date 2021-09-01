@@ -268,6 +268,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     private void playVideoFile() {
         File file = new File(getInstanceFolder() + File.separator + binaryName);
+        Timber.w("Play Video file:  %s", file.getAbsolutePath());
         mediaUtils.openFile(getContext(), file, "video/*");
     }
 }
