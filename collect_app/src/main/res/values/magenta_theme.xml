@@ -14,6 +14,7 @@
         <item name="colorOnBackground">#000000</item>
         <item name="colorOnError">#FFFFFF</item>
         <item name="colorOnSurface">#000000</item>
+        <item name="colorButtonNormal">?colorPrimary</item>
 
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2</item>

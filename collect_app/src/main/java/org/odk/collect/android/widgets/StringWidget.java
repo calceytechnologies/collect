@@ -16,6 +16,8 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
@@ -142,11 +144,11 @@ public class StringWidget extends QuestionWidget {
         // needed to make long read only text scroll
         answerEditText.setHorizontallyScrolling(false);
         answerEditText.setSingleLine(false);
+        answerEditText.setTextColor(themeUtils.getColorOnSurface());
 
         if (readOnly) {
             answerEditText.setBackground(null);
             answerEditText.setEnabled(false);
-            answerEditText.setTextColor(themeUtils.getColorOnSurface());
             answerEditText.setFocusable(false);
         }
 

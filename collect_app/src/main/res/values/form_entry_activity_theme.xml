@@ -13,4 +13,9 @@
         <item name="android:textDirection" tools:targetApi="17">firstStrong</item>
     </style>
 
+    <style name="Theme.Collect.Activity.FormEntryActivity.DreamSave" parent="Theme.Collect.DreamSave">
+        <item name="android:textDirection" tools:targetApi="17">firstStrong</item>
+    </style>
+
+
 </resources>

@@ -9,33 +9,36 @@
 
     <style name="Theme.Collect.DreamSave" parent="Theme.AppCompat.Light.NoActionBar">
         <!--Material theme attributes-->
-        <item name="colorPrimary">#E0E0E0</item>
-        <item name="colorSecondary">#3e9fcc</item>
+        <item name="colorPrimary">#FFF8E9C5</item>
+        <item name="colorPrimaryDark">#FFFCDC95</item>
+        <item name="colorSecondary">#FF324B5A</item>
+
         <item name="colorError">@color/red_500</item>
 
         <item name="colorPrimaryVariant">?colorPrimary</item>
         <item name="colorSecondaryVariant">?colorSecondary</item>
         <item name="colorSurface">#FFFFFF</item>
-        <item name="colorOnPrimary">#000000</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
         <item name="colorOnSecondary">#FFFFFF</item>
         <item name="colorOnBackground">#000000</item>
         <item name="colorOnError">#000000</item>
-        <item name="colorOnSurface">#000000</item>
+        <item name="colorOnSurface">?colorSecondary</item>
         <item name="scrimBackground">@color/mtrl_scrim_color</item>
+        <item name="colorButtonNormal">#FF68C7C2</item>
 
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2</item>
         <item name="textAppearanceHeadline3">@style/TextAppearance.MaterialComponents.Headline3</item>
         <item name="textAppearanceHeadline4">@style/TextAppearance.Collect.Headline4</item>
         <item name="textAppearanceHeadline5">@style/TextAppearance.Collect.Headline5</item>
-        <item name="textAppearanceHeadline6">@style/TextAppearance.Collect.Headline6</item>
+        <item name="textAppearanceHeadline6">@style/Theme.Collect.DreamSave.HeadLine6</item>
         <item name="textAppearanceSubtitle1">@style/TextAppearance.Collect.Subtitle1</item>
         <item name="textAppearanceSubtitle2">@style/TextAppearance.MaterialComponents.Subtitle2</item>
         <item name="textAppearanceBody1">@style/TextAppearance.Collect.Body1</item>
         <item name="textAppearanceBody2">@style/TextAppearance.Collect.Body2</item>
-        <item name="textAppearanceCaption">@style/TextAppearance.MaterialComponents.Caption</item>
-        <item name="textAppearanceButton">@style/TextAppearance.Collect.Button</item>
-        <item name="textAppearanceOverline">@style/TextAppearance.MaterialComponents.Overline</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.Collect.DreamSave.Caption</item>
+        <item name="textAppearanceButton">@style/TextAppearance.Collect.DreamSave.Button</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.Collect.DreamSave.Overline</item>
 
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MaterialComponents.SmallComponent</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MaterialComponents.MediumComponent</item>
@@ -48,7 +51,7 @@
         <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
         <item name="android:fadeScrollbars">false</item>
         <item name="colorAccent">?colorSecondary</item>
-        <item name="android:fontFamily">@string/font_regular</item>
+        <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
         <item name="alertDialogTheme">@style/Theme.Collect.Light.Dialog.Alert</item>
         <item name="android:alertDialogTheme">@style/Theme.Collect.Light.Dialog.Alert</item>
@@ -56,6 +59,17 @@
         <item name="iconColor">#000000</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="android:tintMode" tools:targetApi="21">src_in</item>
+    </style>
+
+    <style name="Theme.Collect.DreamSave.HeadLine6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="titleTextColor">?attr/colorSecondary</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginEnd">4sp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_weight">0.6</item>
+        <item name="android:fontFamily">@string/font_family_regular</item>
     </style>
 
     <style name="Theme.Collect.DreamSave.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -81,4 +95,36 @@
     <style name="Theme.Collect.DreamSave.Spinner.TimePicker" parent="android:Widget.Material.Light.TimePicker">
         <item name="android:timePickerMode">spinner</item>
     </style>
+
+    <style name="TextAppearance.Collect.DreamSave.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:height">45dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginBottom">24dp</item>
+        <item name="fontFamily">@string/font_family_medium</item>
+        <item name="android:fontFamily">@string/font_family_medium</item>
+    </style>
+
+    <style name="TextAppearance.Collect.DreamSave.Caption" parent="TextAppearance.AppCompat.Caption">
+        <item name="fontFamily">@string/font_family_regular</item>
+        <item name="android:fontFamily">@string/font_family_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="background">?colorSecondary</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+
+    <style name="TextAppearance.Collect.DreamSave.Overline" parent="TextAppearance.AppCompat">
+        <item name="fontFamily">@string/font_family_regular</item>
+        <item name="android:fontFamily">@string/font_family_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="background">?colorSecondary</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:letterSpacing">0.166666667</item>
+    </style>
+
 </resources>

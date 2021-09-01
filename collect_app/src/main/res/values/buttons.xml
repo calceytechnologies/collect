@@ -4,6 +4,10 @@
     <style name="Widget.Collect.Button.Custom" parent="Widget.MaterialComponents.Button">
         <item name="android:textAllCaps">false</item>
         <item name="android:textStyle">normal</item>
+        <item name="cornerRadius">74dp</item>
+        <item name="materialThemeOverlay">@style/AppButtonStyling</item>
+        <item name="colorOnPrimary">?colorOnPrimary</item>
+        <item name="android:textAppearanceButton">?textAppearanceButton</item>
     </style>
 
     <style name="Widget.Collect.Button.IconButton" parent="Widget.MaterialComponents.Button">
@@ -40,8 +44,6 @@
     <style name="Widget.Collect.Button.WidgetAnswer" parent="Widget.Collect.Button.Custom">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">@dimen/margin_small</item>
-        <item name="android:layout_marginTop">@dimen/margin_extra_small</item>
     </style>
 
     <style name="Widget.Collect.Button.BottomOption" parent="Widget.Collect.Button.Custom">
@@ -67,6 +69,10 @@
     <style name="Widget.Collect.ImageButton.MapButton" parent="Widget.AppCompat.ImageButton">
         <item name="android:tintMode">src_in</item>
         <item name="android:tint">@color/map_button_tint_list</item>
+    </style>
+
+    <style name="AppButtonStyling">
+        <item name="colorPrimary">?colorButtonNormal</item>
     </style>
 
 </resources>

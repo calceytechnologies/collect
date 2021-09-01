@@ -12,7 +12,7 @@
         <item name="colorPrimary">#616161</item>
         <item name="colorSecondary">#57C4C2</item>
         <item name="colorError">@color/red_500</item>
-
+        <item name="colorButtonNormal">?colorPrimary</item>
         <item name="colorPrimaryVariant">?colorPrimary</item>
         <item name="colorSecondaryVariant">?colorSecondary</item>
         <item name="colorSurface">#303030</item>
@@ -46,7 +46,7 @@
         <item name="android:scrollbarSize">1.75mm</item>
         <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
         <item name="android:fadeScrollbars">false</item>
-        <item name="android:fontFamily">@string/font_regular</item>
+        <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
         <item name="alertDialogTheme">@style/Theme.Collect.Dark.Dialog.Alert</item>
         <item name="android:alertDialogTheme">@style/Theme.Collect.Dark.Dialog.Alert</item>

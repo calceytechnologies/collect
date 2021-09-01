@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:paddingVertical="@dimen/margin_small"
     android:paddingEnd="@dimen/margin_standard"
+    android:textColor="?colorOnSurface"
     android:button="@drawable/inset_check_box"
     tools:text="Option A">
 

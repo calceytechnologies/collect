@@ -50,7 +50,7 @@ public final class ThemeUtils {
             if (theme.equals(context.getString(R.string.app_theme_dark))) {
                 return R.style.Theme_Collect_Dark;
             } else {
-                return R.style.Theme_Collect_Light;
+                return R.style.Theme_Collect_DreamSave;
             }
         }
     }
@@ -64,7 +64,7 @@ public final class ThemeUtils {
             if (theme.equals(context.getString(R.string.app_theme_dark))) {
                 return R.style.Theme_Collect_Activity_FormEntryActivity_Dark;
             } else {
-                return R.style.Theme_Collect_Activity_FormEntryActivity_Light;
+                return R.style.Theme_Collect_Activity_FormEntryActivity_DreamSave;
             }
         }
     }
