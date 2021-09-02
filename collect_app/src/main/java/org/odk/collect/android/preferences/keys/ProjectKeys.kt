@@ -136,7 +136,7 @@ object ProjectKeys {
             // server_preferences.xml
             hashMap[KEY_PROTOCOL] = PROTOCOL_SERVER
             // user_interface_preferences.xml
-            hashMap[KEY_APP_THEME] = Collect.getApplication().getString(R.string.app_theme_light)
+            hashMap[KEY_APP_THEME] = R.style.Theme_Collect_Light
             hashMap[KEY_APP_LANGUAGE] = ""
             hashMap[KEY_FONT_SIZE] = QuestionFontSizeUtils.DEFAULT_FONT_SIZE.toString()
             hashMap[KEY_NAVIGATION] = NAVIGATION_BOTH

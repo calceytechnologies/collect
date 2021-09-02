@@ -46,40 +46,25 @@ public final class ThemeUtils {
         if (isMagentaEnabled()) {
             return R.style.Theme_Collect_Magenta;
         } else {
-            String theme = getPrefsTheme();
-            if (theme.equals(context.getString(R.string.app_theme_dark))) {
-                return R.style.Theme_Collect_Dark;
-            } else {
-                return R.style.Theme_Collect_DreamSave;
-            }
+            return getPrefsTheme();
         }
     }
 
     @StyleRes
     public int getFormEntryActivityTheme() {
         if (isMagentaEnabled()) {
-            return R.style.Theme_Collect_Activity_FormEntryActivity_Magenta;
+            return R.style.Theme_Collect_Magenta;
         } else {
-            String theme = getPrefsTheme();
-            if (theme.equals(context.getString(R.string.app_theme_dark))) {
-                return R.style.Theme_Collect_Activity_FormEntryActivity_Dark;
-            } else {
-                return R.style.Theme_Collect_Activity_FormEntryActivity_DreamSave;
-            }
+            return getPrefsTheme();
         }
     }
 
     @StyleRes
     public int getSettingsTheme() {
         if (isMagentaEnabled()) {
-            return R.style.Theme_Collect_Settings_Magenta;
+            return R.style.Theme_Collect_Magenta;
         } else {
-            String theme = getPrefsTheme();
-            if (theme.equals(context.getString(R.string.app_theme_dark))) {
-                return R.style.Theme_Collect_Settings_Dark;
-            } else {
-                return R.style.Theme_Collect_Settings_Light;
-            }
+            return getPrefsTheme();
         }
     }
 
@@ -130,16 +115,17 @@ public final class ThemeUtils {
     }
 
     public boolean isDarkTheme() {
-        String theme = getPrefsTheme();
-        return theme.equals(context.getString(R.string.app_theme_dark));
+        int theme = getPrefsTheme();
+        return theme == R.style.Theme_Collect_Dark ? true : false;
     }
 
     private boolean isMagentaEnabled() {
         return settingsProvider.getGeneralSettings().getBoolean(ProjectKeys.KEY_MAGENTA_THEME);
     }
 
-    private String getPrefsTheme() {
-        return settingsProvider.getGeneralSettings().getString(ProjectKeys.KEY_APP_THEME);
+    @StyleRes
+    private int getPrefsTheme() {
+        return settingsProvider.getGeneralSettings().getInt(ProjectKeys.KEY_APP_THEME);
     }
 
     /**

@@ -24,12 +24,14 @@ import android.app.Application;
 import android.os.StrictMode;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
+
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
+import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.external.FormsProvider;
 import org.odk.collect.android.external.InstanceProvider;
-import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.externaldata.ExternalDataManager;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
@@ -66,7 +68,7 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
 
     public static final String defaultSysLanguage = "en";
     private static Collect singleton;
-    public static String AppID ;
+    public static String AppID;
 
     @Inject
     ApplicationInitializer applicationInitializer;
@@ -135,34 +137,27 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
      * @param langCode    language to translate
      * @param url         server url
      * @param apiKey      server token
+     * @param theme       applicationTheme
      */
-    public void init(Application application, String langCode, String url, String apiKey) {
+    public void init(Application application, String langCode,
+                     String url, String apiKey,
+                     @StyleRes int theme) {
         this.application = application;
         initApplicationId();
         initDaggerModules();
         configureProject(url, apiKey);
         updateLanguageCode(langCode);
+        updateThemePack(theme);
         applicationInitializer.initialize();
-
-
-        if (BuildConfig.DEBUG) {
-            //uncomment this for load demo project
-            //testProjectConfiguration();
-        }
-
-
         testStorage();
         fixGoogleBug154855417();
         setupStrictMode();
-
-
     }
 
     /**
      * Initiate DreamSave application ID
      */
-    private void initApplicationId(){
-
+    private void initApplicationId() {
         AppID = this.application.getApplicationInfo().packageName;
         initProviders();
     }
@@ -170,7 +165,7 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
     /**
      * Initiate forms and instance providers
      */
-    private void initProviders(){
+    private void initProviders() {
         InstanceProvider.initiateURIMatcher();
         FormsProvider.initiateURIMatcher();
     }
@@ -245,7 +240,7 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
      *
      * @param theme theme
      */
-    private void updateThemePack(String theme) {
+    private void updateThemePack(@StyleRes int theme) {
         settingsProvider.getGeneralSettings().save(KEY_APP_THEME, theme);
     }
 
