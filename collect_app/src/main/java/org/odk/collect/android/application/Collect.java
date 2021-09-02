@@ -158,6 +158,24 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
     }
 
     /**
+     * Update module language.
+     *
+     * @param language language
+     */
+    public void updateLanguageCode(String language) {
+        settingsProvider.getGeneralSettings().save(KEY_APP_LANGUAGE, language);
+    }
+
+    /**
+     * Get form management instance to execute form management functions.
+     *
+     * @return FormManagementContract
+     */
+    public FormManagementContract getFormManagementContract() {
+        return new FormManagementContractImpl();
+    }
+
+    /**
      * Initiate DreamSave application ID
      */
     private void initApplicationId() {
@@ -192,24 +210,6 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
                     }
                 })
                 .build();
-    }
-
-    /**
-     * Get form management instance to execute form management functions.
-     *
-     * @return FormManagementContract
-     */
-    public FormManagementContract getFormManagementContract() {
-        return new FormManagementContractImpl();
-    }
-
-    /**
-     * Update module language.
-     *
-     * @param language language
-     */
-    private void updateLanguageCode(String language) {
-        settingsProvider.getGeneralSettings().save(KEY_APP_LANGUAGE, language);
     }
 
     /**
