@@ -1,5 +1,6 @@
 package org.odk.collect.android.application;
 
+import android.app.Activity;
 import android.content.Context;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,10 +28,11 @@ public interface FormManagementContract {
     /**
      * Opens locally saved ODK form.
      *
-     * @param context context
+     * @param activity activity
      * @param formId  form id to access
+     * @param requestCode request code to notify returned actions
      */
-    void openForm(@NotNull Context context, @NotNull String formId);
+    void openForm(@NotNull Activity activity, @NotNull String formId,@NotNull int requestCode);
 
 
     /**

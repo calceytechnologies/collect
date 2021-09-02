@@ -1,5 +1,6 @@
 package org.odk.collect.android.application;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -66,18 +67,19 @@ public class FormManagementContractImpl implements FormManagementContract {
 
 
     @Override
-    public synchronized void openForm(@NotNull Context context, @NotNull String formId) {
+    public synchronized void openForm(@NotNull Activity activity, @NotNull String formId,
+                                      @NotNull int requestCode) {
         if (formId != null) {
             Form form = getForm(formId);
             if (form != null) {
                 Uri formUri = FormsContract.getUri(currentProjectProvider
                         .getCurrentProject().getUuid(), form.getDbId());
-                Intent intent = new Intent(context, FormEntryActivity.class);
+                Intent intent = new Intent(activity.getApplicationContext(), FormEntryActivity.class);
                 intent.setAction(Intent.ACTION_EDIT);
                 intent.setData(formUri);
                 intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
                         ApplicationConstants.FormModes.EDIT_SAVED);
-                context.startActivity(intent);
+                activity.startActivityForResult(intent, requestCode);
             }
         }
     }
