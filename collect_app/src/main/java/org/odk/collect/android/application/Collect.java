@@ -37,6 +37,7 @@ import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.projects.ProjectCreator;
@@ -143,15 +144,17 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
                      String url, String apiKey,
                      @StyleRes int theme) {
         this.application = application;
+
         initApplicationId();
         initDaggerModules();
-        configureProject(url, apiKey);
+        initProject(url, apiKey);
+        initProjectConfiguration();
+
         updateLanguageCode(langCode);
         updateThemePack(theme);
+
         applicationInitializer.initialize();
-        testStorage();
         fixGoogleBug154855417();
-        setupStrictMode();
     }
 
     /**
@@ -215,7 +218,7 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
      * @param url    server url
      * @param apiKey token to access
      */
-    private void configureProject(String url, String apiKey) {
+    private void initProject(String url, String apiKey) {
 //        String settingsJson = appConfigurationGenerator
 //                .getAppConfigurationAsJsonWithTokenDetails(url, apiKey);
 
@@ -233,6 +236,18 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
 
         settingsProvider.getGeneralSettings().save(KEY_SERVER_URL, url);
         settingsProvider.getGeneralSettings().save(KEY_API_KEY, apiKey);
+    }
+
+    /**
+     * Configure project settings
+     */
+    private void initProjectConfiguration() {
+        // set project view settings
+        settingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_SAVE_MID, false);
+        settingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_JUMP_TO, false);
+        settingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_CHANGE_LANGUAGE, false);
+        settingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_ACCESS_SETTINGS, false);
+        settingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false);
     }
 
     /**

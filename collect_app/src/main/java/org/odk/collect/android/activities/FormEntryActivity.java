@@ -646,7 +646,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  * Savepoints for forms that were explicitly saved will be recovered when that
                  * explicitly saved instance is edited via edit-saved-form.
                  */
-                instancePath = loadSavePoint();
+                instancePath = null;  //no need to get saved points.  loadSavePoint();
             }
         } else {
             Timber.i("Unrecognized URI: %s", uri);
