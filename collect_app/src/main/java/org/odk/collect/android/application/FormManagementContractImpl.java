@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 
@@ -99,7 +100,7 @@ public class FormManagementContractImpl implements FormManagementContract {
                     listener.formsDownloadingCancelled();
                 }
             });
-            formListTask.execute();
+            formListTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 
@@ -113,7 +114,8 @@ public class FormManagementContractImpl implements FormManagementContract {
                     instanceUploaderTask.setUploaderListener(listener);
                     instanceUploaderTask.setRepositories(instancesRepositoryProvider.get(),
                             formsRepositoryProvider.get(), settingsProvider);
-                    instanceUploaderTask.execute(getInstanceIds(instances));
+                    instanceUploaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+                            getInstanceIds(instances));
                 } else {
                     listener.uploadCanceled();
                 }
@@ -131,7 +133,8 @@ public class FormManagementContractImpl implements FormManagementContract {
         if (instancesToDelete != null && instanceIds.size() != 0) {
             // remove instances
             DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepositoryProvider.get(), formsRepositoryProvider.get());
-            dit.execute(instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
+            dit.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+                    instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
         }
     }
 
@@ -184,6 +187,6 @@ public class FormManagementContractImpl implements FormManagementContract {
     private void downloadForms(List<ServerFormDetails> formList, DownloadFormsTaskListener listener) {
         DownloadFormsTask downloadFormsTask = new DownloadFormsTask(formDownloader);
         downloadFormsTask.setDownloaderListener(listener);
-        downloadFormsTask.execute((ArrayList<ServerFormDetails>) formList);
+        downloadFormsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (ArrayList<ServerFormDetails>) formList);
     }
 }

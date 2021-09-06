@@ -574,7 +574,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
                     showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
-                    formLoaderTask.execute(formPath);
+                    formLoaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, formPath);
                 }
 
                 return;
