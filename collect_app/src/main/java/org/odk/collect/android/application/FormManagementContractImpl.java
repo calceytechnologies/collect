@@ -88,7 +88,7 @@ public class FormManagementContractImpl implements FormManagementContract {
     @Override
     public synchronized void downloadFormDetails(@NotNull List<FormListItem> formListItems,
                                                  @NotNull DownloadFormsTaskListener listener) {
-        if (formListItems != null && listener != null) {
+        if (formListItems != null) {
             serverFormsDetailsFetcher.setFormList(formListItems);
             DownloadFormListTask formListTask = new DownloadFormListTask(serverFormsDetailsFetcher);
             formListTask.setDownloaderListener((formList, exception) -> {
@@ -101,12 +101,16 @@ public class FormManagementContractImpl implements FormManagementContract {
                 }
             });
             formListTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            if (listener != null) {
+                listener.formsDownloadingCancelled();
+            }
         }
     }
 
     @Override
     public void uploadForms(@NonNull @NotNull String[] formIds, @NotNull InstanceUploaderListener listener) {
-        if (formIds != null && listener != null) {
+        if (formIds != null) {
             for (String formId : formIds) {
                 List<Instance> instances = getUploadForms(formId);
                 if (instances != null && !instances.isEmpty()) {
@@ -119,6 +123,25 @@ public class FormManagementContractImpl implements FormManagementContract {
                 } else {
                     listener.uploadCanceled();
                 }
+            }
+        } else {
+            if (listener != null) {
+                listener.uploadCanceled();
+            }
+        }
+    }
+
+    @Override
+    public void uploadForms(@NotNull Long[] instanceIds, @NotNull InstanceUploaderListener listener) {
+        if (instanceIds != null) {
+            InstanceUploaderTask instanceUploaderTask = new InstanceServerUploaderTask();
+            instanceUploaderTask.setUploaderListener(listener);
+            instanceUploaderTask.setRepositories(instancesRepositoryProvider.get(),
+                    formsRepositoryProvider.get(), settingsProvider);
+            instanceUploaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, instanceIds);
+        } else {
+            if (listener != null) {
+                listener.uploadCanceled();
             }
         }
     }
@@ -146,7 +169,6 @@ public class FormManagementContractImpl implements FormManagementContract {
      */
     private Form getForm(String formId) {
         List<Form> forms = formsRepositoryProvider.get().getAllByFormId(formId);
-
         if (!forms.isEmpty()) {
             return forms.stream().max(Comparator.comparingLong(Form::getDate)).get();
         } else {

@@ -46,12 +46,21 @@ public interface FormManagementContract {
                              @NotNull DownloadFormsTaskListener listener);
 
     /**
-     * Uploads given formIds to backend server.
+     * Uploads forms to backend server.
      *
      * @param formIds  list of form ids
      * @param listener listener to detect form upload
      */
     void uploadForms(@NotNull String[] formIds, @NotNull InstanceUploaderListener listener);
+
+
+    /**
+     * Uploads instances to backend server.
+     *
+     * @param instanceIds  list of instance ids
+     * @param listener listener to detect form upload
+     */
+    void uploadForms(@NotNull Long[] instanceIds, @NotNull InstanceUploaderListener listener);
 
 
     /**
