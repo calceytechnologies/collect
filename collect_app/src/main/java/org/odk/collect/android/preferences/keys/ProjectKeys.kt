@@ -15,6 +15,7 @@ object ProjectKeys {
     const val KEY_USERNAME = "username"
     const val KEY_PASSWORD = "password"
     const val KEY_API_KEY = "api_key"
+    const val KEY_APP_VERSION = "app_version"
 
     // custom_server_paths_preferences.xml
     const val KEY_FORMLIST_URL = "formlist_url"
@@ -95,6 +96,9 @@ object ProjectKeys {
     // experimental
     const val KEY_MAGENTA_THEME = "magenta"
 
+    // api keys
+    const val HEADER_KEY_API = "API_KEY"
+    const val HEADER_KEY_APP_VERSION = "X-APP-VERSION"
 
     @JvmStatic
     val defaults: HashMap<String, Any>

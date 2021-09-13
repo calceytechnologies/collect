@@ -38,8 +38,7 @@ import static java.util.Collections.emptyMap;
  * @author msundt
  * @author carlhartung
  */
-public class DownloadFormsTask extends
-        AsyncTask<ArrayList<ServerFormDetails>, String, Map<ServerFormDetails, String>> {
+public class DownloadFormsTask extends AsyncTask<ArrayList<ServerFormDetails>, String, Map<ServerFormDetails, String>> {
 
     private final FormDownloader formDownloader;
     private DownloadFormsTaskListener stateListener;

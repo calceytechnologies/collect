@@ -61,6 +61,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
         Request request = new Request.Builder()
                 .url(uri.toURL())
+                .addHeader(ProjectKeys.HEADER_KEY_API, credentials.getApiKey())
+                .addHeader(ProjectKeys.HEADER_KEY_APP_VERSION, credentials.getAppVersion())
                 .get()
                 .build();
 
@@ -121,6 +123,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials);
         Request request = new Request.Builder()
                 .url(uri.toURL())
+                .addHeader(ProjectKeys.HEADER_KEY_API, credentials.getApiKey())
+                .addHeader(ProjectKeys.HEADER_KEY_APP_VERSION, credentials.getAppVersion())
                 .head()
                 .build();
 
@@ -205,6 +209,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         Request request = new Request.Builder()
                 .url(uri.toURL())
                 .post(multipartBody)
+                .addHeader(ProjectKeys.HEADER_KEY_API, credentials.getApiKey())
+                .addHeader(ProjectKeys.HEADER_KEY_APP_VERSION, credentials.getAppVersion())
                 .build();
         Response response = httpClient.makeRequest(request, new Date());
 

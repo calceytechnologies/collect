@@ -80,6 +80,14 @@ public class WebCredentialsUtils {
         return generalSettings.getString(ProjectKeys.KEY_USERNAME);
     }
 
+    private String getApiKeyFromPreferences() {
+        return generalSettings.getString(ProjectKeys.KEY_API_KEY);
+    }
+
+    private String getAppVersionFromPreferences() {
+        return generalSettings.getString(ProjectKeys.KEY_APP_VERSION);
+    }
+
     /**
      * Returns a credentials object from the url
      *
@@ -97,7 +105,8 @@ public class WebCredentialsUtils {
             if (HOST_CREDENTIALS.containsKey(host)) {
                 return HOST_CREDENTIALS.get(host);
             } else {
-                return new HttpCredentials(getUserNameFromPreferences(), getPasswordFromPreferences());
+                return new HttpCredentials(getUserNameFromPreferences(), getPasswordFromPreferences(),
+                        getApiKeyFromPreferences(), getAppVersionFromPreferences());
             }
         } else {
             return HOST_CREDENTIALS.get(host);

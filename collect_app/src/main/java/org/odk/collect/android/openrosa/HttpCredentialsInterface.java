@@ -4,4 +4,8 @@ public interface HttpCredentialsInterface {
     String getUsername();
 
     String getPassword();
+
+    String getApiKey();
+
+    String getAppVersion();
 }

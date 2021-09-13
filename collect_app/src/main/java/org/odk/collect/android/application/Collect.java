@@ -18,6 +18,7 @@ import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_1
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_API_KEY;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_APP_LANGUAGE;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_APP_THEME;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_APP_VERSION;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SERVER_URL;
 
 import android.app.Application;
@@ -137,17 +138,18 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
      * @param application App application (this will work as shared instance through-out the module)
      * @param langCode    language to translate
      * @param url         server url
-     * @param apiKey      server token
+     * @param apiKey      server api key
+     * @param appVersion  app version
      * @param theme       applicationTheme
      */
     public void init(Application application, String langCode,
-                     String url, String apiKey,
+                     String url, String apiKey, String appVersion,
                      @StyleRes int theme) {
         this.application = application;
 
         initApplicationId();
         initDaggerModules();
-        initProject(url, apiKey);
+        initProject(url, apiKey, appVersion);
         initProjectConfiguration();
 
         updateLanguageCode(langCode);
@@ -215,18 +217,13 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
     /**
      * Set server configurations.
      *
-     * @param url    server url
-     * @param apiKey token to access
+     * @param url        server url
+     * @param apiKey     token to access
+     * @param appVersion app version
      */
-    private void initProject(String url, String apiKey) {
-//        String settingsJson = appConfigurationGenerator
-//                .getAppConfigurationAsJsonWithTokenDetails(url, apiKey);
-
-        String settingsJson = appConfigurationGenerator.getAppConfigurationAsJsonWithServerDetails(
-                url,
-                "ganidu",
-                "UdjS%W5T"
-        );
+    private void initProject(String url, String apiKey, String appVersion) {
+        String settingsJson = appConfigurationGenerator
+                .getAppConfigurationAsJsonWithTokenDetails(url, apiKey);
 
         SettingsConnectionMatcher settingsConnectionMatcher = new SettingsConnectionMatcher(projectsRepository, settingsProvider);
         String UUID = settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson);
@@ -236,6 +233,7 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
 
         settingsProvider.getGeneralSettings().save(KEY_SERVER_URL, url);
         settingsProvider.getGeneralSettings().save(KEY_API_KEY, apiKey);
+        settingsProvider.getGeneralSettings().save(KEY_APP_VERSION, appVersion);
     }
 
     /**
