@@ -156,8 +156,21 @@ public class FormManagementContractImpl implements FormManagementContract {
         if (instancesToDelete != null && instanceIds.size() != 0) {
             // remove instances
             DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepositoryProvider.get(), formsRepositoryProvider.get());
-            dit.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-                    instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
+            dit.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
+        }
+    }
+
+    @Override
+    public void removeInstances(@NotNull Set<String> instanceIds) {
+        // filters stream to upload
+        Stream<Instance> instancesToDelete = instanceIds.stream()
+                .map(id -> new InstancesRepositoryProvider(Collect.getApplication()).get().get(Long.parseLong(id)))
+                .filter(instance -> instance.getStatus().equals(Instance.STATUS_COMPLETE) | instance.getStatus().equals(Instance.STATUS_INCOMPLETE));
+
+        if (instancesToDelete != null && instanceIds.size() != 0) {
+            // remove instances
+            DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepositoryProvider.get(), formsRepositoryProvider.get());
+            dit.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
         }
     }
 

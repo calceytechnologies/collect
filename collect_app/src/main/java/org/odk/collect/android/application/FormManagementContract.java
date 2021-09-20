@@ -1,7 +1,6 @@
 package org.odk.collect.android.application;
 
 import android.app.Activity;
-import android.content.Context;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
@@ -10,8 +9,6 @@ import org.odk.collect.forms.FormListItem;
 
 import java.util.List;
 import java.util.Set;
-
-import io.reactivex.annotations.Nullable;
 
 /**
  * interface to communicate between ODK module and Application module.
@@ -28,11 +25,11 @@ public interface FormManagementContract {
     /**
      * Opens locally saved ODK form.
      *
-     * @param activity activity
-     * @param formId  form id to access
+     * @param activity    activity
+     * @param formId      form id to access
      * @param requestCode request code to notify returned actions
      */
-    void openForm(@NotNull Activity activity, @NotNull String formId,@NotNull int requestCode);
+    void openForm(@NotNull Activity activity, @NotNull String formId, @NotNull int requestCode);
 
 
     /**
@@ -57,8 +54,8 @@ public interface FormManagementContract {
     /**
      * Uploads instances to backend server.
      *
-     * @param instanceIds  list of instance ids
-     * @param listener listener to detect form upload
+     * @param instanceIds list of instance ids
+     * @param listener    listener to detect form upload
      */
     void uploadForms(@NotNull Long[] instanceIds, @NotNull InstanceUploaderListener listener);
 
@@ -69,4 +66,12 @@ public interface FormManagementContract {
      * @param instanceIds instance ids
      */
     void removeUploadedForms(@NotNull Set<String> instanceIds);
+
+
+    /**
+     * Remove completed forms.
+     *
+     * @param instanceIds instances
+     */
+    void removeInstances(@NotNull Set<String> instanceIds);
 }
