@@ -41,6 +41,7 @@ public final class Instance {
     private final String geometry;
 
     private final Long dbId;
+    private final String submissionInstanceId;
 
     private Instance(Builder builder) {
         displayName = builder.displayName;
@@ -54,8 +55,8 @@ public final class Instance {
         deletedDate = builder.deletedDate;
         geometryType = builder.geometryType;
         geometry = builder.geometry;
-
         dbId = builder.dbId;
+        submissionInstanceId = builder.submissionInstanceId;
     }
 
     public static class Builder {
@@ -70,8 +71,8 @@ public final class Instance {
         private Long deletedDate;
         private String geometryType;
         private String geometry;
-
         private Long dbId;
+        private String submissionInstanceId;
 
         public Builder() {
 
@@ -90,6 +91,7 @@ public final class Instance {
             deletedDate = instance.deletedDate;
             geometryType = instance.geometryType;
             geometry = instance.geometry;
+            submissionInstanceId = instance.submissionInstanceId;
         }
 
         public Builder displayName(String displayName) {
@@ -152,6 +154,11 @@ public final class Instance {
             return this;
         }
 
+        public Builder submissionInstanceId(String submissionInstanceId){
+            this.submissionInstanceId  = submissionInstanceId;
+            return this;
+        }
+
         public Instance build() {
             return new Instance(this);
         }
@@ -203,6 +210,10 @@ public final class Instance {
 
     public Long getDbId() {
         return dbId;
+    }
+
+    public String getSubmissionInstanceId() {
+        return submissionInstanceId;
     }
 
     @Override

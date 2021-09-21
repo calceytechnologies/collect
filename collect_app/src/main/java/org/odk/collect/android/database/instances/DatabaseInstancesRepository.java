@@ -32,6 +32,7 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_VERSION;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.SUBMISSION_INSTANCE_ID;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.SUBMISSION_URI;
 import static org.odk.collect.shared.PathUtils.getRelativeFilePath;
 
@@ -235,7 +236,8 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                     LAST_STATUS_CHANGE_DATE,
                     DELETED_DATE,
                     GEOMETRY,
-                    GEOMETRY_TYPE
+                    GEOMETRY_TYPE,
+                    SUBMISSION_INSTANCE_ID
             };
         }
 

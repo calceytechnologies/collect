@@ -225,6 +225,13 @@ public class InstanceServerUploader extends InstanceUploader {
                     + (e.getMessage() != null ? e.getMessage() : e.toString()));
         }
 
+        // set instance id from response if available
+        if(messageParser.getSubmissionInstanceId() != null){
+            instance = new Instance.Builder(instance)
+                    .submissionInstanceId(messageParser.getSubmissionInstanceId())
+                    .build();
+        }
+
         submissionComplete(instance, true);
 
         if (messageParser.isValid()) {

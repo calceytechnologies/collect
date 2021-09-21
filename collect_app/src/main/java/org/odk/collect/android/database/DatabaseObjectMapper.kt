@@ -148,6 +148,7 @@ object DatabaseObjectMapper {
             .deletedDate(values.getAsLong(DatabaseInstanceColumns.DELETED_DATE))
             .geometry(values.getAsString(DatabaseInstanceColumns.GEOMETRY))
             .geometryType(values.getAsString(DatabaseInstanceColumns.GEOMETRY_TYPE))
+            .submissionInstanceId(values.getAsString(DatabaseInstanceColumns.SUBMISSION_INSTANCE_ID))
             .build()
     }
 
@@ -168,6 +169,7 @@ object DatabaseObjectMapper {
         val deletedDateColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.DELETED_DATE)
         val geometryTypeColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.GEOMETRY_TYPE)
         val geometryColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.GEOMETRY)
+        val submissionInstanceId = cursor.getColumnIndex(DatabaseInstanceColumns.SUBMISSION_INSTANCE_ID)
         val databaseIdIndex = cursor.getColumnIndex(BaseColumns._ID)
         return Instance.Builder()
             .dbId(dbId)
@@ -192,6 +194,7 @@ object DatabaseObjectMapper {
             .geometryType(cursor.getString(geometryTypeColumnIndex))
             .geometry(cursor.getString(geometryColumnIndex))
             .dbId(cursor.getLong(databaseIdIndex))
+            .submissionInstanceId(cursor.getString(submissionInstanceId))
             .build()
     }
 
@@ -216,6 +219,7 @@ object DatabaseObjectMapper {
         values.put(DatabaseInstanceColumns.DELETED_DATE, instance.deletedDate)
         values.put(DatabaseInstanceColumns.GEOMETRY, instance.geometry)
         values.put(DatabaseInstanceColumns.GEOMETRY_TYPE, instance.geometryType)
+        values.put(DatabaseInstanceColumns.SUBMISSION_INSTANCE_ID, instance.submissionInstanceId)
         return values
     }
 }

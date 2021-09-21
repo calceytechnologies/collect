@@ -23,6 +23,7 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_VERSION;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.SUBMISSION_INSTANCE_ID;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.SUBMISSION_URI;
 
 public class InstanceDatabaseMigrator implements DatabaseMigrator {
@@ -33,11 +34,15 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
             CAN_EDIT_WHEN_COMPLETE, INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS,
             LAST_STATUS_CHANGE_DATE, DELETED_DATE, GEOMETRY, GEOMETRY_TYPE};
 
-    public static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V6;
+    private static final String[] COLUMN_NAMES_V7 = {_ID, DISPLAY_NAME, SUBMISSION_URI,
+            CAN_EDIT_WHEN_COMPLETE, INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS,
+            LAST_STATUS_CHANGE_DATE, DELETED_DATE, GEOMETRY, GEOMETRY_TYPE, SUBMISSION_INSTANCE_ID};
+
+    public static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V7;
 
     public void onCreate(SQLiteDatabase db) {
         createInstancesTableV5(db, INSTANCES_TABLE_NAME);
-        upgradeToVersion6(db, INSTANCES_TABLE_NAME);
+        upgradeToVersion7(db, INSTANCES_TABLE_NAME);
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -53,6 +58,8 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
                 upgradeToVersion5(db);
             case 5:
                 upgradeToVersion6(db, INSTANCES_TABLE_NAME);
+            case 6:
+                upgradeToVersion7(db, INSTANCES_TABLE_NAME);
                 break;
             default:
                 Timber.i("Unknown version %d", oldVersion);
@@ -133,6 +140,10 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
         SQLiteUtils.addColumn(db, name, GEOMETRY_TYPE, "text");
     }
 
+    private void upgradeToVersion7(SQLiteDatabase db, String name) {
+        SQLiteUtils.addColumn(db, name, SUBMISSION_INSTANCE_ID, "text");
+    }
+
     private void createInstancesTableV5(SQLiteDatabase db, String name) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + name + " ("
                 + _ID + " integer primary key, "
@@ -144,6 +155,9 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
                 + JR_VERSION + " text, "
                 + STATUS + " text not null, "
                 + LAST_STATUS_CHANGE_DATE + " date not null, "
+                + GEOMETRY + " text, "
+                + GEOMETRY_TYPE + " text, "
+                + SUBMISSION_INSTANCE_ID + " text, "
                 + DELETED_DATE + " date );");
     }
 }

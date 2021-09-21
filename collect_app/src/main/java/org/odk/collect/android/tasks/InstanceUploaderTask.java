@@ -139,5 +139,7 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
          * instead of a mix of localized and non-localized user-facing strings.
          */
         public HashMap<String, String> messagesByInstanceId = new HashMap<>();
+
+        public HashMap<Instance, String> messagesByInstance = new HashMap<>();
     }
 }
