@@ -78,8 +78,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
             try {
                 String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl, null);
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
-                outcome.messagesByInstanceId.put(instance.getDbId().toString(),
-                        customMessage != null ? customMessage : TranslationHandler.getString(Collect.getApplication(), R.string.success));
+                outcome.messagesByInstance.put(instance, customMessage != null ? customMessage : TranslationHandler.getString(Collect.getApplication(), R.string.success));
 
                 analytics.logEvent(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion()));
             } catch (UploadAuthRequestedException e) {
@@ -88,8 +87,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 // retry. Items present in the map are considered already attempted and won't be
                 // retried.
             } catch (UploadException e) {
-                outcome.messagesByInstanceId.put(instance.getDbId().toString(),
-                        e.getDisplayMessage());
+                outcome.messagesByInstance.put(instance, e.getDisplayMessage());
             }
         }
         

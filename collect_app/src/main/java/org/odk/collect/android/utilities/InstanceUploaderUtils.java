@@ -45,13 +45,13 @@ public class InstanceUploaderUtils {
      *
      * Instance name 2 - result
      */
-    public static String getUploadResultMessage(InstancesRepository instancesRepository, Context context, Map<String, String> result) {
-        Set<String> keys = result.keySet();
-        Iterator<String> it = keys.iterator();
+    public static String getUploadResultMessage(InstancesRepository instancesRepository, Context context, Map<Instance, String> result) {
+        Set<Instance> keys = result.keySet();
+        Iterator<Instance> it = keys.iterator();
         StringBuilder message = new StringBuilder();
 
         while (it.hasNext()) {
-            Instance instance = instancesRepository.get(Long.valueOf(it.next()));
+            Instance instance = instancesRepository.get(Long.valueOf(it.next().getDbId()));
             message.append(getUploadResultMessageForInstances(instance, result));
         }
 
@@ -62,7 +62,7 @@ public class InstanceUploaderUtils {
         return message.toString().trim();
     }
 
-    private static String getUploadResultMessageForInstances(Instance instance, Map<String, String> resultMessagesByInstanceId) {
+    private static String getUploadResultMessageForInstances(Instance instance, Map<Instance, String> resultMessagesByInstanceId) {
         StringBuilder uploadResultMessage = new StringBuilder();
         if (instance != null) {
             String name = instance.getDisplayName();

@@ -49,30 +49,7 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
                 if (outcome.authRequestingServer != null) {
                     stateListener.authRequest(outcome.authRequestingServer, outcome.messagesByInstanceId);
                 } else {
-                    stateListener.uploadingComplete(outcome.messagesByInstanceId);
-
-                    // Delete instances that were successfully sent and that need to be deleted
-                    // either because app-level auto-delete is enabled or because the form
-                    // specifies it.
-                    Set<String> instanceIds = outcome.messagesByInstanceId.keySet();
-
-                    boolean isFormAutoDeleteOptionEnabled;
-
-                    // The custom configuration from the third party app overrides
-                    // the app preferences set for delete after submission
-                    if (deleteInstanceAfterSubmission != null) {
-                        isFormAutoDeleteOptionEnabled = deleteInstanceAfterSubmission;
-                    } else {
-                        isFormAutoDeleteOptionEnabled = settingsProvider.getGeneralSettings().getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND);
-                    }
-
-                    Stream<Instance> instancesToDelete = instanceIds.stream()
-                            .map(id -> new InstancesRepositoryProvider(Collect.getApplication()).get().get(Long.parseLong(id)))
-                            .filter(instance -> instance.getStatus().equals(Instance.STATUS_SUBMITTED))
-                            .filter(instance -> shouldFormBeDeleted(formsRepository, instance.getFormId(), instance.getFormVersion(), isFormAutoDeleteOptionEnabled));
-
-                    DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepository, formsRepository);
-                    dit.execute(instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
+                    stateListener.uploadingComplete(outcome.messagesByInstance);
                 }
             }
         }
@@ -140,6 +117,19 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
          */
         public HashMap<String, String> messagesByInstanceId = new HashMap<>();
 
+        /**
+         * Map of database instances for finalized forms to the user-facing status message for the latest
+         * submission attempt. Currently this can be either a localized message in the case of a
+         * common status or an English message in the case of a rare status that is needed for
+         * developer troubleshooting.
+         * <p>
+         * The keys in the map are also used to identify filled forms that were part of the ongoing
+         * submission attempt and don't need to be retried in the case of an authentication request.
+         * See {@link #authRequestingServer}.
+         * <p>
+         * TODO: Consider mapping to something machine-readable like a message ID or status ID
+         * instead of a mix of localized and non-localized user-facing strings.
+         */
         public HashMap<Instance, String> messagesByInstance = new HashMap<>();
     }
 }

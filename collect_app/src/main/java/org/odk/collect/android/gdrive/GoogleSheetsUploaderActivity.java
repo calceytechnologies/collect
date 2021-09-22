@@ -47,6 +47,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.forms.instances.Instance;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -251,7 +252,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     }
 
     @Override
-    public void uploadingComplete(HashMap<String, String> result) {
+    public void uploadingComplete(HashMap<Instance, String> result) {
         try {
             dismissProgressDialog();
         } catch (Exception e) {

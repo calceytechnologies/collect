@@ -16,13 +16,15 @@ package org.odk.collect.android.listeners;
 
 import android.net.Uri;
 
+import org.odk.collect.forms.instances.Instance;
+
 import java.util.HashMap;
 
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface InstanceUploaderListener {
-    void uploadingComplete(HashMap<String, String> result);
+    void uploadingComplete(HashMap<Instance, String> result);
 
     void uploadCanceled();
 

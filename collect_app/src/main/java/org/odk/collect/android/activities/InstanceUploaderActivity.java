@@ -32,6 +32,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.util.ArrayList;
@@ -233,7 +234,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     }
 
     @Override
-    public void uploadingComplete(HashMap<String, String> result) {
+    public void uploadingComplete(HashMap<Instance, String> result) {
         Timber.i("uploadingComplete: Processing results (%d) from upload of %d instances!",
                 result.size(), instancesToSend.length);
 

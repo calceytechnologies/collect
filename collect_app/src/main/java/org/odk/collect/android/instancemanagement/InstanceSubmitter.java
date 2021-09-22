@@ -68,7 +68,7 @@ public class InstanceSubmitter {
         String protocol = generalSettings.getString(ProjectKeys.KEY_PROTOCOL);
 
         InstanceUploader uploader;
-        Map<String, String> resultMessagesByInstanceId = new HashMap<>();
+        Map<Instance, String> resultMessagesByInstanceId = new HashMap<>();
         String deviceId = null;
         boolean anyFailure = false;
 
@@ -97,7 +97,7 @@ public class InstanceSubmitter {
 
                     if (!InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile(destinationUrl)) {
                         anyFailure = true;
-                        resultMessagesByInstanceId.put(instance.getDbId().toString(), SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
+                        resultMessagesByInstanceId.put(instance, SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
                         continue;
                     }
                 } else {
@@ -105,7 +105,7 @@ public class InstanceSubmitter {
                 }
 
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
-                resultMessagesByInstanceId.put(instance.getDbId().toString(), customMessage != null ? customMessage : TranslationHandler.getString(Collect.getApplication(), R.string.success));
+                resultMessagesByInstanceId.put(instance, customMessage != null ? customMessage : TranslationHandler.getString(Collect.getApplication(), R.string.success));
 
                 // If the submission was successful, delete the instance if either the app-level
                 // delete preference is set or the form definition requests auto-deletion.
@@ -130,7 +130,7 @@ public class InstanceSubmitter {
             } catch (UploadException e) {
                 Timber.d(e);
                 anyFailure = true;
-                resultMessagesByInstanceId.put(instance.getDbId().toString(),
+                resultMessagesByInstanceId.put(instance,
                         e.getDisplayMessage());
             }
         }
