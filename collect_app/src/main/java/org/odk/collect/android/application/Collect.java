@@ -246,6 +246,7 @@ public class Collect implements LocalizedApplication, ProjectsDependencyComponen
         settingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_CHANGE_LANGUAGE, false);
         settingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_ACCESS_SETTINGS, false);
         settingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false);
+        settingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_MARK_AS_FINALIZED, false);
     }
 
     /**

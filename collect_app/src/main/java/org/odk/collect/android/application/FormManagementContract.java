@@ -18,6 +18,7 @@ import java.util.Set;
  * - Fetch forms from backend server (This could come as a single URL or list of URLs to download)
  * - Upload completed forms to backend server.
  * - Open downloaded forms based on given form id.
+ * </p>
  */
 
 public interface FormManagementContract {
