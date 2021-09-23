@@ -18,6 +18,7 @@ public class ResponseMessageParser {
     private static final String MESSAGE_XML_TAG = "message";
     private static final String META_DATA_XML_TAG = "submissionMetadata";
     private static final String ATTR_INSTANCE_ID_TAG = "instanceID";
+    private static final String KEY_UUID_TEXT = "uuid:";
 
     private boolean isValid;
     private String messageResponse;
@@ -70,7 +71,7 @@ public class ResponseMessageParser {
                             .getNamedItem(ATTR_INSTANCE_ID_TAG).getNodeValue();
 
                     if(nodeValue != null){
-                        submissionInstanceId = nodeValue;
+                        submissionInstanceId = nodeValue.replace(KEY_UUID_TEXT,"").trim();
                     }
                 }
             }
