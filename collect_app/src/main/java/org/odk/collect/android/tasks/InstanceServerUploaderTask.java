@@ -17,6 +17,7 @@ package org.odk.collect.android.tasks;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
@@ -25,6 +26,7 @@ import org.odk.collect.android.upload.UploadAuthRequestedException;
 import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +46,9 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
 
     @Inject
     WebCredentialsUtils webCredentialsUtils;
+
+    @Inject
+    InstancesRepositoryProvider instancesRepositoryProvider;
 
     @Inject
     Analytics analytics;
@@ -78,6 +83,11 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
             try {
                 String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl, null);
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
+
+                // returns updated instance and set it to current instance
+                InstancesRepository instancesRepository = instancesRepositoryProvider.get();
+                instance = instancesRepository.get(instance.getDbId());
+
                 outcome.messagesByInstance.put(instance, customMessage != null ? customMessage : TranslationHandler.getString(Collect.getApplication(), R.string.success));
 
                 analytics.logEvent(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion()));
