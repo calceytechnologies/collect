@@ -204,6 +204,8 @@ public class InstanceServerUploader extends InstanceUploader {
                 } else if (responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                     exception = new UploadException(FAIL + postResult.getReasonPhrase()
                             + " (" + responseCode + ") at " + urlString);
+                } else if (responseCode == HttpsURLConnection.HTTP_BAD_METHOD) {
+                    exception = new UploadException(FAIL + postResult.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
                 } else {
                     if (messageParser.isValid()) {
                         exception = new UploadException(FAIL + messageParser.getMessageResponse());
