@@ -85,24 +85,27 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true">
 
-        <activity android:name=".activities.FirstLaunchActivity" />
-        <activity android:name=".activities.MainMenuActivity" />
+        <activity  android:screenOrientation="portrait" android:name=".activities.FirstLaunchActivity" />
+        <activity  android:screenOrientation="portrait" android:name=".activities.MainMenuActivity" />
         <activity
             android:name=".activities.ScannerWithFlashlightActivity"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activities.FormEntryActivity"
             android:windowSoftInputMode="adjustResize" />
 
         <activity-alias
+            android:screenOrientation="portrait"
             android:name=".activities.FormEntryActivity"
             android:exported="true"
             android:targetActivity=".activities.FormEntryActivity"
             tools:ignore="AppLinkUrlError"></activity-alias>
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".activities.NotificationActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
@@ -112,12 +115,14 @@
             android:name=".activities.DrawActivity"
             android:screenOrientation="landscape" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".gdrive.GoogleDriveActivity"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activities.InstanceChooserList" />
 
         <activity-alias
+            android:screenOrientation="portrait"
             android:name=".activities.InstanceChooserList"
             android:targetActivity=".activities.InstanceChooserList"
             tools:ignore="AppLinkUrlError">
@@ -133,10 +138,12 @@
         </activity-alias>
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".activities.FillBlankFormActivity"
             android:launchMode="singleTop" />
 
         <activity-alias
+            android:screenOrientation="portrait"
             android:name=".activities.FormChooserList"
             android:targetActivity=".activities.FillBlankFormActivity"
             tools:ignore="AppLinkUrlError">
@@ -151,9 +158,12 @@
             </intent-filter>
         </activity-alias>
 
-        <activity android:name=".activities.FormDownloadListActivity" />
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".activities.FormDownloadListActivity" />
 
         <activity-alias
+            android:screenOrientation="portrait"
             android:name=".activities.FormDownloadList"
             android:targetActivity=".activities.FormDownloadListActivity">
             <intent-filter>
@@ -166,16 +176,20 @@
         </activity-alias>
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".activities.DeleteSavedFormActivity"
             android:configChanges="orientation|screenSize" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".gdrive.GoogleSheetsUploaderActivity"
             android:configChanges="orientation|screenSize" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activities.InstanceUploaderListActivity"
             android:configChanges="orientation|screenSize" />
 
         <activity-alias
+            android:screenOrientation="portrait"
             android:name=".activities.InstanceUploaderList"
             android:targetActivity=".activities.InstanceUploaderListActivity">
             <intent-filter>
@@ -189,6 +203,7 @@
         <activity android:name=".activities.InstanceUploaderActivity" />
 
         <activity-alias
+            android:screenOrientation="portrait"
             android:name=".activities.InstanceUploaderActivity"
             android:targetActivity=".activities.InstanceUploaderActivity">
             <intent-filter>
@@ -200,21 +215,23 @@
             </intent-filter>
         </activity-alias>
 
-        <activity android:name=".activities.AboutActivity" />
-        <activity android:name=".configure.qr.QRCodeTabsActivity" />
-        <activity android:name=".preferences.screens.ProjectPreferencesActivity" />
-        <activity android:name=".activities.FormHierarchyActivity" />
-        <activity android:name=".activities.ViewOnlyFormHierarchyActivity" />
-        <activity android:name=".activities.GeoPointActivity" />
-        <activity android:name=".activities.GeoPointMapActivity" />
-        <activity android:name=".activities.GeoPolyActivity" />
-        <activity android:name=".activities.FormMapActivity" />
-        <activity android:name=".activities.BearingActivity" />
+        <activity  android:screenOrientation="portrait" android:name=".activities.AboutActivity" />
+        <activity  android:screenOrientation="portrait" android:name=".configure.qr.QRCodeTabsActivity" />
+        <activity  android:screenOrientation="portrait" android:name=".preferences.screens.ProjectPreferencesActivity" />
+        <activity   android:screenOrientation="portrait" android:name=".activities.FormHierarchyActivity" />
+        <activity  android:screenOrientation="portrait" android:name=".activities.ViewOnlyFormHierarchyActivity" />
+        <activity  android:screenOrientation="portrait" android:name=".activities.GeoPointActivity" />
+        <activity  android:screenOrientation="portrait" android:name=".activities.GeoPointMapActivity" />
+        <activity  android:screenOrientation="portrait" android:name=".activities.GeoPolyActivity" />
+        <activity  android:screenOrientation="portrait" android:name=".activities.FormMapActivity" />
+        <activity  android:screenOrientation="portrait" android:name=".activities.BearingActivity" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activities.SplashScreenActivity"
             android:theme="@style/Theme.Transparent" />
 
         <activity-alias
+            android:screenOrientation="portrait"
             android:name=".activities.SplashScreenActivity"
             android:targetActivity=".activities.SplashScreenActivity">
             <intent-filter>
@@ -226,9 +243,9 @@
             </intent-filter>
         </activity-alias>
 
-        <activity android:name=".activities.CaptureSelfieActivity" />
-        <activity android:name=".activities.WebViewActivity" />
-        <activity android:name=".activities.CaptureSelfieVideoActivity" /> <!-- Configure this key by setting GOOGLE_MAPS_API_KEY in collect_app/secrets.properties. -->
+        <activity  android:screenOrientation="portrait" android:name=".activities.CaptureSelfieActivity" />
+        <activity  android:screenOrientation="portrait" android:name=".activities.WebViewActivity" />
+        <activity  android:screenOrientation="portrait" android:name=".activities.CaptureSelfieVideoActivity" /> <!-- Configure this key by setting GOOGLE_MAPS_API_KEY in collect_app/secrets.properties. -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/GOOGLE_MAPS_API_KEY" />
@@ -268,6 +285,7 @@
         Do not use the activity directly as its name/package might change.
         -->
         <activity
+            android:screenOrientation="portrait"
             android:name=".external.FormUriActivity"
             android:noHistory="true"
             tools:ignore="AppLinkUrlError">
