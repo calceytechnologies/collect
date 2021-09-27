@@ -75,4 +75,17 @@ public interface FormManagementContract {
      * @param instanceIds instances
      */
     void removeInstances(@NotNull Set<String> instanceIds);
+
+    /**
+     * Get forms db path.
+     * @return forms db path
+     */
+    String getFormsDbPath();
+
+    /**
+     * Get instance db path.
+     * @return instance db path
+     */
+    String getInstanceDbPath();
+
 }

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.database.DatabaseConstants;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
@@ -18,6 +19,8 @@ import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
@@ -30,6 +33,7 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormListItem;
 import org.odk.collect.forms.instances.Instance;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -58,6 +62,9 @@ public class FormManagementContractImpl implements FormManagementContract {
 
     @Inject
     InstancesRepositoryProvider instancesRepositoryProvider;
+
+    @Inject
+    StoragePathProvider storagePathProvider;
 
     /**
      * Initialise dagger injected constructor.
@@ -172,6 +179,16 @@ public class FormManagementContractImpl implements FormManagementContract {
             DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepositoryProvider.get(), formsRepositoryProvider.get());
             dit.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
         }
+    }
+
+    @Override
+    public String getFormsDbPath() {
+        return  storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA, currentProjectProvider.getCurrentProject().getUuid()) + File.separator + DatabaseConstants.FORMS_DATABASE_NAME;
+    }
+
+    @Override
+    public String getInstanceDbPath() {
+        return  storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA, currentProjectProvider.getCurrentProject().getUuid()) + File.separator + DatabaseConstants.INSTANCES_DATABASE_NAME;
     }
 
     /**
