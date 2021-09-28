@@ -12,22 +12,26 @@
 
         <TextView
             android:id="@+id/txt_title"
-            style="@style/DialogTextStyle"
+            style="?attr/textAppearanceHeadline1"
             android:layout_width="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_large"
             android:text="@string/form_alert_title"
+            android:textColor="?colorSecondary"
             android:textSize="@dimen/text_large_xx" />
 
         <TextView
             android:id="@+id/txt_desc"
-            style="@style/TextMedium.StyleNormal"
+            style="?attr/textAppearanceHeadline6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_normal"
             android:layout_marginTop="@dimen/margin_normal"
             android:layout_marginEnd="@dimen/margin_normal"
             android:text="@string/form_alert_desc"
+            android:textColor="?colorAccent"
             android:textSize="@dimen/text_normal" />
 
         <RelativeLayout
@@ -37,28 +41,35 @@
             android:background="?attr/colorPrimary">
 
             <Button
+                style="?attr/textAppearanceButton"
                 android:id="@+id/btn_ok"
-                style="@style/DialogButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:textSize="@dimen/text_normal"
                 android:background="@android:color/transparent"
                 android:paddingStart="@dimen/dp22"
                 android:paddingEnd="@dimen/dp22"
+                android:paddingTop="@dimen/padding_large"
+                android:paddingBottom="@dimen/padding_large"
                 android:text="@string/yes"
-                android:textAllCaps="true" />
+                android:textColor="?attr/colorAccent"
+                android:textAllCaps="false" />
 
             <Button
+                style="?attr/textAppearanceButton"
                 android:id="@+id/btn_cancel"
-                style="@style/DialogButtonStyle"
-                fontPath="@string/font_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@id/btn_ok"
+                android:textSize="@dimen/text_normal"
                 android:background="@android:color/transparent"
                 android:paddingStart="@dimen/dp22"
                 android:paddingEnd="@dimen/dp22"
+                android:paddingTop="@dimen/padding_large"
+                android:paddingBottom="@dimen/padding_large"
                 android:text="@string/no"
+                android:textColor="?attr/colorAccent"
                 android:textAllCaps="false" />
         </RelativeLayout>
     </LinearLayout>
