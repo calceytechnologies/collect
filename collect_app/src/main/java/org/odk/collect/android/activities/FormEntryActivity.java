@@ -96,6 +96,8 @@ import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
+import org.odk.collect.android.formentry.formutils.AlertUtils;
+import org.odk.collect.android.formentry.formutils.ConfirmDialogListener;
 import org.odk.collect.android.formentry.loading.FormInstanceFileCreator;
 import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
@@ -1031,7 +1033,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (formController.indexContainsRepeatableGroup()) {
             menu.add(0, DELETE_REPEAT, 0, getString(R.string.delete_repeat));
         }
-        menu.setHeaderTitle(getString(R.string.edit_prompt));
+        //Remove the Edit Prompt
+        //menu.setHeaderTitle(getString(R.string.edit_prompt));
     }
 
     @Override
@@ -1788,8 +1791,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Confirm clear answer dialog
      */
     private void createClearDialog(final QuestionWidget qw) {
-        alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle(getString(R.string.clear_answer_ask));
 
         String question = qw.getFormEntryPrompt().getLongText();
         if (question == null) {
@@ -1798,28 +1799,25 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (question.length() > 50) {
             question = question.substring(0, 50) + "...";
         }
-
-        alertDialog.setMessage(getString(R.string.clearanswer_confirm,
-                question));
-
-        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case BUTTON_POSITIVE: // yes
+        AlertUtils.showMessage(this,
+                R.string.warning,
+                getString(R.string.clearanswer_confirm,
+                        question),
+                R.string.discard_answer,
+                R.string.clear_answer_no,
+                new ConfirmDialogListener() {
+                    @Override
+                    public void onConfirmDialogClick() {
                         clearAnswer(qw);
                         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                        break;
+                    }
+
+                    @Override
+                    public void onCancelDialogClick() {
+                    }
                 }
-            }
-        };
-        alertDialog.setCancelable(false);
-        alertDialog
-                .setButton(BUTTON_POSITIVE, getString(R.string.discard_answer), quitListener);
-        alertDialog.setButton(BUTTON_NEGATIVE, getString(R.string.clear_answer_no),
-                quitListener);
-        alertDialog.show();
+        );
+
     }
 
     /**
@@ -2000,11 +1998,29 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case KeyEvent.KEYCODE_BACK:
                 if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
                     // We want the user to stop recording before changing screens
-                    DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
+                   // DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
                     return true;
                 }
 
-                showIfNotShowing(QuitFormDialogFragment.class, getSupportFragmentManager());
+                String title = formSaveViewModel.getFormName() == null ? getActivity().getString(R.string.no_form_loaded) : formSaveViewModel.getFormName();
+
+                AlertUtils.showMessage(this,
+                        getString(R.string.quit_application, title),
+                        getString(R.string.ignore_confirm),
+                        R.string.do_not_save,
+                        R.string.clear_answer_no,
+                        new ConfirmDialogListener() {
+                            @Override
+                            public void onConfirmDialogClick() {
+                                getActivity().finish();
+                            }
+
+                            @Override
+                            public void onCancelDialogClick() {
+                            }
+                        }
+                );
+               // showIfNotShowing(QuitFormDialogFragment.class, getSupportFragmentManager());
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 if (event.isAltPressed() && !swipeHandler.beenSwiped()) {

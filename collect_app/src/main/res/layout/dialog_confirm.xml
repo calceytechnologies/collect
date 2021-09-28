@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="MissingPrefix">
+
+        <TextView
+            android:id="@+id/txt_title"
+            style="@style/DialogTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_large"
+            android:text="@string/form_alert_title"
+            android:textSize="@dimen/text_large_xx" />
+
+        <TextView
+            android:id="@+id/txt_desc"
+            style="@style/TextMedium.StyleNormal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:text="@string/form_alert_desc"
+            android:textSize="@dimen/text_normal" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:background="?attr/colorPrimary">
+
+            <Button
+                android:id="@+id/btn_ok"
+                style="@style/DialogButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@android:color/transparent"
+                android:paddingStart="@dimen/dp22"
+                android:paddingEnd="@dimen/dp22"
+                android:text="@string/yes"
+                android:textAllCaps="true" />
+
+            <Button
+                android:id="@+id/btn_cancel"
+                style="@style/DialogButtonStyle"
+                fontPath="@string/font_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/btn_ok"
+                android:background="@android:color/transparent"
+                android:paddingStart="@dimen/dp22"
+                android:paddingEnd="@dimen/dp22"
+                android:text="@string/no"
+                android:textAllCaps="false" />
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

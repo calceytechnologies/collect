@@ -135,7 +135,7 @@
     <string name="clear_answer">Remove response</string>
     <string name="clear_answer_ask">Remove This Response?</string>
     <string name="clear_answer_no">Cancel</string>
-    <string name="discard_answer">Remove response</string>
+    <string name="discard_answer">Remove</string>
     <string name="discard_group">Remove group</string>
 
     <string name="delete_repeat">Remove group</string>
@@ -162,12 +162,17 @@
     <string name="data_saved_ok">Form successfully saved!</string>
     <string name="save_point_error">Error saving recovery point: %s</string>
 
+    <string name="form_alert_title">Title</string>
+    <string name="form_alert_desc">Description</string>
     <!-- Dialog title when exiting a form. The name of the form will be included -->
     <string name="quit_application">Exit %s</string>
     <!-- Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded> -->
     <string name="no_form_loaded">&lt;no form loaded&gt;</string>
-    <string name="do_not_save">Ignore Changes</string>
+    <string name="do_not_save">Ignore</string>
     <string name="keep_changes">Save Changes</string>
+
+    <string name="ignore_confirm">Are you sure to ignore these changes and exit?</string>
+    <string name="warning">Warning</string>
 
     <string name="saving_form">Saving Form</string>
     <string name="survey_saving_validating_message">Validating answers…</string>

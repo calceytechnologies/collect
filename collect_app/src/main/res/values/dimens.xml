@@ -7,4 +7,20 @@
     <!-- touch target -->
     <dimen name="touch_target_size">48dp</dimen>
     <dimen name="divider_accidental_tap">8dp</dimen>
+
+
+    <dimen name="padding_large_x">32dp</dimen>
+    <dimen name="padding_large_xx">64dp</dimen>
+    <dimen name="margin_normal">24dp</dimen>
+    <dimen name="margin_medium">32dp</dimen>
+
+    <dimen name="padding_large">16dp</dimen>
+
+
+    <dimen name="text_normal">14sp</dimen>
+    <dimen name="text_medium">16sp</dimen>
+    <dimen name="text_large_xx">24sp</dimen>
+
+
+    <dimen name="dp22">22dp</dimen>
 </resources>
