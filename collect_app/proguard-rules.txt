@@ -10,6 +10,16 @@
 -keep class org.odk.collect.android.logic.actions.**
 -keep class android.support.v7.widget.** { *; }
 -keep class org.mp4parser.boxes.** { *; }
+
+-keep public class org.odk.collect.android.application.** {
+  public protected *;
+}
+-keep class org.odk.collect.android.application.Collect{*;}
+-keep class org.odk.collect.android.application.FormManagementContract{*;}
+-keep class org.odk.collect.android.application.FormManagementContractImpl{*;}
+-keep class org.odk.collect.android.application.CollectSettingsChangeHandler{*;}
+-keep class org.odk.collect.android.database.DatabaseConstants{*;}
+
 -keepclassmembers class * {
   @com.google.api.client.util.Key <fields>;
 }
