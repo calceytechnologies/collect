@@ -206,6 +206,8 @@ public class InstanceServerUploader extends InstanceUploader {
                             + " (" + responseCode + ") at " + urlString);
                 } else if (responseCode == HttpsURLConnection.HTTP_BAD_METHOD) {
                     exception = new UploadException(FAIL + postResult.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
+                } else if (responseCode == HttpsURLConnection.HTTP_ENTITY_TOO_LARGE) {
+                    exception = new UploadException(FAIL + postResult.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
                 } else {
                     if (messageParser.isValid()) {
                         exception = new UploadException(FAIL + messageParser.getMessageResponse());
